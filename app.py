@@ -5,7 +5,7 @@ from openpyxl import load_workbook
 from io import BytesIO
 from flask_sqlalchemy import SQLAlchemy
 from parse_project import ProjectParser
-
+from datetime import datetime
 
 # db imports
 from sqlalchemy import Column, Integer, String, Float, Boolean, DateTime, ForeignKey
@@ -78,7 +78,7 @@ with app.app_context():
 
 # db operations file
 # Create new project
-def db_create_project(name: str, code: str) -> bool:
+def db_create_project(name: str, code: str) -> Project:
     """Create new project in a database.
     Each project in database has unique name and code.
     If project with provided name and code does not exist, new project gets created.
@@ -100,7 +100,7 @@ def db_create_project(name: str, code: str) -> bool:
     project = Project(name=name, code=code)
     db.session.add(project)
     db.session.commit()
-    return True
+    return project
 
 
 def db_find_project_by_name(name: str) -> Project:
@@ -129,6 +129,69 @@ def db_find_project_by_code(code: str) -> Project:
     return project
 
 
+def db_assign_general(
+    start_date: datetime,
+    reference_period: int,
+    analysis_method: str,
+    analysis_principle: str,
+    main_sector: str,
+    no_alternatives: int,
+    da_analysis: bool,
+    version: str,
+    project_id: int,
+) -> bool:
+    # Assign general information to a project
+    general = General(
+        start_date=start_date,
+        reference_period=reference_period,
+        analysis_method=analysis_method,
+        analysis_principle=analysis_principle,
+        main_sector=main_sector,
+        no_alternatives=no_alternatives,
+        da_analysis=da_analysis,
+        version=version,
+        project_id=project_id,
+    )
+    try:
+        db.session.add(general)
+        db.session.commit()
+        return True
+    except:
+        return False
+
+
+def db_assign_ratios(
+    enis: float,
+    egdv: int,
+    evgn: float,
+    sva: float,
+    da: float,
+    fgdv: int,
+    fvgn: float,
+    fnis: float,
+    project_id: int,
+) -> bool:
+    # Assign ratios to a project
+
+    ratios = Ratios(
+        enis=enis,
+        egdv=egdv,
+        evgn=evgn,
+        sva=sva,
+        da=da,
+        fgdv=fgdv,
+        fvgn=fvgn,
+        fnis=fnis,
+        project_id=project_id,
+    )
+    try:
+        db.session.add(ratios)
+        db.session.commit()
+
+    except:
+        return False
+
+
 # Routes file
 @app.route("/", methods=["GET", "POST"])
 def upload_file():
@@ -144,9 +207,25 @@ def upload_file():
             )
             parser = ProjectParser(workbook=workbook)
 
+            # Get data from excel spreadsheet
             project = parser.fetch_project_info()
-            success = db_create_project(name=project.name, code=project.code)
-            print(success)
+            general = parser.fetch_general_info()
+
+            # Test db operations
+            project = db_create_project(name=project.name, code=project.code)
+            print(project.id)
+
+            db_assign_general(
+                start_date=general.start_date,
+                reference_period=general.reference_period,
+                analysis_method=general.analysis_method,
+                analysis_principle=general.analysis_principle,
+                main_sector=general.main_sector,
+                no_alternatives=general.no_alternatives,
+                da_analysis=general.da_analysis,
+                version=general.version,
+                project_id=project.id,
+            )
 
             date = 1
             return f"{date}"
