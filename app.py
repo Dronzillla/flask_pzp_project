@@ -76,6 +76,59 @@ with app.app_context():
     db.create_all()
 
 
+# db operations file
+# Create new project
+def db_create_project(name: str, code: str) -> bool:
+    """Create new project in a database.
+    Each project in database has unique name and code.
+    If project with provided name and code does not exist, new project gets created.
+    Otherwise, no new project is created.
+
+    Args:
+        name (str): Customer first name
+        code (str): Customer last name
+    Returns:
+        bool: 'True' - Project with provided details does not exist, 'False' - Project with provided details exist.
+    """
+    # If project already exists, we should not create a new one
+    if db_find_project_by_name(name) is not None:
+        return False
+    if db_find_project_by_code(code) is not None:
+        return False
+
+    # Create new project
+    project = Project(name=name, code=code)
+    db.session.add(project)
+    db.session.commit()
+    return True
+
+
+def db_find_project_by_name(name: str) -> Project:
+    """Checks if project exists in database based on an provided name.
+
+    Args:
+        name (str): Project name
+
+    Returns:
+        Project: 'Project' object if project exists in database, 'None' if project does not exist in database.
+    """
+    project = Project.query.filter_by(name=name).one_or_none()
+    return project
+
+
+def db_find_project_by_code(code: str) -> Project:
+    """Checks if project exists in database based on an provided code.
+
+    Args:
+        name (str): Project code
+
+    Returns:
+        Project: 'Project' object if project exists in database, 'None' if project does not exist in database.
+    """
+    project = Project.query.filter_by(code=code).one_or_none()
+    return project
+
+
 # Routes file
 @app.route("/", methods=["GET", "POST"])
 def upload_file():
@@ -91,7 +144,8 @@ def upload_file():
             )
             parser = ProjectParser(workbook=workbook)
 
-            project_info = parser.fetch_project_info()
+            project = parser.fetch_project_info()
+            db_create_project(name=project.name, code=project.code)
 
             date = 1
             return f"{date}"
