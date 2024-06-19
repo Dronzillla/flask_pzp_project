@@ -145,7 +145,8 @@ def upload_file():
             parser = ProjectParser(workbook=workbook)
 
             project = parser.fetch_project_info()
-            db_create_project(name=project.name, code=project.code)
+            success = db_create_project(name=project.name, code=project.code)
+            print(success)
 
             date = 1
             return f"{date}"
