@@ -22,8 +22,9 @@ General = namedtuple(
         "version",
     ],
 )
-Benefit = namedtuple("Benefit", ["category", "values"])
-Harm = namedtuple("Harm", ["category", "values"])
+Benefit_tuple = namedtuple("Benefit", ["name", "values"])
+Harm = namedtuple("Harm", ["name", "values"])
+Cashflow_tuple = namedtuple("Cashflow", ["category", "values"])
 
 
 class MyNumbers:
@@ -239,8 +240,12 @@ class ProjectParser:
         print(result)
         return result
 
-    def fetch_capex(self) -> dict:
-        result = self.get_budget_line_values("capex")
+    # TODO remake all cashflows to follow same logic as capex
+    def fetch_capex(self) -> Cashflow_tuple:
+        cf_name = "capex"
+        values = self.get_budget_line_values(cf_name)
+        result = Cashflow_tuple(category=cf_name, values=values)
+        print(result)
         return result
 
     def fetch_reinvestment(self) -> dict:
@@ -279,17 +284,17 @@ class ProjectParser:
         )
         return result
 
-    def fetch_benefits(self) -> list[Benefit]:
+    def fetch_benefits(self) -> list[Benefit_tuple]:
         result = []
         # Maximum amount of benefit categories are 7
         for i in range(7):
-            benefit_category = self.sheet_alternatyva[f"C{119+i}"].value
-            benefit_category_total_values = self.sheet_alternatyva[f"G{119+i}"].value
+            benefit_component = self.sheet_alternatyva[f"C{119+i}"].value
+            benefit_component_total_values = self.sheet_alternatyva[f"G{119+i}"].value
             # Check if benefit or total values for benefit is blank
-            if benefit_category == None or benefit_category_total_values == 0:
+            if benefit_component == None or benefit_component_total_values == 0:
                 continue
             values = self.get_budget_line_values("benefit", index=i)
-            benefit = Benefit(category=benefit_category, values=values)
+            benefit = Benefit_tuple(name=benefit_component, values=values)
             result.append(benefit)
         print(result)
         return result
@@ -304,7 +309,7 @@ class ProjectParser:
             if harm_category == None or harm_category_total_values == 0:
                 continue
             values = self.get_budget_line_values("harm", index=i)
-            harm = Harm(category=harm_category, values=values)
+            harm = Harm(name=harm_category, values=values)
             result.append(harm)
         print(result)
         return result

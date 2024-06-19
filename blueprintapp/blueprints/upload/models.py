@@ -43,6 +43,7 @@ class Project(db.Model):
     )
 
     # TODO create Harm model
+    # TODO Remove sector db connection
     # harm = db.relationship("Harm", back_populates="project")
 
 
@@ -82,6 +83,19 @@ class Ratios(db.Model):
     # unique=True
     project_id = db.Column(db.Integer, db.ForeignKey("project.id"), unique=True)
     project = db.relationship("Project", back_populates="ratios")
+
+
+class Cashflow(db.Model):
+    __tablename__ = "cashflow"
+    id = db.Column(db.Integer, primary_key=True)
+    amount = db.Column(db.Float)
+    year = db.Column(db.Integer)
+    category = db.Column(db.String(80))
+    # Relationship many to one
+    # Project
+    # unique=False
+    project_id = db.Column(db.Integer, db.ForeignKey("project.id"))
+    project = db.relationship("Project", back_populates="capex")
 
 
 class Capex(db.Model):

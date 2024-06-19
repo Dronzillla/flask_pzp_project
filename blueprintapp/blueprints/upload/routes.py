@@ -42,6 +42,7 @@ def index():
                 # Get data from excel spreadsheet
                 project = parser.fetch_project_info()
                 general = parser.fetch_general_info()
+                parser.fetch_capex()
 
                 # Test db operations
                 # project = db_create_project(name=project.name, code=project.code)

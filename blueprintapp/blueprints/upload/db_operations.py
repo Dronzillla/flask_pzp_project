@@ -1,6 +1,16 @@
 from blueprintapp.app import db
-from blueprintapp.blueprints.upload.models import Project, General, Ratios
+from blueprintapp.blueprints.upload.models import (
+    Project,
+    General,
+    Ratios,
+    Cashflow,
+    Benefit,
+    BenefitComponent,
+)
 from datetime import datetime
+
+from blueprintapp.blueprints.upload.parse_project import Cashflow_tuple, Benefit_tuple
+from typing import Optional
 
 
 # db operations file
@@ -117,3 +127,46 @@ def db_assign_ratios(
 
     except:
         return False
+
+
+def db_insert_cashflow(cashflow: Cashflow_tuple, project_id: int) -> None:
+    for year, amount in cashflow["values"].items():
+        record = Cashflow(
+            amount=amount, year=year, category=cashflow.category, project_id=project_id
+        )
+        db.session.add(record)
+    db.session.commit()
+
+
+def db_insert_benefit(benefit: Benefit_tuple, benefit_id: int, project_id: int):
+    for year, amount in benefit["values"].items():
+        record = Benefit(
+            amount=amount, year=year, benefit_id=benefit_id, project_id=project_id
+        )
+        db.session.add(record)
+    db.session.commit()
+
+
+def db_insert_benefits(benefits: list[Benefit_tuple], project_id: int):
+    for benefit in benefits:
+        # Get benefit component
+        benefit_name = benefit.name
+        # Check if it exists in database
+        component = db_benefit_component_exists(name=benefit_name)
+        # Add component if it does not exist
+        if component is None:
+            ...
+        # Retrieve benefit_component id
+        benefit_id = component.id
+        # Add benefit to a project
+        db_insert_benefit(benefit=benefit, benefit_id=benefit_id, project_id=project_id)
+
+
+# Return benefitcomponent or None
+def db_benefit_component_exists(name: str) -> Optional[BenefitComponent]:
+    component = BenefitComponent.query.filter_by(name=name).one_or_none()
+    return component
+
+
+def db_insert_component():
+    pass
