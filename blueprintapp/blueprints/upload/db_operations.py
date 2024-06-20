@@ -6,6 +6,7 @@ from blueprintapp.blueprints.upload.models import (
     Cashflow,
     Benefit,
     BenefitComponent,
+    Sector,
 )
 from datetime import datetime
 
@@ -15,7 +16,7 @@ from typing import Optional
 
 # db operations file
 # Create new project
-def db_create_project(name: str, code: str) -> Project:
+def db_create_project(name: str, code: str) -> Optional[Project]:
     """Create new project in a database.
     Each project in database has unique name and code.
     If project with provided name and code does not exist, new project gets created.
@@ -40,7 +41,7 @@ def db_create_project(name: str, code: str) -> Project:
     return project
 
 
-def db_find_project_by_name(name: str) -> Project:
+def db_find_project_by_name(name: str) -> Optional[Project]:
     """Checks if project exists in database based on an provided name.
 
     Args:
@@ -53,7 +54,7 @@ def db_find_project_by_name(name: str) -> Project:
     return project
 
 
-def db_find_project_by_code(code: str) -> Project:
+def db_find_project_by_code(code: str) -> Optional[Project]:
     """Checks if project exists in database based on an provided code.
 
     Args:
@@ -66,7 +67,7 @@ def db_find_project_by_code(code: str) -> Project:
     return project
 
 
-def db_assign_general(
+def db_insert_general(
     start_date: datetime,
     reference_period: int,
     analysis_method: str,
@@ -76,7 +77,7 @@ def db_assign_general(
     da_analysis: bool,
     version: str,
     project_id: int,
-) -> bool:
+) -> Optional[General]:
     # Assign general information to a project
     general = General(
         start_date=start_date,
@@ -92,12 +93,12 @@ def db_assign_general(
     try:
         db.session.add(general)
         db.session.commit()
-        return True
+        return general
     except:
-        return False
+        return None
 
 
-def db_assign_ratios(
+def db_insert_ratios(
     enis: float,
     egdv: int,
     evgn: float,
@@ -107,9 +108,8 @@ def db_assign_ratios(
     fvgn: float,
     fnis: float,
     project_id: int,
-) -> bool:
+) -> Optional[Ratios]:
     # Assign ratios to a project
-
     ratios = Ratios(
         enis=enis,
         egdv=egdv,
@@ -124,9 +124,14 @@ def db_assign_ratios(
     try:
         db.session.add(ratios)
         db.session.commit()
-
+        return ratios
     except:
-        return False
+        return None
+
+
+"""
+Functions to insert cashflows
+"""
 
 
 def db_insert_cashflow(cashflow: Cashflow_tuple, project_id: int) -> None:
@@ -138,7 +143,17 @@ def db_insert_cashflow(cashflow: Cashflow_tuple, project_id: int) -> None:
     db.session.commit()
 
 
-def db_insert_benefit(benefit: Benefit_tuple, benefit_id: int, project_id: int):
+def db_insert_cashflows(cashflows: list[Cashflow_tuple], project_id: int) -> None:
+    for cashflow in cashflows:
+        db_insert_cashflow(cashflow=cashflow, project_id=project_id)
+
+
+"""
+Functions to insert benefits
+"""
+
+
+def db_insert_benefit(benefit: Benefit_tuple, benefit_id: int, project_id: int) -> None:
     for year, amount in benefit["values"].items():
         record = Benefit(
             amount=amount, year=year, benefit_id=benefit_id, project_id=project_id
@@ -147,26 +162,58 @@ def db_insert_benefit(benefit: Benefit_tuple, benefit_id: int, project_id: int):
     db.session.commit()
 
 
-def db_insert_benefits(benefits: list[Benefit_tuple], project_id: int):
+# Return benefitcomponent or None
+def db_benefit_component_exists(benefit_name: str) -> Optional[BenefitComponent]:
+    benefit_component = BenefitComponent.query.filter_by(
+        benefit_name=benefit_name
+    ).one_or_none()
+    return benefit_component
+
+
+def db_insert_benefit_component(benefit_name: str) -> BenefitComponent:
+    benefit_component = BenefitComponent(name=benefit_name)
+    return benefit_component
+
+
+def db_insert_benefits(benefits: list[Benefit_tuple], project_id: int) -> None:
     for benefit in benefits:
         # Get benefit component
         benefit_name = benefit.name
         # Check if it exists in database
-        component = db_benefit_component_exists(name=benefit_name)
+        benefit_component = db_benefit_component_exists(benefit_name=benefit_name)
         # Add component if it does not exist
-        if component is None:
-            ...
+        if benefit_component is None:
+            benefit_component = db_insert_benefit_component(benefit_name=benefit_name)
         # Retrieve benefit_component id
-        benefit_id = component.id
+        benefit_id = benefit_component.id
         # Add benefit to a project
         db_insert_benefit(benefit=benefit, benefit_id=benefit_id, project_id=project_id)
 
 
-# Return benefitcomponent or None
-def db_benefit_component_exists(name: str) -> Optional[BenefitComponent]:
-    component = BenefitComponent.query.filter_by(name=name).one_or_none()
-    return component
+"""
+Functions to insert economic sectors
+"""
 
 
-def db_insert_component():
-    pass
+def db_economic_sector_exists(name: str) -> Optional[Sector]:
+    sector = Sector.query.filter_by(name=name).one_or_none()
+    return sector
+
+
+def db_insert_economic_sector(name: str) -> Sector:
+    # Check if economic sector does not exist
+    sector = db_economic_sector_exists(name=name)
+    if sector is None:
+        sector = Sector(name=name)
+        db.session.add(sector)
+        db.session.commit()
+    return sector
+
+
+def db_insert_economic_sectors(economic_sector_names: list[str]) -> list[Sector]:
+    # list[Sector] for making an association
+    result = []
+    for name in economic_sector_names:
+        sector = db_insert_economic_sector(name=name)
+        result.append(sector)
+    return result

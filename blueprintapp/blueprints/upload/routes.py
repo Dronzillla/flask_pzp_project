@@ -4,10 +4,7 @@ from flask import request, render_template, redirect, url_for, Blueprint
 from blueprintapp.app import db
 from blueprintapp.blueprints.upload.models import Project, General, Ratios
 
-# from blueprintapp.blueprints.upload.db_operations import (
-#     db_create_project,
-#     db_assign_general,
-# )
+from blueprintapp.blueprints.upload.db_operations import db_create_project
 
 # Routes import
 from openpyxl import load_workbook
@@ -40,12 +37,20 @@ def index():
                 parser = ProjectParser(workbook=workbook)
 
                 # Get data from excel spreadsheet
-                project = parser.fetch_project_info()
+
                 general = parser.fetch_general_info()
-                parser.fetch_capex()
+                cashflows = parser.fetch_cashflows()
+                ratios = parser.fetch_ratios()
+
+                benefits = parser.fetch_benefits()
+                harms = parser.fetch_harms()
+
+                economic_sectors = parser.fetch_economic_sectors()
+
+                project = parser.fetch_project_info()
 
                 # Test db operations
-                # project = db_create_project(name=project.name, code=project.code)
+                project = db_create_project(name=project.name, code=project.code)
                 # print(project.id)
 
                 # db_assign_general(

@@ -24,6 +24,7 @@ class Project(db.Model):
     general = db.relationship("General", uselist=False, back_populates="project")
     ratios = db.relationship("Ratios", uselist=False, back_populates="project")
     # Relationships (PK) one to many
+    cashflow = db.relationship("Cashflow", back_populates="project")
     capex = db.relationship("Capex", back_populates="project")
     reinvestment = db.relationship("Reinvestment", back_populates="project")
     opex = db.relationship("Opex", back_populates="project")
@@ -95,7 +96,7 @@ class Cashflow(db.Model):
     # Project
     # unique=False
     project_id = db.Column(db.Integer, db.ForeignKey("project.id"))
-    project = db.relationship("Project", back_populates="capex")
+    project = db.relationship("Project", back_populates="cashflow")
 
 
 class Capex(db.Model):

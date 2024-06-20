@@ -23,7 +23,7 @@ General = namedtuple(
     ],
 )
 Benefit_tuple = namedtuple("Benefit", ["name", "values"])
-Harm = namedtuple("Harm", ["name", "values"])
+Harm_tuple = namedtuple("Harm", ["name", "values"])
 Cashflow_tuple = namedtuple("Cashflow", ["category", "values"])
 
 
@@ -162,12 +162,12 @@ class ProjectParser:
 
     def get_multiple_budget_line_values(self, type: str, lines: int) -> dict:
         list_budget_lines: list[dict] = []
-        # Revenue is recorded on 5 lines
+        # Iterate over
         for i in range(lines):
-            budget_line = self.get_budget_line_values(type, index=i)
+            budget_line = self.get_budget_line_values(type=type, index=i)
             list_budget_lines.append(budget_line)
         result = self.sum_budget_lines_values(list_budget_lines)
-        print(result)
+        # print(result)
         return result
 
     def get_sector_name(self, index) -> str:
@@ -240,48 +240,79 @@ class ProjectParser:
         print(result)
         return result
 
-    # TODO remake all cashflows to follow same logic as capex
     def fetch_capex(self) -> Cashflow_tuple:
         cf_name = "capex"
         values = self.get_budget_line_values(cf_name)
         result = Cashflow_tuple(category=cf_name, values=values)
-        print(result)
         return result
 
-    def fetch_reinvestment(self) -> dict:
-        result = self.get_budget_line_values("reinvestment")
+    def fetch_reinvestment(self) -> Cashflow_tuple:
+        cf_name = "reinvestment"
+        values = self.get_budget_line_values(cf_name)
+        result = Cashflow_tuple(category=cf_name, values=values)
         return result
 
-    def fetch_opex(self) -> dict:
+    def fetch_opex(self) -> Cashflow_tuple:
+        cf_name = "opex"
         # Public opex
         # Opex is recorded on 5 lines
-        result = self.get_multiple_budget_line_values(type="opex", lines=5)
+        values = self.get_multiple_budget_line_values(type=cf_name, lines=5)
+        result = Cashflow_tuple(category=cf_name, values=values)
         return result
 
-    def fetch_revenue(self) -> dict:
-        result = self.get_budget_line_values("revenue")
+    def fetch_revenue(self) -> Cashflow_tuple:
+        cf_name = "revenue"
+        values = self.get_budget_line_values(cf_name)
+        result = Cashflow_tuple(category=cf_name, values=values)
         return result
 
-    def fetch_tax_revenue(self) -> dict:
-        result = self.get_budget_line_values("tax_revenue")
+    def fetch_tax_revenue(self) -> Cashflow_tuple:
+        cf_name = "tax_revenue"
+        values = self.get_budget_line_values(cf_name)
+        result = Cashflow_tuple(category=cf_name, values=values)
         return result
 
-    def fetch_vat(self) -> dict:
-        result = self.get_budget_line_values("vat")
+    def fetch_vat(self) -> Cashflow_tuple:
+        cf_name = "vat"
+        values = self.get_budget_line_values("vat")
+        result = Cashflow_tuple(category=cf_name, values=values)
         return result
 
-    def fetch_private_cost(self) -> dict:
+    def fetch_private_cost(self) -> Cashflow_tuple:
         # Private capex and opex 95:99
         # Cost is recorded on 5 lines
-        result = self.get_multiple_budget_line_values(type="private_cf_cost", lines=5)
+        cf_name = "private_cf_cost"
+        values = self.get_multiple_budget_line_values(type=cf_name, lines=5)
+        result = Cashflow_tuple(category=cf_name, values=values)
         return result
 
-    def fetch_private_revenue(self) -> dict:
+    def fetch_private_revenue(self) -> Cashflow_tuple:
         # Private revenue 106:110
         # Revenue is recorded on 5 lines
-        result = self.get_multiple_budget_line_values(
-            type="private_cf_revenue", lines=5
+        cf_name = "private_cf_revenue"
+        values = self.get_multiple_budget_line_values(type=cf_name, lines=5)
+        result = Cashflow_tuple(category=cf_name, values=values)
+        return result
+
+    def fetch_cashflows(self) -> list[Cashflow_tuple]:
+        result = []
+        # Append cashflows
+        result.extend(
+            [
+                self.fetch_capex(),
+                self.fetch_reinvestment(),
+                self.fetch_opex(),
+                self.fetch_revenue(),
+                self.fetch_tax_revenue(),
+                self.fetch_vat(),
+                self.fetch_private_cost(),
+                self.fetch_private_revenue(),
+            ]
         )
+        # For debugging
+        for cashflow in result:
+            print(cashflow)
+
         return result
 
     def fetch_benefits(self) -> list[Benefit_tuple]:
@@ -299,17 +330,17 @@ class ProjectParser:
         print(result)
         return result
 
-    def fetch_harms(self) -> list[Harm]:
+    def fetch_harms(self) -> list[Harm_tuple]:
         result = []
         # Maximum amount of harm categories are 3
         for i in range(3):
-            harm_category = self.sheet_alternatyva[f"C{127+i}"].value
-            harm_category_total_values = self.sheet_alternatyva[f"G{127+i}"].value
+            harm_component = self.sheet_alternatyva[f"C{127+i}"].value
+            harm_component_total_values = self.sheet_alternatyva[f"G{127+i}"].value
             # Check if harm or total values for harm is blank
-            if harm_category == None or harm_category_total_values == 0:
+            if harm_component == None or harm_component_total_values == 0:
                 continue
             values = self.get_budget_line_values("harm", index=i)
-            harm = Harm(name=harm_category, values=values)
+            harm = Harm_tuple(name=harm_component, values=values)
             result.append(harm)
         print(result)
         return result
