@@ -7,10 +7,16 @@ from blueprintapp.blueprints.upload.models import (
     Benefit,
     BenefitComponent,
     Sector,
+    HarmComponent,
+    Harm,
 )
 from datetime import datetime
 
-from blueprintapp.blueprints.upload.parse_project import Cashflow_tuple, Benefit_tuple
+from blueprintapp.blueprints.upload.parse_project import (
+    Cashflow_tuple,
+    Benefit_tuple,
+    Harm_tuple,
+)
 from typing import Optional
 
 
@@ -163,31 +169,67 @@ def db_insert_benefit(benefit: Benefit_tuple, benefit_id: int, project_id: int) 
 
 
 # Return benefitcomponent or None
-def db_benefit_component_exists(benefit_name: str) -> Optional[BenefitComponent]:
-    benefit_component = BenefitComponent.query.filter_by(
-        benefit_name=benefit_name
-    ).one_or_none()
+def db_benefit_component_exists(name: str) -> Optional[BenefitComponent]:
+    benefit_component = BenefitComponent.query.filter_by(name=name).one_or_none()
     return benefit_component
 
 
-def db_insert_benefit_component(benefit_name: str) -> BenefitComponent:
-    benefit_component = BenefitComponent(name=benefit_name)
+def db_insert_benefit_component(name: str) -> BenefitComponent:
+    benefit_component = BenefitComponent(name=name)
     return benefit_component
 
 
 def db_insert_benefits(benefits: list[Benefit_tuple], project_id: int) -> None:
     for benefit in benefits:
         # Get benefit component
-        benefit_name = benefit.name
+        name = benefit.name
         # Check if it exists in database
-        benefit_component = db_benefit_component_exists(benefit_name=benefit_name)
+        benefit_component = db_benefit_component_exists(name=name)
         # Add component if it does not exist
         if benefit_component is None:
-            benefit_component = db_insert_benefit_component(benefit_name=benefit_name)
+            benefit_component = db_insert_benefit_component(name=name)
         # Retrieve benefit_component id
         benefit_id = benefit_component.id
         # Add benefit to a project
         db_insert_benefit(benefit=benefit, benefit_id=benefit_id, project_id=project_id)
+
+
+"""
+Functions to insert harms
+"""
+
+
+def db_insert_harm(harm: Harm_tuple, harm_id: int, project_id: int) -> None:
+    for year, amount in harm["values"].items():
+        record = Harm(amount=amount, year=year, harm_id=harm_id, project_id=project_id)
+        db.session.add(record)
+    db.session.commit()
+
+
+# Return harmcomponent or None
+def db_harm_component_exists(name: str) -> Optional[HarmComponent]:
+    harm_component = HarmComponent.query.filter_by(name=name).one_or_none()
+    return harm_component
+
+
+def db_insert_harm_component(name: str) -> HarmComponent:
+    harm_component = HarmComponent(name=name)
+    return harm_component
+
+
+def db_insert_harms(harms: list[Harm_tuple], project_id: int) -> None:
+    for harm in harms:
+        # Get harm component
+        name = harm.name
+        # Check if it exists in database
+        harm_component = db_harm_component_exists(name=name)
+        # Add component if it does not exist
+        if harm_component is None:
+            harm_component = db_insert_harm_component(name=name)
+        # Retrieve harm_component id
+        harm_id = harm_component.id
+        # Add harm to a project
+        db_insert_harm(harm=harm, harm_id=harm_id, project_id=project_id)
 
 
 """

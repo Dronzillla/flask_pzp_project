@@ -50,20 +50,8 @@ def index():
                 project = parser.fetch_project_info()
 
                 # Test db operations
-                project = db_create_project(name=project.name, code=project.code)
+                # project = db_create_project(name=project.name, code=project.code)
                 # print(project.id)
-
-                # db_assign_general(
-                #     start_date=general.start_date,
-                #     reference_period=general.reference_period,
-                #     analysis_method=general.analysis_method,
-                #     analysis_principle=general.analysis_principle,
-                #     main_sector=general.main_sector,
-                #     no_alternatives=general.no_alternatives,
-                #     da_analysis=general.da_analysis,
-                #     version=general.version,
-                #     project_id=project.id,
-                # )
 
                 date = 1
                 return f"{date}"

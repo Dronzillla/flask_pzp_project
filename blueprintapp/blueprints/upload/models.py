@@ -34,6 +34,7 @@ class Project(db.Model):
     private_revenue = db.relationship("PrivateRevenue", back_populates="project")
     private_cost = db.relationship("PrivateCost", back_populates="project")
     benefit = db.relationship("Benefit", back_populates="project")
+    harm = db.relationship("Harm", back_populates="project")
     # Relationships Many to many
     # Sector
     sectors = db.relationship(
@@ -43,9 +44,7 @@ class Project(db.Model):
         back_populates="projects",
     )
 
-    # TODO create Harm model
     # TODO Remove sector db connection
-    # harm = db.relationship("Harm", back_populates="project")
 
 
 class General(db.Model):
@@ -237,13 +236,49 @@ class Benefit(db.Model):
     project = db.relationship("Project", back_populates="benefit")
 
 
+class HarmComponent(db.Model):
+    __tablename__ = "harm_component"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), nullable=False, unique=True)
+
+    # Relationship (PK) one to many
+    harm = db.relationship("Harm", back_populates="harm_component")
+
+    # Relationship many to one
+    # Sector
+    # unique=False
+    sector_id = db.Column(db.Integer, db.ForeignKey("sector.id"))
+    sector = db.relationship("Sector", back_populates="harm_component")
+
+
+class Harm(db.Model):
+    __tablename__ = "harm"
+    id = db.Column(db.Integer, primary_key=True)
+    amount = db.Column(db.Float)
+    year = db.Column(db.Integer)
+
+    # Relationship many to one
+    # HarmComponent
+    # unique=False
+    harm_id = db.Column(db.Integer, db.ForeignKey("harm_component.id"))
+    harm_component = db.relationship("HarmComponent", back_populates="harm")
+
+    # Relationship many to one
+    # Project
+    # unique=False
+    project_id = db.Column(db.Integer, db.ForeignKey("project.id"))
+    project = db.relationship("Project", back_populates="harm")
+
+
 class Sector(db.Model):
     __tablename__ = "sector"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False, unique=True)
 
-    # Relationship (PK) one to many
+    # Relationships (PK) one to many
     benefit_component = db.relationship("BenefitComponent", back_populates="sector")
+    harm_component = db.relationship("HarmComponent", back_populates="sector")
+
     # Relationship many to many
     # Project
     projects = db.relationship(
@@ -252,18 +287,3 @@ class Sector(db.Model):
         lazy="subquery",
         back_populates="sectors",
     )
-
-
-class Todo(db.Model):
-    __tablename__ = "todos"
-
-    tid = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String, nullable=False)
-    description = db.Column(db.String)
-    done = db.Column(db.Boolean, nullable=False)
-
-    def __repr__(self):
-        return f"<TODO {self.title}, Done: {self.done}>"
-
-    def get_id(self):
-        return self.tid
