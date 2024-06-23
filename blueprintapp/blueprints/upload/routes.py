@@ -4,7 +4,11 @@ from flask import request, render_template, redirect, url_for, Blueprint
 from blueprintapp.app import db
 from blueprintapp.blueprints.upload.models import Project, General, Ratios
 
-from blueprintapp.blueprints.upload.db_operations import db_create_project
+from blueprintapp.blueprints.upload.db_operations import (
+    db_project_exists,
+    db_create_project,
+    db_assign_project_information,
+)
 
 # Routes import
 from openpyxl import load_workbook
@@ -36,25 +40,32 @@ def index():
                 )
                 parser = ProjectParser(workbook=workbook)
 
-                # Get data from excel spreadsheet
-
-                general = parser.fetch_general_info()
-                cashflows = parser.fetch_cashflows()
-                ratios = parser.fetch_ratios()
-
-                benefits = parser.fetch_benefits()
-                harms = parser.fetch_harms()
-
-                economic_sectors = parser.fetch_economic_sectors()
-
-                project = parser.fetch_project_info()
-
-                # Test db operations
-                # project = db_create_project(name=project.name, code=project.code)
-                # print(project.id)
-
-                date = 1
-                return f"{date}"
+                # Get data from excel spreadsheet to check if project exist in db
+                project_data = parser.fetch_project_info()
+                # Check if project exists
+                if db_project_exists(project_tuple=project_data):
+                    return "Project already exists"
+                else:
+                    # Create new project
+                    project = db_create_project(project_tuple=project_data)
+                    # Get the remaining data from excel spreadsheet
+                    general_data = parser.fetch_general_info()
+                    ratios_data = parser.fetch_ratios()
+                    cashflows_data = parser.fetch_cashflows()
+                    benefits_data = parser.fetch_benefits()
+                    harms_data = parser.fetch_harms()
+                    economic_sectors_data = parser.fetch_economic_sectors()
+                    # Assign information to a project
+                    db_assign_project_information(
+                        project=project,
+                        general=general_data,
+                        ratios=ratios_data,
+                        cashflows=cashflows_data,
+                        benefits=benefits_data,
+                        harms=harms_data,
+                        economic_sector_names=economic_sectors_data,
+                    )
+                    return "Project added successfully"
             else:
                 return "Only .xlsm files are allowed."
         # return render_template("upload/index.html", form=form)

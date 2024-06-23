@@ -45,6 +45,7 @@ class Project(db.Model):
     )
 
     # TODO Remove sector db connection
+    # TODO Remove all seperate cashflows models and leave only cashflow model
 
 
 class General(db.Model):

@@ -13,38 +13,71 @@ from blueprintapp.blueprints.upload.models import (
 from datetime import datetime
 
 from blueprintapp.blueprints.upload.parse_project import (
-    Cashflow_tuple,
     Benefit_tuple,
+    Cashflow_tuple,
+    General_tuple,
     Harm_tuple,
+    Project_tuple,
+    Ratios_tuple,
 )
 from typing import Optional
 
 
 # db operations file
 # Create new project
-def db_create_project(name: str, code: str) -> Optional[Project]:
+def db_create_project(project_tuple: Project_tuple) -> Optional[Project]:
     """Create new project in a database.
     Each project in database has unique name and code.
-    If project with provided name and code does not exist, new project gets created.
+    If project with provided project.name and project.code does not exist, new project gets created.
     Otherwise, no new project is created.
 
     Args:
-        name (str): Customer first name
-        code (str): Customer last name
+        project (Project_tuple): object, which has data for project 'name' and 'code' attributes.
     Returns:
-        bool: 'True' - Project with provided details does not exist, 'False' - Project with provided details exist.
+        Project: - 'Project' object if new project was successfully crreated, 'False' - if project.code or project.name already exists in database.
     """
     # If project already exists, we should not create a new one
-    if db_find_project_by_name(name) is not None:
+    if db_find_project_by_name(name=project_tuple.name) is not None:
         return False
-    if db_find_project_by_code(code) is not None:
+    if db_find_project_by_code(code=project_tuple.code) is not None:
         return False
 
     # Create new project
-    project = Project(name=name, code=code)
+    project = Project(name=project_tuple.name, code=project_tuple.code)
     db.session.add(project)
     db.session.commit()
     return project
+
+
+def db_assign_project_information(
+    project: Project,
+    general: General_tuple,
+    ratios: Ratios_tuple,
+    cashflows: list[Cashflow_tuple],
+    benefits: list[Benefit_tuple],
+    harms: list[Harm_tuple],
+    economic_sector_names: list[str],
+):
+
+    try:
+        # Assign general information
+        db_insert_general(general, project_id=project.id)
+        # Assign ratios
+        db_insert_ratios(ratios=ratios, project_id=project.id)
+        # Assign cashflows
+        db_insert_cashflows(cashflows=cashflows, project_id=project.id)
+        # Assign benefits
+        db_insert_benefits(benefits=benefits, project_id=project.id)
+        # Assign harms
+        db_insert_harms(harms=harms, project_id=project.id)
+        # Insert sectors
+        economic_sectors = db_insert_economic_sectors(
+            economic_sector_names=economic_sector_names
+        )
+        # TODO Assign sectors to project
+    except Exception as e:
+        db.session.rollback()
+        print(f"An error occurred: {e}")
 
 
 def db_find_project_by_name(name: str) -> Optional[Project]:
@@ -73,27 +106,29 @@ def db_find_project_by_code(code: str) -> Optional[Project]:
     return project
 
 
+def db_project_exists(project_tuple: Project_tuple) -> bool:
+    if (
+        db_find_project_by_name(name=project_tuple.name) is None
+        and db_find_project_by_code(code=project_tuple.code) is None
+    ):
+        return False
+    return True
+
+
 def db_insert_general(
-    start_date: datetime,
-    reference_period: int,
-    analysis_method: str,
-    analysis_principle: str,
-    main_sector: str,
-    no_alternatives: int,
-    da_analysis: bool,
-    version: str,
+    general: General_tuple,
     project_id: int,
 ) -> Optional[General]:
     # Assign general information to a project
     general = General(
-        start_date=start_date,
-        reference_period=reference_period,
-        analysis_method=analysis_method,
-        analysis_principle=analysis_principle,
-        main_sector=main_sector,
-        no_alternatives=no_alternatives,
-        da_analysis=da_analysis,
-        version=version,
+        start_date=general.start_date,
+        reference_period=general.reference_period,
+        analysis_method=general.analysis_method,
+        analysis_principle=general.analysis_principle,
+        main_sector=general.main_sector,
+        no_alternatives=general.no_alternatives,
+        da_analysis=general.da_analysis,
+        version=general.version,
         project_id=project_id,
     )
     try:
@@ -105,26 +140,19 @@ def db_insert_general(
 
 
 def db_insert_ratios(
-    enis: float,
-    egdv: int,
-    evgn: float,
-    sva: float,
-    da: float,
-    fgdv: int,
-    fvgn: float,
-    fnis: float,
+    ratios: Ratios_tuple,
     project_id: int,
 ) -> Optional[Ratios]:
     # Assign ratios to a project
     ratios = Ratios(
-        enis=enis,
-        egdv=egdv,
-        evgn=evgn,
-        sva=sva,
-        da=da,
-        fgdv=fgdv,
-        fvgn=fvgn,
-        fnis=fnis,
+        enis=ratios.enis,
+        egdv=ratios.egdv,
+        evgn=ratios.evgn,
+        sva=ratios.sva,
+        da=ratios.da,
+        fgdv=ratios.fgdv,
+        fvgn=ratios.fvgn,
+        fnis=ratios.fnis,
         project_id=project_id,
     )
     try:
@@ -141,7 +169,7 @@ Functions to insert cashflows
 
 
 def db_insert_cashflow(cashflow: Cashflow_tuple, project_id: int) -> None:
-    for year, amount in cashflow["values"].items():
+    for year, amount in cashflow.values.items():
         record = Cashflow(
             amount=amount, year=year, category=cashflow.category, project_id=project_id
         )
@@ -160,7 +188,7 @@ Functions to insert benefits
 
 
 def db_insert_benefit(benefit: Benefit_tuple, benefit_id: int, project_id: int) -> None:
-    for year, amount in benefit["values"].items():
+    for year, amount in benefit.values.items():
         record = Benefit(
             amount=amount, year=year, benefit_id=benefit_id, project_id=project_id
         )
@@ -176,6 +204,8 @@ def db_benefit_component_exists(name: str) -> Optional[BenefitComponent]:
 
 def db_insert_benefit_component(name: str) -> BenefitComponent:
     benefit_component = BenefitComponent(name=name)
+    db.session.add(benefit_component)
+    db.session.commit()
     return benefit_component
 
 
@@ -200,7 +230,7 @@ Functions to insert harms
 
 
 def db_insert_harm(harm: Harm_tuple, harm_id: int, project_id: int) -> None:
-    for year, amount in harm["values"].items():
+    for year, amount in harm.values.items():
         record = Harm(amount=amount, year=year, harm_id=harm_id, project_id=project_id)
         db.session.add(record)
     db.session.commit()
@@ -214,6 +244,8 @@ def db_harm_component_exists(name: str) -> Optional[HarmComponent]:
 
 def db_insert_harm_component(name: str) -> HarmComponent:
     harm_component = HarmComponent(name=name)
+    db.session.add(harm_component)
+    db.session.commit()
     return harm_component
 
 

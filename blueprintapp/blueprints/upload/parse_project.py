@@ -5,12 +5,11 @@ from collections import namedtuple
 from datetime import datetime
 from collections import Counter
 
-Ratios = namedtuple(
-    "Ratios", ["enis", "egdv", "evgn", "sva", "da", "fgdv", "fvgn", "fnis"]
-)
-Project = namedtuple("Project", ["code", "name"])
-General = namedtuple(
-    "General",
+
+Benefit_tuple = namedtuple("Benefit_tuple", ["name", "values"])
+Cashflow_tuple = namedtuple("Cashflow_tuple", ["category", "values"])
+General_tuple = namedtuple(
+    "General_tuple",
     [
         "start_date",
         "reference_period",
@@ -22,9 +21,11 @@ General = namedtuple(
         "version",
     ],
 )
-Benefit_tuple = namedtuple("Benefit", ["name", "values"])
-Harm_tuple = namedtuple("Harm", ["name", "values"])
-Cashflow_tuple = namedtuple("Cashflow", ["category", "values"])
+Harm_tuple = namedtuple("Harm_tuple", ["name", "values"])
+Project_tuple = namedtuple("Project_tuple", ["code", "name"])
+Ratios_tuple = namedtuple(
+    "Ratios_tuple", ["enis", "egdv", "evgn", "sva", "da", "fgdv", "fvgn", "fnis"]
+)
 
 
 class MyNumbers:
@@ -179,14 +180,14 @@ class ProjectParser:
     MAIN functions do fetch data for database operations
     """
 
-    def fetch_project_info(self) -> Project:
+    def fetch_project_info(self) -> Project_tuple:
         code = self.sheet_pradzia["E4"].value
         name = self.sheet_pradzia["E6"].value
-        result = Project(code=code, name=name)
+        result = Project_tuple(code=code, name=name)
         print(result)
         return result
 
-    def fetch_general_info(self) -> General:
+    def fetch_general_info(self) -> General_tuple:
         start_date = self.get_start_date()
         reference_period = self.get_reference_period()
         analysis_method = self.get_analysis_method()
@@ -195,7 +196,7 @@ class ProjectParser:
         no_alterantives = self.get_no_alterantives()
         da_analysis = self.get_is_da_analysis_selected()
         version = self.sheet_pradzia["C45"].value
-        result = General(
+        result = General_tuple(
             start_date=start_date,
             reference_period=reference_period,
             analysis_method=analysis_method,
@@ -208,7 +209,7 @@ class ProjectParser:
         print(result)
         return result
 
-    def fetch_ratios(self) -> Ratios:
+    def fetch_ratios(self) -> Ratios_tuple:
         if self.get_analysis_method() == "Sąnaudų ir naudos analizė":
             sva = None
             enis = round(self.sheet_scenariju_analize["G271"].value, 2)
@@ -225,9 +226,13 @@ class ProjectParser:
         else:
             da = None
         fgdv = round(self.sheet_scenariju_analize["G277"].value, 0)
-        fvgn = round(self.sheet_scenariju_analize["G278"].value, 4)
+        # TODO try, except for other ratios.
+        try:
+            fvgn = round(self.sheet_scenariju_analize["G278"].value, 4)
+        except:
+            fvgn = 0
         fnis = round(self.sheet_scenariju_analize["G279"].value, 2)
-        result = Ratios(
+        result = Ratios_tuple(
             enis=enis,
             egdv=egdv,
             evgn=evgn,
@@ -310,9 +315,7 @@ class ProjectParser:
             ]
         )
         # For debugging
-        for cashflow in result:
-            print(cashflow)
-
+        print(result)
         return result
 
     def fetch_benefits(self) -> list[Benefit_tuple]:
