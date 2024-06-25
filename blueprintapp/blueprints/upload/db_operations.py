@@ -330,3 +330,19 @@ def db_insert_economic_sectors(
 #     for economic_sector in economic_sectors:
 #         project.sectors.append(economic_sector)
 #         db.session.commit()
+
+
+def db_delete_all_projects() -> None:
+    """Deletes all project information. Leaves data in models BenefitComponent, HarmComponent and Sector."""
+    projects = db.session.query(Project).all()
+    for project in projects:
+        db.session.delete(project)
+    db.session.commit()
+
+
+def db_delete_sector_and_components() -> None:
+    """Deletes data from models BenefitComponent, HarmComponent and Sector."""
+    db.session.query(Sector).delete()
+    db.session.query(BenefitComponent).delete()
+    db.session.query(HarmComponent).delete()
+    db.session.commit()

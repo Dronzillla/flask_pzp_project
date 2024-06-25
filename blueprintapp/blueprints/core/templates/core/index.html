@@ -4,4 +4,6 @@
     <h1>Home page </h1>    
     <a href="{{ url_for('upload.index') }}">Upload</a>
     <a href="{{ url_for('people.index') }}">People</a>
+    <a href="{{ url_for('upload.delete_all') }}">Delete db data</a>
+    <a href="{{ url_for('upload.delete_all_sector') }}">Delete sector data</a>
 {% endblock %}

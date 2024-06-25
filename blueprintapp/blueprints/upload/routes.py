@@ -8,6 +8,8 @@ from blueprintapp.blueprints.upload.db_operations import (
     db_project_exists,
     db_create_project,
     db_assign_project_information,
+    db_delete_all_projects,
+    db_delete_sector_and_components,
 )
 
 # Routes import
@@ -70,6 +72,18 @@ def index():
                 return "Only .xlsm files are allowed."
         # return render_template("upload/index.html", form=form)
     return render_template("upload/index.html", form=form)
+
+
+@upload.route("/delete_all")
+def delete_all():
+    db_delete_all_projects()
+    return redirect(url_for("core.index"))
+
+
+@upload.route("/delete_sector")
+def delete_all_sector():
+    db_delete_sector_and_components()
+    return redirect(url_for("core.index"))
 
 
 # @upload.route("/")
