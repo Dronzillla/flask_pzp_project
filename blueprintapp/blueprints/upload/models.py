@@ -1,8 +1,5 @@
 from blueprintapp.app import db
 
-# from sqlalchemy import Column, Integer, String, Boolean, DateTime, Float, ForeignKey
-# from sqlalchemy.orm import relationship
-
 
 # Association Table for Many-to-Many Relationship
 # Project - Sector
@@ -35,8 +32,6 @@ class Project(db.Model):
         lazy="subquery",
         back_populates="projects",
     )
-
-    # TODO Remove sector db connection
 
 
 class General(db.Model):
@@ -98,12 +93,6 @@ class BenefitComponent(db.Model):
     # Relationship (PK) one to many
     benefit = db.relationship("Benefit", back_populates="benefit_component")
 
-    # Relationship many to one
-    # Sector
-    # unique=False
-    sector_id = db.Column(db.Integer, db.ForeignKey("sector.id"))
-    sector = db.relationship("Sector", back_populates="benefit_component")
-
 
 class Benefit(db.Model):
     __tablename__ = "benefit"
@@ -132,12 +121,6 @@ class HarmComponent(db.Model):
     # Relationship (PK) one to many
     harm = db.relationship("Harm", back_populates="harm_component")
 
-    # Relationship many to one
-    # Sector
-    # unique=False
-    sector_id = db.Column(db.Integer, db.ForeignKey("sector.id"))
-    sector = db.relationship("Sector", back_populates="harm_component")
-
 
 class Harm(db.Model):
     __tablename__ = "harm"
@@ -162,10 +145,6 @@ class Sector(db.Model):
     __tablename__ = "sector"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False, unique=True)
-
-    # Relationships (PK) one to many
-    benefit_component = db.relationship("BenefitComponent", back_populates="sector")
-    harm_component = db.relationship("HarmComponent", back_populates="sector")
 
     # Relationship many to many
     # Project
