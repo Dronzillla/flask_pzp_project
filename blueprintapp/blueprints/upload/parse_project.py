@@ -181,6 +181,11 @@ class ProjectParser:
     """
 
     def fetch_project_info(self) -> Project_tuple:
+        """Extracts project name and code from uploaded excel file. Project name and code should be unique in database.
+
+        Returns:
+            Project_tuple: named tuple with two two attributes 'name' and 'code'.
+        """
         code = self.sheet_pradzia["E4"].value
         name = self.sheet_pradzia["E6"].value
         result = Project_tuple(code=code, name=name)

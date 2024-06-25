@@ -59,6 +59,17 @@ def db_assign_project_information(
     harms: list[Harm_tuple],
     economic_sector_names: list[str],
 ) -> None:
+    """Assigns project information extracted from uploaded excel spreadsheet to database tables.
+
+    Args:
+        project (Project): project database model
+        general (General_tuple): tuple with multiple attributes for general project information.
+        ratios (Ratios_tuple): tuple with multiple attributes for different ratios of a project.
+        cashflows (list[Cashflow_tuple]): list of tuples for time series data for cashflows: capex, opex, etc of a project.
+        benefits (list[Benefit_tuple]): list of tuples for time series data for specific benefit component and their respective cahsflows for a project.
+        harms (list[Harm_tuple]): list of tuples for time series data for specific harm component and their respective cahsflows for a project.
+        economic_sector_names (list[str]): list of economic sector names assigned to a project.
+    """
 
     try:
         # Assign general information
@@ -112,6 +123,14 @@ def db_find_project_by_code(code: str) -> Optional[Project]:
 
 
 def db_project_exists(project_tuple: Project_tuple) -> bool:
+    """Checks if project exists in database based on
+
+    Args:
+        project_tuple (Project_tuple): Object with attributes 'name' and 'code'.
+
+    Returns:
+        bool: 'True' if project with provided 'name' or 'code' does not exist in database, 'False' if project with provided 'name' or 'code' exists in database.
+    """
     if (
         db_find_project_by_name(name=project_tuple.name) is None
         and db_find_project_by_code(code=project_tuple.code) is None
