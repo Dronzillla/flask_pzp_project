@@ -9,6 +9,7 @@ from blueprintapp.blueprints.upload.models import (
     Sector,
     HarmComponent,
     Harm,
+    project_sector,
 )
 from datetime import datetime
 
@@ -57,7 +58,7 @@ def db_assign_project_information(
     benefits: list[Benefit_tuple],
     harms: list[Harm_tuple],
     economic_sector_names: list[str],
-):
+) -> None:
 
     try:
         # Assign general information
@@ -70,11 +71,15 @@ def db_assign_project_information(
         db_insert_benefits(benefits=benefits, project_id=project.id)
         # Assign harms
         db_insert_harms(harms=harms, project_id=project.id)
-        # Insert sectors
-        economic_sectors = db_insert_economic_sectors(
-            economic_sector_names=economic_sector_names
+        # Insert sectors and assign to project
+        db_insert_economic_sectors(
+            economic_sector_names=economic_sector_names, project=project
         )
         # TODO Assign sectors to project
+        # for economic_sector in economic_sectors:
+        #     project.sectors.append(economic_sector)
+        #     db.session.commit()
+
     except Exception as e:
         db.session.rollback()
         print(f"An error occurred: {e}")
@@ -193,7 +198,7 @@ def db_insert_benefit(benefit: Benefit_tuple, benefit_id: int, project_id: int) 
             amount=amount, year=year, benefit_id=benefit_id, project_id=project_id
         )
         db.session.add(record)
-    db.session.commit()
+        db.session.commit()
 
 
 # Return benefitcomponent or None
@@ -233,7 +238,7 @@ def db_insert_harm(harm: Harm_tuple, harm_id: int, project_id: int) -> None:
     for year, amount in harm.values.items():
         record = Harm(amount=amount, year=year, harm_id=harm_id, project_id=project_id)
         db.session.add(record)
-    db.session.commit()
+        db.session.commit()
 
 
 # Return harmcomponent or None
@@ -284,10 +289,25 @@ def db_insert_economic_sector(name: str) -> Sector:
     return sector
 
 
-def db_insert_economic_sectors(economic_sector_names: list[str]) -> list[Sector]:
+def db_insert_economic_sectors(
+    economic_sector_names: list[str], project: Project
+) -> None:
     # list[Sector] for making an association
-    result = []
+    # result = []
     for name in economic_sector_names:
+        # Get new sector or create new sector if it does not exist
         sector = db_insert_economic_sector(name=name)
-        result.append(sector)
-    return result
+        # Append to project_sector association table
+        project.sectors.append(sector)
+        db.session.commit()
+
+        # result.append(sector)
+    # return result
+
+
+# def db_assign_economic_sectors(
+#     project: Project, economic_sectors: list[Sector]
+# ) -> None:
+#     for economic_sector in economic_sectors:
+#         project.sectors.append(economic_sector)
+#         db.session.commit()
