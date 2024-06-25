@@ -25,14 +25,6 @@ class Project(db.Model):
     ratios = db.relationship("Ratios", uselist=False, back_populates="project")
     # Relationships (PK) one to many
     cashflow = db.relationship("Cashflow", back_populates="project")
-    capex = db.relationship("Capex", back_populates="project")
-    reinvestment = db.relationship("Reinvestment", back_populates="project")
-    opex = db.relationship("Opex", back_populates="project")
-    revenue = db.relationship("Revenue", back_populates="project")
-    tax_revenue = db.relationship("TaxRevenue", back_populates="project")
-    vat = db.relationship("Vat", back_populates="project")
-    private_revenue = db.relationship("PrivateRevenue", back_populates="project")
-    private_cost = db.relationship("PrivateCost", back_populates="project")
     benefit = db.relationship("Benefit", back_populates="project")
     harm = db.relationship("Harm", back_populates="project")
     # Relationships Many to many
@@ -45,7 +37,6 @@ class Project(db.Model):
     )
 
     # TODO Remove sector db connection
-    # TODO Remove all seperate cashflows models and leave only cashflow model
 
 
 class General(db.Model):
@@ -97,110 +88,6 @@ class Cashflow(db.Model):
     # unique=False
     project_id = db.Column(db.Integer, db.ForeignKey("project.id"))
     project = db.relationship("Project", back_populates="cashflow")
-
-
-class Capex(db.Model):
-    __tablename__ = "capex"
-    id = db.Column(db.Integer, primary_key=True)
-    amount = db.Column(db.Float)
-    year = db.Column(db.Integer)
-
-    # Relationship many to one
-    # Project
-    # unique=False
-    project_id = db.Column(db.Integer, db.ForeignKey("project.id"))
-    project = db.relationship("Project", back_populates="capex")
-
-
-class Reinvestment(db.Model):
-    __tablename__ = "reinvestment"
-    id = db.Column(db.Integer, primary_key=True)
-    amount = db.Column(db.Float)
-    year = db.Column(db.Integer)
-
-    # Relationship many to one
-    # Project
-    # unique=False
-    project_id = db.Column(db.Integer, db.ForeignKey("project.id"))
-    project = db.relationship("Project", back_populates="reinvestment")
-
-
-class Opex(db.Model):
-    __tablename__ = "opex"
-    id = db.Column(db.Integer, primary_key=True)
-    amount = db.Column(db.Float)
-    year = db.Column(db.Integer)
-
-    # Relationship many to one
-    # Project
-    # unique=False
-    project_id = db.Column(db.Integer, db.ForeignKey("project.id"))
-    project = db.relationship("Project", back_populates="opex")
-
-
-class Revenue(db.Model):
-    __tablename__ = "revenue"
-    id = db.Column(db.Integer, primary_key=True)
-    amount = db.Column(db.Float)
-    year = db.Column(db.Integer)
-
-    # Relationship many to one
-    # Project
-    # unique=False
-    project_id = db.Column(db.Integer, db.ForeignKey("project.id"))
-    project = db.relationship("Project", back_populates="revenue")
-
-
-class TaxRevenue(db.Model):
-    __tablename__ = "tax_revenue"
-    id = db.Column(db.Integer, primary_key=True)
-    amount = db.Column(db.Float)
-    year = db.Column(db.Integer)
-
-    # Relationship many to one
-    # Project
-    # unique=False
-    project_id = db.Column(db.Integer, db.ForeignKey("project.id"))
-    project = db.relationship("Project", back_populates="tax_revenue")
-
-
-class Vat(db.Model):
-    __tablename__ = "vat"
-    id = db.Column(db.Integer, primary_key=True)
-    amount = db.Column(db.Float)
-    year = db.Column(db.Integer)
-
-    # Relationship many to one
-    # Project
-    # unique=False
-    project_id = db.Column(db.Integer, db.ForeignKey("project.id"))
-    project = db.relationship("Project", back_populates="vat")
-
-
-class PrivateRevenue(db.Model):
-    __tablename__ = "private_revenue"
-    id = db.Column(db.Integer, primary_key=True)
-    amount = db.Column(db.Float)
-    year = db.Column(db.Integer)
-
-    # Relationship many to one
-    # Project
-    # unique=False
-    project_id = db.Column(db.Integer, db.ForeignKey("project.id"))
-    project = db.relationship("Project", back_populates="private_revenue")
-
-
-class PrivateCost(db.Model):
-    __tablename__ = "private_cost"
-    id = db.Column(db.Integer, primary_key=True)
-    amount = db.Column(db.Float)
-    year = db.Column(db.Integer)
-
-    # Relationship many to one
-    # Project
-    # unique=False
-    project_id = db.Column(db.Integer, db.ForeignKey("project.id"))
-    project = db.relationship("Project", back_populates="private_cost")
 
 
 class BenefitComponent(db.Model):
