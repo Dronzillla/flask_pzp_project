@@ -4,5 +4,16 @@
 Objective: Create a basic application to extract data from standartized excel spreadsheets, which are used for preparing national progress plans.
 
 Requirements:
-- Upload file to a flask application. 
+- Enable file upload in flask application. 
 - Extract information from file and save it to a database.
+
+### Stage 2: Basic user authentication
+Objective: Create basic user authentication with Flask-Login
+
+Requirements:
+- User can register.
+- User can login andchoose to stay logged in.
+- User can log out.
+- User can upload projects.
+- User can read and delete projects.
+- User can see menu items based on log in fact.

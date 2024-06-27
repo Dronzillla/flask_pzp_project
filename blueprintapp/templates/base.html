@@ -10,6 +10,9 @@
         <a href="{{ url_for('core.index') }}">Main</a>
         <a href="{{ url_for('people.index') }}">People</a>
         <a href="{{ url_for('upload.index') }}">Upload</a>
+        <a href="{{ url_for('auth.login') }}">Login</a>
+        <a href="{{ url_for('auth.register') }}">Register</a>
+        <a href="{{ url_for('auth.logout') }}">Logout</a>
     </nav>
 
     {% block content %}{% endblock %}
