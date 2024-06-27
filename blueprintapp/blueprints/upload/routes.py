@@ -1,9 +1,20 @@
 from flask import request, render_template, redirect, url_for, Blueprint
+from flask_login import login_required
 
 # Have to leave it for db migrations
 from blueprintapp.app import db
-from blueprintapp.blueprints.upload.models import Project, General, Ratios
-
+from blueprintapp.blueprints.upload.models import (
+    Project,
+    General,
+    Ratios,
+    Cashflow,
+    BenefitComponent,
+    Benefit,
+    HarmComponent,
+    Harm,
+)
+from blueprintapp.blueprints.upload.parse_project import ProjectParser
+from blueprintapp.blueprints.upload.forms import UploadForm
 from blueprintapp.blueprints.upload.db_operations import (
     db_project_exists,
     db_create_project,
@@ -11,22 +22,16 @@ from blueprintapp.blueprints.upload.db_operations import (
     db_delete_all_projects,
     db_delete_sector_and_components,
 )
-
-# Routes import
 from openpyxl import load_workbook
 from io import BytesIO
 
-#
-from blueprintapp.blueprints.upload.parse_project import ProjectParser
-
-#
-from blueprintapp.blueprints.upload.forms import UploadForm
 
 upload = Blueprint("upload", __name__, template_folder="templates")
 
 
-# Routes file
+# Only registered user can upload files
 @upload.route("/", methods=["GET", "POST"])
+@login_required
 def index():
     form = UploadForm()
 
@@ -84,27 +89,3 @@ def delete_all():
 def delete_all_sector():
     db_delete_sector_and_components()
     return redirect(url_for("core.index"))
-
-
-# @upload.route("/")
-# def index():
-#     upload = Todo.query.all()
-#     # Create a directory in templates that use same name as blueprint
-#     return render_template("upload/index.html", upload=upload)
-
-
-# @upload.route("/create", methods=["GET", "POST"])
-# def create():
-#     if request.method == "GET":
-#         return render_template("upload/create.html")
-#     elif request.method == "POST":
-#         title = request.form.get("title")
-#         description = request.form.get("description")
-#         # If checkbox is checked
-#         done = True if "done" in request.form.keys() else False
-#         # If decsription is empty string set it to None
-#         description = description if description != "" else None
-#         todo = Todo(title=title, description=description, done=done)
-#         db.session.add(todo)
-#         db.session.commit()
-#         return redirect(url_for("upload.index"))

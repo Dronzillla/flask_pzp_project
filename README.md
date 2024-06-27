@@ -12,8 +12,9 @@ Objective: Create basic user authentication with Flask-Login
 
 Requirements:
 - User can register.
-- User can login andchoose to stay logged in.
-- User can log out.
+- User can login and choose to stay logged in.
+- User can logout.
 - User can upload projects.
 - User can read and delete projects.
 - User can see menu items based on log in fact.
+- User can access upload and auth/logout routes only if he is logged in.
