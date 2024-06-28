@@ -11,8 +11,8 @@ auth = Blueprint("auth", __name__, template_folder="templates")
 @auth.route("/register", methods=["GET", "POST"])
 def register():
     if current_user.is_authenticated:
-        return f"{current_user.username}"
-        # return redirect(url_for("core.index"))
+        # return f"{current_user.username}"
+        return redirect(url_for("dashboard.index"))
     form = RegistrationForm()
     if form.validate_on_submit():
         user = User(username=form.username.data.lower(), email=form.email.data.lower())
@@ -28,8 +28,8 @@ def register():
 def login():
     nologin = False
     if current_user.is_authenticated:
-        return f"{current_user.username}"
-        # return redirect(url_for("core.index"))
+        # return f"{current_user.username}"
+        return redirect(url_for("dashboard.index"))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data.lower()).first()
@@ -45,7 +45,7 @@ def login():
             login_user(user, remember=form.remember_me.data)
             next_page = request.args.get("next")
             if not next_page or urlparse(next_page).netloc != "":
-                next_page = url_for("core.index")
+                next_page = url_for("dashboard.index")
             return redirect(next_page)
     return render_template("auth/login.html", form=form, message=nologin)
 

@@ -17,4 +17,4 @@ Requirements:
 - User can upload projects.
 - User can read and delete projects.
 - User can see menu items based on log in fact.
-- User can access upload and auth/logout routes only if he is logged in.
+- User can access upload, dashboard and auth/logout routes only if he is logged in.

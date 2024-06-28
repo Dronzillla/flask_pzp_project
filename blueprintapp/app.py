@@ -24,6 +24,7 @@ def create_app():
     from blueprintapp.blueprints.upload.routes import upload
     from blueprintapp.blueprints.people.routes import people
     from blueprintapp.blueprints.auth.routes import auth
+    from blueprintapp.blueprints.dashboard.routes import dashboard
 
     # in order to go to index we need to go to -> todos/
     # to create an account /todos/create
@@ -31,6 +32,7 @@ def create_app():
     app.register_blueprint(upload, url_prefix="/upload")
     app.register_blueprint(people, url_prefix="/people")
     app.register_blueprint(auth, url_prefix="/auth")
+    app.register_blueprint(dashboard, url_prefix="/dashboard")
 
     migrate = Migrate(app, db)
     # To create db go to blueprintapp folder where app.py is
