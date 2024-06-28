@@ -34,6 +34,7 @@ def create_app():
     app.register_blueprint(auth, url_prefix="/auth")
     app.register_blueprint(dashboard, url_prefix="/dashboard")
 
+    # SQL does not support alter tables. Might include: render_as_batch=True
     migrate = Migrate(app, db)
     # To create db go to blueprintapp folder where app.py is
     # flask db init

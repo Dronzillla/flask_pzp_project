@@ -44,7 +44,7 @@ class Project(db.Model):
     harm = db.relationship(
         "Harm", back_populates="project", cascade="all, delete-orphan"
     )
-    # Relationships Many to many
+    # Relationships many to many
     # Sector
     sectors = db.relationship(
         "Sector",
@@ -53,6 +53,13 @@ class Project(db.Model):
         back_populates="projects",
         # cascade="all, delete",
     )
+    # Relationship many to one
+    # User
+    # unique=False
+    user_id = db.Column(
+        db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), nullable=False
+    )
+    user = db.relationship("User", back_populates="project")
 
 
 class General(db.Model):

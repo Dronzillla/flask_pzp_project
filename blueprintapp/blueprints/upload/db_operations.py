@@ -26,7 +26,7 @@ from typing import Optional
 
 # db operations file
 # Create new project
-def db_create_project(project_tuple: Project_tuple) -> Optional[Project]:
+def db_create_project(project_tuple: Project_tuple, user_id: int) -> Optional[Project]:
     """Create new project in a database.
     Each project in database has unique name and code.
     If project with provided project.name and project.code does not exist, new project gets created.
@@ -44,7 +44,7 @@ def db_create_project(project_tuple: Project_tuple) -> Optional[Project]:
         return False
 
     # Create new project
-    project = Project(name=project_tuple.name, code=project_tuple.code)
+    project = Project(name=project_tuple.name, code=project_tuple.code, user_id=user_id)
     db.session.add(project)
     db.session.commit()
     return project

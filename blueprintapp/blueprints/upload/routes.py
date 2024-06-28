@@ -1,8 +1,6 @@
 from flask import request, render_template, redirect, url_for, Blueprint
-from flask_login import login_required
-
-# Have to leave it for db migrations
-from blueprintapp.app import db
+from flask_login import login_required, current_user
+from blueprintapp.app import db  # Have to leave it for db migrations
 from blueprintapp.blueprints.upload.models import (
     Project,
     General,
@@ -34,7 +32,8 @@ upload = Blueprint("upload", __name__, template_folder="templates")
 @login_required
 def index():
     form = UploadForm()
-
+    # Get current user id
+    user_id = current_user.id
     if request.method == "POST":
         if form.validate_on_submit():
             file = form.file.data
@@ -54,7 +53,9 @@ def index():
                     return "Project already exists"
                 else:
                     # Create new project
-                    project = db_create_project(project_tuple=project_data)
+                    project = db_create_project(
+                        project_tuple=project_data, user_id=user_id
+                    )
                     # Get the remaining data from excel spreadsheet
                     general_data = parser.fetch_general_info()
                     ratios_data = parser.fetch_ratios()

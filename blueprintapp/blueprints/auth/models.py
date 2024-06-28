@@ -10,7 +10,11 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(80), unique=True)
     email = db.Column(db.String(80), unique=True)
     password_hash = db.Column(db.String(80))
-    # TODO Create relationship with project one user can have many projects
+
+    # Relationships (PK) one to many
+    project = db.relationship(
+        "Project", back_populates="user", cascade="all, delete-orphan"
+    )
 
     def __repr__(self):
         return f"<User {self.username}>"
