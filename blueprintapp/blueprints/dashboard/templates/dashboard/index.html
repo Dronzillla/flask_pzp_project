@@ -2,5 +2,17 @@
 {% block title %}Dashboard{% endblock %}
 {% block content %}
 <h1>Dashboard</h1>
-<p>Logged in: {{ username }}</p>
+<p>Logged in as: {{ username }}</p>
+<h2>Projects</h2>
+<div>
+    <ul>
+        {% for project in projects %}
+            <li>
+                <div>{{ project.name }}</div>
+                <div><a href="{{ url_for('dashboard.project', id=project.id) }}">View</a></div>
+                <div><a href="{{ url_for('dashboard.delete_project', id=project.id) }}">Delete</a></div>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
 {% endblock %}

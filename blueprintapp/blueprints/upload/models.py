@@ -61,6 +61,9 @@ class Project(db.Model):
     )
     user = db.relationship("User", back_populates="project")
 
+    def __repr__(self):
+        return f"id: {self.id}, name: {self.name}, code: {self.code}"
+
 
 class General(db.Model):
     __tablename__ = "general"
