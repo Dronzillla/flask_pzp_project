@@ -8,7 +8,7 @@ Requirements:
 - Extract information from file and save it to a database.
 
 ### Stage 2: Basic user authentication
-Objective: Create basic user authentication with Flask-Login
+Objective: Create basic user authentication with Flask-Login.
 
 Requirements:
 - User can register.
@@ -18,3 +18,14 @@ Requirements:
 - User can read and delete projects.
 - User can see menu items based on log in fact.
 - User can access upload, dashboard and auth/logout routes only if he is logged in.
+
+
+### Stage 3: Basic visualization for data
+Objectives: 
+- Enforce uploading only valid files.
+- Create project specific and aggregate data visualization.
+
+Requirements:
+- Validate eligble to upload excel files.
+- Create visuals of aggregate data.
+- Create visuals for viewing specific project data.
