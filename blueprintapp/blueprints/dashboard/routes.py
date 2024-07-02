@@ -6,6 +6,11 @@ from blueprintapp.blueprints.dashboard.db_operations import (
     db_read_project_by_id,
     db_delete_project,
 )
+from blueprintapp.blueprints.dashboard.visuals import (
+    graph_project_cashflows_scatter,
+    table_project_ratios,
+)
+
 
 dashboard = Blueprint("dashboard", __name__, template_folder="templates")
 
@@ -21,6 +26,7 @@ def index():
 @dashboard.route("/project/<int:id>")
 @login_required
 def project(id):
+
     # TODO Make View and Delete as buttons
     # Get user id
     user_id = current_user.id
@@ -28,7 +34,14 @@ def project(id):
     if project is None:
         return "Project not found", 404
     # TODO Get project information from database.
-    return render_template("dashboard/project.html", project=project)
+    table_ratios_html = table_project_ratios(project_id=project.id)
+
+    graph_cashflows_html = graph_project_cashflows_scatter(project_id=project.id)
+    return render_template(
+        "dashboard/project.html",
+        project=project,
+        graph_cashflows_html=graph_cashflows_html,
+    )
 
 
 @dashboard.route("/project/delete/<int:id>")

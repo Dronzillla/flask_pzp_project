@@ -1,5 +1,5 @@
 from blueprintapp.app import db
-from blueprintapp.blueprints.upload.models import Project
+from blueprintapp.blueprints.upload.models import Project, Cashflow, Ratios
 from typing import Optional
 
 
@@ -15,3 +15,13 @@ def db_read_project_by_id(id: int, user_id: int) -> Optional[Project]:
 def db_delete_project(project: Project) -> None:
     db.session.delete(project)
     db.session.commit()
+
+
+def db_read_cashflow_by_project_id(project_id: int) -> list:
+    cashflow_data = Cashflow.query.filter_by(project_id=project_id).all()
+    return cashflow_data
+
+
+def db_read_ratios_by_project_id(project_id: int) -> Optional[Ratios]:
+    ratios_data = Ratios.query.filter_by(project_id=project_id).one_or_none()
+    return ratios_data
