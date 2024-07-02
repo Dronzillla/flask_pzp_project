@@ -4,6 +4,7 @@ from openpyxl.utils import column_index_from_string
 from collections import namedtuple
 from datetime import datetime
 from collections import Counter
+from typing import Union
 
 
 Benefit_tuple = namedtuple("Benefit_tuple", ["name", "values"])
@@ -214,29 +215,42 @@ class ProjectParser:
         print(result)
         return result
 
+    def __round_ratio(self, ratio: Union[int, float], ndigits: int) -> float:
+        """Trie to round ratio.
+
+        Args:
+            ratio (Union[int, float]): ratio value
+            ndigits (int): round precision
+
+        Returns:
+            float: ratio rounded to given precision, -9999 if ratio rounding was unsuccessful.
+        """
+        try:
+            ratio = round(ratio, ndigits)
+        except:
+            ratio = -9999
+        return ratio
+
     def fetch_ratios(self) -> Ratios_tuple:
         if self.get_analysis_method() == "Sąnaudų ir naudos analizė":
             sva = None
-            enis = round(self.sheet_scenariju_analize["G271"].value, 2)
-            egdv = round(self.sheet_scenariju_analize["G272"].value, 0)
-            evgn = round(self.sheet_scenariju_analize["G273"].value, 4)
+            enis = self.__round_ratio(self.sheet_scenariju_analize["G271"].value, 2)
+            egdv = self.__round_ratio(self.sheet_scenariju_analize["G272"].value, 0)
+            evgn = self.__round_ratio(self.sheet_scenariju_analize["G273"].value, 4)
         else:
-            sva = round(self.sheet_scenariju_analize["G274"].value, 2)
+            sva = self.__round_ratio(self.sheet_scenariju_analize["G274"].value, 2)
             enis = None
             egdv = None
             evgn = None
-
+        # If multicriteria analysis is selected
         if self.get_is_da_analysis_selected():
-            da = round(self.sheet_scenariju_analize["G275"].value, 2)
+            da = self.__round_ratio(self.sheet_scenariju_analize["G275"].value, 2)
         else:
             da = None
-        fgdv = round(self.sheet_scenariju_analize["G277"].value, 0)
-        # TODO try, except for other ratios.
-        try:
-            fvgn = round(self.sheet_scenariju_analize["G278"].value, 4)
-        except:
-            fvgn = 0
-        fnis = round(self.sheet_scenariju_analize["G279"].value, 2)
+        # Financial ratios
+        fgdv = self.__round_ratio(self.sheet_scenariju_analize["G277"].value, 0)
+        fvgn = self.__round_ratio(self.sheet_scenariju_analize["G278"].value, 4)
+        fnis = self.__round_ratio(self.sheet_scenariju_analize["G279"].value, 2)
         result = Ratios_tuple(
             enis=enis,
             egdv=egdv,

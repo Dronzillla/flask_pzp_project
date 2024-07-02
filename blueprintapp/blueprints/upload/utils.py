@@ -14,7 +14,7 @@ def is_valid_excel_file(file: FileStorage) -> Optional[Workbook]:
         bool: 'True' if given file is valid format file, 'False' if given file is not valid format file.
     """
     # Check if filname endswith .xlsm or .xlsx
-    if not file.filename.endswith(".xlsm") or not not file.filename.endswith(".xlsx"):
+    if not (file.filename.endswith(".xlsm") or file.filename.endswith(".xlsx")):
         return False
     # Read the file in memory
     in_memory_file = BytesIO(file.read())
