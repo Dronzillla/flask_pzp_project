@@ -13,7 +13,8 @@ def convert_db_cashflow_to_pd_df(cashflow_data: list) -> pd.DataFrame:
     df = pd.DataFrame(data)
 
     # Pivot the data to get years as rows and categories as columns
-    df_pivot = df.pivot(index="year", columns="category", values="total_amount").fillna(
-        0
-    )
-    return df_pivot
+    # df_pivot = df.pivot(index="year", columns="category", values="total_amount").fillna(
+    #     0
+    # )
+    print(df)
+    return df
