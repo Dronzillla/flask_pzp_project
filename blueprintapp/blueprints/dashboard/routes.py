@@ -9,6 +9,7 @@ from blueprintapp.blueprints.dashboard.db_operations import (
 from blueprintapp.blueprints.dashboard.visuals import (
     graph_project_cashflows_scatter,
     table_project_ratios,
+    table_project_general,
 )
 
 
@@ -34,13 +35,16 @@ def project(id):
     if project is None:
         return "Project not found", 404
     # TODO Get project information from database.
-    table_ratios_html = table_project_ratios(project_id=project.id)
-
     graph_cashflows_html = graph_project_cashflows_scatter(project_id=project.id)
+    table_ratios_html = table_project_ratios(project_id=project.id)
+    table_general_html = table_project_general(project_id=project.id)
+
     return render_template(
         "dashboard/project.html",
         project=project,
         graph_cashflows_html=graph_cashflows_html,
+        table_ratios_html=table_ratios_html,
+        table_general_html=table_general_html,
     )
 
 

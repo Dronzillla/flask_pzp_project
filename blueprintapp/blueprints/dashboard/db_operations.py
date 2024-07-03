@@ -1,5 +1,5 @@
 from blueprintapp.app import db
-from blueprintapp.blueprints.upload.models import Project, Cashflow, Ratios
+from blueprintapp.blueprints.upload.models import Project, Cashflow, Ratios, General
 from typing import Optional
 
 
@@ -25,3 +25,8 @@ def db_read_cashflow_by_project_id(project_id: int) -> list:
 def db_read_ratios_by_project_id(project_id: int) -> Optional[Ratios]:
     ratios_data = Ratios.query.filter_by(project_id=project_id).one_or_none()
     return ratios_data
+
+
+def db_read_general_by_project_id(project_id: int) -> Optional[General]:
+    general_data = General.query.filter_by(project_id=project_id).one_or_none()
+    return general_data
