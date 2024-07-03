@@ -17,7 +17,6 @@ def convert_db_project_cashflows_to_pd_df(cashflow_data: list) -> pd.DataFrame:
 
 
 def convert_db_project_ratios_to_pd_df(ratios_data: Ratios) -> pd.DataFrame:
-
     if ratios_data.fvgn == -9999.0:
         fvgn = "N/A"
     else:
