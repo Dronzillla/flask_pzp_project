@@ -20,7 +20,6 @@ def convert_db_ratios_to_pd_df(ratios_data: list) -> pd.DataFrame:
     data = {row.ratio: row.average for row in ratios_data}
     # Create the DataFrame from the dictionary
     df = pd.DataFrame(data, index=["Value"])
-    # Rename the first column
     # print(df)
     return df
 
@@ -46,3 +45,17 @@ def filter_benefits_pd_df_top5(df: pd.DataFrame) -> pd.DataFrame:
     # Filter the original DataFrame to keep only rows corresponding to the top 5 names
     filtered_df = df[df["name"].isin(top5_names)]
     return filtered_df
+
+
+def convert_db_general_to_df(general_data: list) -> pd.DataFrame:
+    df = pd.DataFrame(general_data)
+    # print(df)
+    return df
+
+
+# TODO remake convert_db_cashflows and convert_db_benefits
+# TODO Remove convert db_general_to_df
+def convert_db_list_to_pd_df(data: list) -> pd.DataFrame:
+    df = pd.DataFrame(data)
+    # print(df)
+    return df

@@ -2,12 +2,16 @@
 {% block title %}Core{% endblock %}
 {% block content %}
     <h1>Home page </h1>
-    <a href="{{ url_for('upload.delete_all') }}">Delete db data</a><br>
-    <a href="{{ url_for('upload.delete_all_sector') }}">Delete sector data</a><br>
-    <h2>Aggregate Cashflow by Category and Year</h2>
+    <!-- <a href="{{ url_for('upload.delete_all') }}">Delete db data</a><br> -->
+    <!-- <a href="{{ url_for('upload.delete_all_sector') }}">Delete sector data</a><br> -->
+    <div>National progress plans uploaded: {{ project_count }}</div>
+    
     <div>{{ plot_html | safe }}</div>
     <div>{{ table_html | safe }}</div>
     <div>{{ ratios_html | safe }}</div>
     <div>{{ graph_benefits_html | safe }}</div>
+    <div>{{ graph_general_method_html | safe }}</div>
+    <div>{{ graph_general_principle_html | safe }}</div>
+    <div>{{ graph_general_sector_html | safe }}</div>
 
 {% endblock %}

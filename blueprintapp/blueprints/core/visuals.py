@@ -2,12 +2,16 @@ from blueprintapp.blueprints.core.db_operations import (
     db_aggregate_cashflow_data,
     db_aggregate_ratio_averages,
     db_aggregate_benefits_by_component_by_year,
+    db_aggregate_general_analysis_methods_count,
+    db_aggregate_general_analysis_principle_count,
+    db_aggregate_general_main_sector_count,
 )
 from blueprintapp.blueprints.core.utils import (
     convert_db_cashflow_to_pd_df,
     convert_db_ratios_to_pd_df,
     convert_db_benefits_to_pd_df,
     filter_benefits_pd_df_top5,
+    convert_db_general_to_df,
 )
 import plotly.graph_objects as go
 import plotly.express as px
@@ -129,3 +133,29 @@ def graph_benefits_scatter_top5() -> str:
     # Create HTML representation of the Plotly figure
     benefits_html_graph = fig.to_html(full_html=False)
     return benefits_html_graph
+
+
+def graph_general_indicator_pie(indicator: str) -> str:
+    """Create plotly pie chart to graph general indicator.
+
+    Returns:
+        str: html string representation of a graph.
+    """
+    # Get database data from General models
+    if indicator == "analysis_method":
+        title = "Analysis Methods Used"
+        general_data = db_aggregate_general_analysis_methods_count()
+    elif indicator == "analysis_principle":
+        title = "Analysis Principles Used"
+        general_data = db_aggregate_general_analysis_principle_count()
+    elif indicator == "main_sector":
+        title = "Main Economic Sectors"
+        general_data = db_aggregate_general_main_sector_count()
+    if len(general_data) == 0:
+        return ""
+    # Convert to pandas data frame
+    df = convert_db_general_to_df(general_data=general_data)
+    # Create general data count graph
+    fig = px.pie(df, values="count", names=indicator, title=title)
+    general_html_graph = fig.to_html(full_html=False)
+    return general_html_graph
