@@ -1,16 +1,24 @@
 from blueprintapp.blueprints.core.db_operations import (
     db_aggregate_cashflow_data,
     db_aggregate_ratio_averages,
+    db_aggregate_benefits_by_component_by_year,
 )
 from blueprintapp.blueprints.core.utils import (
     convert_db_cashflow_to_pd_df,
     convert_db_ratios_to_pd_df,
+    convert_db_benefits_to_pd_df,
+    filter_benefits_pd_df_top5,
 )
 import plotly.graph_objects as go
 import plotly.express as px
 
 
 def graph_cashflows_scatter() -> str:
+    """Create plotly scatter plot to graph aggregate yearly cashflows of all projects.
+
+    Returns:
+        str: html string representation of a graph.
+    """
     # Get database data for cahsflows
     cashflow_data = db_aggregate_cashflow_data()
     if len(cashflow_data) == 0:
@@ -35,6 +43,11 @@ def graph_cashflows_scatter() -> str:
 
 
 def table_cashflows_totals() -> str:
+    """Create plotly table to show aggregate yearly cashflows of all projects.
+
+    Returns:
+        str: html string representation of a table.
+    """
     # Get database data for cashflows
     cashflow_data = db_aggregate_cashflow_data()
     if len(cashflow_data) == 0:
@@ -61,6 +74,11 @@ def table_cashflows_totals() -> str:
 
 
 def table_ratios_averages() -> str:
+    """Create plotly table to show average ratios values of all projects.
+
+    Returns:
+        str: html string representation of a table.
+    """
     # Get database data for ratios averages
     ratios_data = db_aggregate_ratio_averages()
     if len(ratios_data) == 0:
@@ -74,9 +92,40 @@ def table_ratios_averages() -> str:
     cells = dict(values=values_header, align="left")
     fig = go.Figure(data=[go.Table(header=header, cells=cells)])
     fig.update_layout(
-        height=200,
+        height=100,
         margin=dict(t=0, b=0),
     )
     # Create html table
     table_ratios_html = fig.to_html(full_html=False)
     return table_ratios_html
+
+
+def graph_benefits_scatter_top5() -> str:
+    """Create plotly scatter plot to graph aggregate yearly benefits of top5 benefit components.
+
+    Returns:
+        str: html string representation of a graph.
+    """
+    # Get database data for cahsflows
+    benefits_data = db_aggregate_benefits_by_component_by_year()
+    if len(benefits_data) == 0:
+        return ""
+    # Convert db benefits data to pandas Data Frame
+    df = convert_db_benefits_to_pd_df(benefits_data=benefits_data)
+    # Get top 5 values
+    df = filter_benefits_pd_df_top5(df=df)
+    # Create aggregate benefits graph
+    fig = px.scatter(df, x="year", y="total_amount", color="name")
+    fig.update_layout(
+        title="Top 5 Aggregate Benefits by Benefit Component and Year",
+        xaxis_title="Year",
+        yaxis_title="Amount",
+        yaxis=dict(type="log"),
+        # yaxis=dict(type="log", dtick=1, tickvals=y_ticks, ticktext=y_labels),
+        legend_title="Component",
+        barmode="group",
+    )
+    fig.update_traces(hovertemplate="Year: %{x}<br>Amount: %{y:.2s} EUR<br>")
+    # Create HTML representation of the Plotly figure
+    benefits_html_graph = fig.to_html(full_html=False)
+    return benefits_html_graph

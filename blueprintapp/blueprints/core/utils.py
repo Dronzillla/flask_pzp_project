@@ -23,3 +23,26 @@ def convert_db_ratios_to_pd_df(ratios_data: list) -> pd.DataFrame:
     # Rename the first column
     # print(df)
     return df
+
+
+def convert_db_benefits_to_pd_df(benefits_data: list) -> pd.DataFrame:
+    data = [
+        {
+            "year": row.year,
+            "name": row.name,
+            "total_amount": row.total_amount,
+        }
+        for row in benefits_data
+    ]
+    df = pd.DataFrame(data)
+    # print(df)
+    return df
+
+
+def filter_benefits_pd_df_top5(df: pd.DataFrame) -> pd.DataFrame:
+    summed_df = df.groupby("name", as_index=False)["total_amount"].sum()
+    # Identify the top 5 names based on summed total_amount
+    top5_names = summed_df.nlargest(5, "total_amount")["name"]
+    # Filter the original DataFrame to keep only rows corresponding to the top 5 names
+    filtered_df = df[df["name"].isin(top5_names)]
+    return filtered_df
