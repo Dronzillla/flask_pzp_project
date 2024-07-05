@@ -64,3 +64,8 @@ def convert_db_project_general_to_pd_df(general_data: General) -> pd.DataFrame:
     # df = pd.DataFrame(list(data.items()), columns=["Indicator", "Value"])
     # print(df)
     return df
+
+
+def convert_db_table_to_pd_df(data) -> pd.DataFrame:
+    df = pd.DataFrame(data)
+    return df

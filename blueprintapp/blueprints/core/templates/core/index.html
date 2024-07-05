@@ -1,17 +1,35 @@
 {% extends "base.html" %}
 {% block title %}Core{% endblock %}
 {% block content %}
-    <h1>Home page </h1>
-    <!-- <a href="{{ url_for('upload.delete_all') }}">Delete db data</a><br> -->
-    <!-- <a href="{{ url_for('upload.delete_all_sector') }}">Delete sector data</a><br> -->
-    <div>National progress plans uploaded: {{ project_count }}</div>
     
-    <div>{{ plot_html | safe }}</div>
-    <div>{{ table_html | safe }}</div>
-    <div>{{ ratios_html | safe }}</div>
-    <div>{{ graph_benefits_html | safe }}</div>
-    <div>{{ graph_general_method_html | safe }}</div>
-    <div>{{ graph_general_principle_html | safe }}</div>
-    <div>{{ graph_general_sector_html | safe }}</div>
+<!-- <a href="{{ url_for('upload.delete_all') }}">Delete db data</a><br> -->
+<!-- <a href="{{ url_for('upload.delete_all_sector') }}">Delete sector data</a><br> -->
+<body>
+    <section>
+        <h2>Aggregate general statistics</h2>
+        <div>National progress plans uploaded: {{ project_count }}</div>
+        <div>
+            <div>{{ graph_general_method_html | safe }}</div>
+            <div>{{ graph_general_principle_html | safe }}</div>
+            <div>{{ graph_general_sector_html | safe }}</div>
+        </div>
+    </section>
 
+    <section>
+        <h2>Aggregate financial cashflows</h2>
+        <div>{{ graph_cashflows_html | safe }}</div>
+        <div>{{ table_cashflows_html | safe }}</div>
+    </section>
+
+    <section>
+        <h2>Aggregate social impact</h2>
+        <div>{{ graph_benefits_html | safe }}</div>
+    </section>
+    
+    <section>
+        <h2>Aggregate ratios</h2>
+        <div>{{ table_ratios_html | safe }}</div>
+    </section>
+    
+</body>
 {% endblock %}

@@ -17,9 +17,9 @@ core = Blueprint("core", __name__, template_folder="templates")
 @core.route("/")
 def index():
     project_count = db_aggregate_project_count()
-    plot_html = graph_cashflows_scatter()
-    table_html = table_cashflows_totals()
-    ratios_html = table_ratios_averages()
+    graph_cashflows_html = graph_cashflows_scatter()
+    table_cashflows_html = table_cashflows_totals()
+    table_ratios_html = table_ratios_averages()
     graph_benefits_html = graph_benefits_scatter_top5()
     graph_general_method_html = graph_general_indicator_pie(indicator="analysis_method")
     graph_general_principle_html = graph_general_indicator_pie(
@@ -30,9 +30,9 @@ def index():
     return render_template(
         "core/index.html",
         project_count=project_count,
-        plot_html=plot_html,
-        table_html=table_html,
-        ratios_html=ratios_html,
+        graph_cashflows_html=graph_cashflows_html,
+        table_cashflows_html=table_cashflows_html,
+        table_ratios_html=table_ratios_html,
         graph_benefits_html=graph_benefits_html,
         graph_general_method_html=graph_general_method_html,
         graph_general_principle_html=graph_general_principle_html,

@@ -10,6 +10,7 @@ from blueprintapp.blueprints.dashboard.visuals import (
     graph_project_cashflows_scatter,
     table_project_ratios,
     table_project_general,
+    graph_project_benefits_scatter,
 )
 
 
@@ -38,6 +39,7 @@ def project(id):
     graph_cashflows_html = graph_project_cashflows_scatter(project_id=project.id)
     table_ratios_html = table_project_ratios(project_id=project.id)
     table_general_html = table_project_general(project_id=project.id)
+    graph_benefits_html = graph_project_benefits_scatter(project_id=project.id)
 
     return render_template(
         "dashboard/project.html",
@@ -45,6 +47,7 @@ def project(id):
         graph_cashflows_html=graph_cashflows_html,
         table_ratios_html=table_ratios_html,
         table_general_html=table_general_html,
+        graph_benefits_html=graph_benefits_html,
     )
 
 
