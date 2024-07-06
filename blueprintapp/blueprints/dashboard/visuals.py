@@ -3,6 +3,7 @@ from blueprintapp.blueprints.dashboard.db_operations import (
     db_read_ratios_by_project_id,
     db_read_general_by_project_id,
     db_read_benefits_by_project_id,
+    db_read_project_by_id,
 )
 from blueprintapp.utils.utilities import (
     pandas_convert_db_query_one_to_none_to_df,
@@ -26,7 +27,7 @@ def graph_project_cashflows_scatter(project_id: int) -> str:
     # Get data from db
     data = db_read_cashflow_by_project_id(project_id=project_id)
     if len(data) == 0:
-        return ""
+        return "-"
     # Convert db cashflow data to pandas DataFrame
     # df = convert_db_project_cashflows_to_pd_df(cashflow_data=data)
     # Convert db data to pandas DataFrame
@@ -35,7 +36,7 @@ def graph_project_cashflows_scatter(project_id: int) -> str:
     # Create graph for cashflows
     fig = px.scatter(df, x="year", y="amount", color="category")
     fig.update_layout(
-        # title="Financial Cashflows by Category and Year",
+        title=f"Progress Plan No. {db_read_project_by_id(id=project_id).code} Financial Cashflows by Category and Year",
         xaxis_title="Year",
         yaxis_title="Amount",
         yaxis=dict(type="log"),
@@ -57,14 +58,14 @@ def graph_project_benefits_scatter(project_id: int):
     # Get data from db
     data = db_read_benefits_by_project_id(project_id=project_id)
     if len(data) == 0:
-        return ""
+        return "-"
     # Convert db data to pandas DataFrame
     df = pd.DataFrame(data=data)
     # print(df)
     # Create graph
     fig = px.scatter(df, x="year", y="amount", color="name")
     fig.update_layout(
-        # title="Social Impact by Component and Year",
+        title=f"Progress Plan No. {db_read_project_by_id(id=project_id).code} Social Impact by Component and Year",
         xaxis_title="Year",
         yaxis_title="Amount",
         yaxis=dict(type="log"),

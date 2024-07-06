@@ -15,7 +15,12 @@ def db_read_all_user_projects(user_id: int) -> list[Project]:
     return projects
 
 
-def db_read_project_by_id(id: int, user_id: int) -> Optional[Project]:
+def db_read_project_by_id(id: int) -> Optional[Project]:
+    result = Project.query.filter_by(id=id).one_or_none()
+    return result
+
+
+def db_read_project_by_id_and_user_id(id: int, user_id: int) -> Optional[Project]:
     result = Project.query.filter_by(id=id, user_id=user_id).one_or_none()
     return result
 

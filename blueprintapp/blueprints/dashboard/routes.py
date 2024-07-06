@@ -3,7 +3,7 @@ from flask_login import login_required, current_user
 from blueprintapp.app import db
 from blueprintapp.blueprints.dashboard.db_operations import (
     db_read_all_user_projects,
-    db_read_project_by_id,
+    db_read_project_by_id_and_user_id,
     db_delete_project,
 )
 from blueprintapp.blueprints.dashboard.visuals import (
@@ -31,7 +31,7 @@ def project(id):
     # TODO Make View and Delete as buttons
     # Get user id
     user_id = current_user.id
-    project = db_read_project_by_id(id=id, user_id=user_id)
+    project = db_read_project_by_id_and_user_id(id=id, user_id=user_id)
     if project is None:
         return "Project not found", 404
     # TODO Get project information from database.
@@ -55,7 +55,7 @@ def project(id):
 def delete_project(id):
     # Get user id
     user_id = current_user.id
-    project = db_read_project_by_id(id=id, user_id=user_id)
+    project = db_read_project_by_id_and_user_id(id=id, user_id=user_id)
     if project is None:
         return "Project not found", 404
     # Delete project
