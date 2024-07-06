@@ -38,3 +38,8 @@ def index():
         graph_general_principle_html=graph_general_principle_html,
         graph_general_sector_html=graph_general_sector_html,
     )
+
+
+@core.route("/about")
+def about():
+    return render_template("core/about.html")

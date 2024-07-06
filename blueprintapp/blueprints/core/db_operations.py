@@ -37,11 +37,14 @@ Functions to get aggregate ratios data from database
 
 
 def db_aggregate_ratio_averages() -> list:
-    # TODO Fix this function to return an empty list if there is no data
     # Build custom named tuple to follow similiar logic to aggregate_cashflow_data
     RatioAverage = namedtuple("RatioAverage", ["ratio", "average"])
     # A list to hold the average values
     averages = []
+    # Check if ratios table is empty, if so. Return an empty list
+    ratios = Ratios.query.all()
+    if len(ratios) == 0:
+        return []
     # Get the list of ratio columns in db
     ratio_columns = [
         column.key
