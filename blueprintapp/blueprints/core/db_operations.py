@@ -163,15 +163,3 @@ def db_aggregate_project_count() -> Optional[int]:
     """
     row_count = int(db.session.query(func.count(Project.id)).scalar())
     return row_count
-
-
-# def db_aggregate_project_and_general_information() -> list:
-#     result = []
-#     project_count = db_aggregate_project_count()
-#     avg_no_alterantives = db_aggregate_general_no_alternatives_average()
-#     avg_reference_period = db_aggregate_general_reference_period_average()
-#     result.append(project_count)
-#     result.append(avg_no_alterantives)
-#     result.append(avg_reference_period)
-#     print(result)
-#     return result

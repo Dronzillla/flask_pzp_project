@@ -45,8 +45,8 @@ def graph_project_cashflows_scatter(project_id: int) -> str:
     # Update hoover template
     fig.update_traces(hovertemplate="Year: %{x}<br>Amount: %{y:.2s} EUR<br>")
     # Create HTML graph
-    cashflow_html_graph = fig.to_html(full_html=False)
-    return cashflow_html_graph
+    html_graph = fig.to_html(full_html=False)
+    return html_graph
 
 
 def graph_project_benefits_scatter(project_id: int):
@@ -87,22 +87,17 @@ def table_project_ratios(project_id: int) -> str:
     """Create plotly table to show ratios of a project.
 
     Returns:
-        str: html string representation of a table.
+        str: html string representation of a table or "-" if there is no data.
     """
     # Get data from db
     data = db_read_ratios_by_project_id(project_id=project_id)
     if data is None:
-        return ""
+        return "-"
     # Convert db data to pandas DataFrame
     drop_columns = ["_sa_instance_state", "id", "project_id"]
     df = pandas_convert_db_query_one_to_none_to_df(data=data, drop_columns=drop_columns)
     # Create plotly figure
     fig = plotly_make_table_from_pandas_df(df=df)
-    # Update layout of plotly figure
-    fig.update_layout(
-        height=70,
-        margin=dict(t=0, b=0),
-    )
     # # Create html table
     html_table = fig.to_html(full_html=False)
     return html_table
@@ -123,11 +118,6 @@ def table_project_general(project_id: int) -> str:
     df = pandas_convert_db_query_one_to_none_to_df(data=data, drop_columns=drop_columns)
     # Create plotly figure
     fig = plotly_make_table_from_pandas_df(df=df)
-    # Update layout of plotly figure
-    fig.update_layout(
-        height=70,
-        margin=dict(t=0, b=0),
-    )
     # Create html table
     html_table = fig.to_html(full_html=False)
     return html_table
