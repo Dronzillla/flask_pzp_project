@@ -6,8 +6,24 @@
 <!-- <a href="{{ url_for('upload.delete_all_sector') }}">Delete sector data</a><br> -->
 <body>
     <section>
-        <h2>Aggregate general statistics</h2>
-        <div>National progress plans uploaded: {{ project_count }}</div>
+        <div>
+            <p>Already registered user?</p>
+            <form action="{{ url_for('upload.index') }}" method="get">
+                <button type="submit">Upload more</button>
+            </form>
+        </div>
+        <div>
+            <p>National progress plans uploaded: {{ project_count }}</p>
+        </div>
+        <div>
+            <p>Not a registered user?</p>
+            <form action="{{ url_for('auth.register') }}" method="get">
+                <button type="submit">Sign up</button>
+            </form>
+        </div>
+    </section>
+    <section>        
+        <h2>General Statistics</h2>
         <div>
             <div>{{ graph_general_method_html | safe }}</div>
             <div>{{ graph_general_principle_html | safe }}</div>
@@ -16,18 +32,18 @@
     </section>
 
     <section>
-        <h2>Aggregate financial cashflows</h2>
+        <h2>Financial Cashflows</h2>
         <div>{{ graph_cashflows_html | safe }}</div>
-        <div>{{ table_cashflows_html | safe }}</div>
+        <!-- <div>{{ table_cashflows_html | safe }}</div> -->
     </section>
 
     <section>
-        <h2>Aggregate social impact</h2>
+        <h2>Social Impact</h2>
         <div>{{ graph_benefits_html | safe }}</div>
     </section>
     
     <section>
-        <h2>Aggregate ratios</h2>
+        <h2>Ratios</h2>
         <div>{{ table_ratios_html | safe }}</div>
     </section>
     

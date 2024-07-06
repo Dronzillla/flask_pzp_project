@@ -17,6 +17,41 @@ import plotly.graph_objects as go
 import plotly.express as px
 
 
+"""
+Functions to make plotly graphs
+"""
+
+
+def graph_general_indicator_pie(indicator: str) -> str:
+    """Create plotly pie chart to graph general indicator.
+
+    Returns:
+        str: html string representation of a graph.
+    """
+    # Get database data from General models
+    if indicator == "analysis_method":
+        title = "Analysis Methods Used"
+        general_data = db_aggregate_general_analysis_methods_count()
+        legend_title = "Analysis method"
+    elif indicator == "analysis_principle":
+        title = "Analysis Principles Used"
+        general_data = db_aggregate_general_analysis_principle_count()
+        legend_title = "Analysis principle"
+    elif indicator == "main_sector":
+        title = "Main Economic Sectors"
+        general_data = db_aggregate_general_main_sector_count()
+        legend_title = "Main economic sector"
+    if len(general_data) == 0:
+        return ""
+    # Convert to pandas data frame
+    df = convert_db_general_to_df(general_data=general_data)
+    # Create general data count graph
+    fig = px.pie(df, values="count", names=indicator, title=title)
+    fig.update_layout(legend_title=legend_title)
+    general_html_graph = fig.to_html(full_html=False)
+    return general_html_graph
+
+
 def graph_cashflows_scatter() -> str:
     """Create plotly scatter plot to graph aggregate yearly cashflows of all projects.
 
@@ -32,7 +67,7 @@ def graph_cashflows_scatter() -> str:
     # Create aggregate cashflows graph
     fig = px.scatter(df, x="year", y="total_amount", color="category")
     fig.update_layout(
-        title="Aggregate Cashflow by Category and Year",
+        title="Aggregate Cashflows by Category and Year",
         xaxis_title="Year",
         yaxis_title="Amount",
         yaxis=dict(type="log"),
@@ -44,6 +79,42 @@ def graph_cashflows_scatter() -> str:
     # Create HTML representation of the Plotly figure
     cashflow_html_graph = fig.to_html(full_html=False)
     return cashflow_html_graph
+
+
+def graph_benefits_scatter_top5() -> str:
+    """Create plotly scatter plot to graph aggregate yearly benefits of top5 benefit components.
+
+    Returns:
+        str: html string representation of a graph.
+    """
+    # Get database data for cahsflows
+    benefits_data = db_aggregate_benefits_by_component_by_year()
+    if len(benefits_data) == 0:
+        return ""
+    # Convert db benefits data to pandas Data Frame
+    df = convert_db_benefits_to_pd_df(benefits_data=benefits_data)
+    # Get top 5 values
+    df = filter_benefits_pd_df_top5(df=df)
+    # Create aggregate benefits graph
+    fig = px.scatter(df, x="year", y="total_amount", color="name")
+    fig.update_layout(
+        title="Top 5 Aggregate Benefits by Benefit Component and Year",
+        xaxis_title="Year",
+        yaxis_title="Amount",
+        yaxis=dict(type="log"),
+        # yaxis=dict(type="log", dtick=1, tickvals=y_ticks, ticktext=y_labels),
+        legend_title="Component",
+        barmode="group",
+    )
+    fig.update_traces(hovertemplate="Year: %{x}<br>Amount: %{y:.2s} EUR<br>")
+    # Create HTML representation of the Plotly figure
+    benefits_html_graph = fig.to_html(full_html=False)
+    return benefits_html_graph
+
+
+"""
+Functions to make plotly tables
+"""
 
 
 def table_cashflows_totals() -> str:
@@ -102,60 +173,3 @@ def table_ratios_averages() -> str:
     # Create html table
     table_ratios_html = fig.to_html(full_html=False)
     return table_ratios_html
-
-
-def graph_benefits_scatter_top5() -> str:
-    """Create plotly scatter plot to graph aggregate yearly benefits of top5 benefit components.
-
-    Returns:
-        str: html string representation of a graph.
-    """
-    # Get database data for cahsflows
-    benefits_data = db_aggregate_benefits_by_component_by_year()
-    if len(benefits_data) == 0:
-        return ""
-    # Convert db benefits data to pandas Data Frame
-    df = convert_db_benefits_to_pd_df(benefits_data=benefits_data)
-    # Get top 5 values
-    df = filter_benefits_pd_df_top5(df=df)
-    # Create aggregate benefits graph
-    fig = px.scatter(df, x="year", y="total_amount", color="name")
-    fig.update_layout(
-        title="Top 5 Aggregate Benefits by Benefit Component and Year",
-        xaxis_title="Year",
-        yaxis_title="Amount",
-        yaxis=dict(type="log"),
-        # yaxis=dict(type="log", dtick=1, tickvals=y_ticks, ticktext=y_labels),
-        legend_title="Component",
-        barmode="group",
-    )
-    fig.update_traces(hovertemplate="Year: %{x}<br>Amount: %{y:.2s} EUR<br>")
-    # Create HTML representation of the Plotly figure
-    benefits_html_graph = fig.to_html(full_html=False)
-    return benefits_html_graph
-
-
-def graph_general_indicator_pie(indicator: str) -> str:
-    """Create plotly pie chart to graph general indicator.
-
-    Returns:
-        str: html string representation of a graph.
-    """
-    # Get database data from General models
-    if indicator == "analysis_method":
-        title = "Analysis Methods Used"
-        general_data = db_aggregate_general_analysis_methods_count()
-    elif indicator == "analysis_principle":
-        title = "Analysis Principles Used"
-        general_data = db_aggregate_general_analysis_principle_count()
-    elif indicator == "main_sector":
-        title = "Main Economic Sectors"
-        general_data = db_aggregate_general_main_sector_count()
-    if len(general_data) == 0:
-        return ""
-    # Convert to pandas data frame
-    df = convert_db_general_to_df(general_data=general_data)
-    # Create general data count graph
-    fig = px.pie(df, values="count", names=indicator, title=title)
-    general_html_graph = fig.to_html(full_html=False)
-    return general_html_graph
