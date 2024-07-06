@@ -11,10 +11,10 @@ DB_COLUMN_MAP = {
     # Ratios
     "enis": "ENIS",
     "egdv": "EGDV",
-    "evgn": "EVGN, %",
+    "evgn": "EVGN",
     "sva": "SVA",
     "da": "DA",
     "fgdv": "FGDV",
-    "fvgn": "FVGN, %",
+    "fvgn": "FVGN",
     "fnis": "FNIS",
 }

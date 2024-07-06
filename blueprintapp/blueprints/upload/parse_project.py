@@ -215,18 +215,35 @@ class ProjectParser:
         print(result)
         return result
 
-    def __round_ratio(self, ratio: Union[int, float], ndigits: int) -> float:
-        """Trie to round ratio.
+    @staticmethod
+    def round_ratio(ratio: Union[int, float], ratio_name: str) -> float:
+        """Try to round a ratio and map number of digits to round based on ratio name"
 
         Args:
             ratio (Union[int, float]): ratio value
-            ndigits (int): round precision
+            ratio_name (str): ratio name in db
 
         Returns:
             float: ratio rounded to given precision, -9999 if ratio rounding was unsuccessful.
         """
+        # Map ratios to ndigits to round
+        ratio_ndigits_map = {
+            "enis": 2,
+            "egdv": 0,
+            "evgn": 4,
+            "sva": 2,
+            "da": 2,
+            "fgdv": 0,
+            "fvgn": 4,
+            "fnis": 2,
+        }
+
         try:
-            ratio = round(ratio, ndigits)
+            ratio = round(ratio, ratio_ndigits_map[ratio_name])
+            # if ratio_name == "evgn" or ratio == "fvgn":
+            #     ratio = round(ratio * 100, ratio_ndigits_map[ratio_name])
+            # else:
+            #     ratio = round(ratio, ratio_ndigits_map[ratio_name])
         except:
             ratio = -9999
         return ratio
@@ -234,23 +251,47 @@ class ProjectParser:
     def fetch_ratios(self) -> Ratios_tuple:
         if self.get_analysis_method() == "Sąnaudų ir naudos analizė":
             sva = None
-            enis = self.__round_ratio(self.sheet_scenariju_analize["G271"].value, 2)
-            egdv = self.__round_ratio(self.sheet_scenariju_analize["G272"].value, 0)
-            evgn = self.__round_ratio(self.sheet_scenariju_analize["G273"].value, 4)
+            enis = ProjectParser.round_ratio(
+                ratio=self.sheet_scenariju_analize["G271"].value,
+                ratio_name="enis",
+            )
+            egdv = ProjectParser.round_ratio(
+                ratio=self.sheet_scenariju_analize["G272"].value,
+                ratio_name="egdv",
+            )
+            evgn = ProjectParser.round_ratio(
+                ratio=self.sheet_scenariju_analize["G273"].value,
+                ratio_name="evgn",
+            )
         else:
-            sva = self.__round_ratio(self.sheet_scenariju_analize["G274"].value, 2)
+            sva = ProjectParser.round_ratio(
+                ratio=self.sheet_scenariju_analize["G274"].value,
+                ratio_name="sva",
+            )
             enis = None
             egdv = None
             evgn = None
         # If multicriteria analysis is selected
         if self.get_is_da_analysis_selected():
-            da = self.__round_ratio(self.sheet_scenariju_analize["G275"].value, 2)
+            da = ProjectParser.round_ratio(
+                ratio=self.sheet_scenariju_analize["G275"].value,
+                ratio_name="da",
+            )
         else:
             da = None
         # Financial ratios
-        fgdv = self.__round_ratio(self.sheet_scenariju_analize["G277"].value, 0)
-        fvgn = self.__round_ratio(self.sheet_scenariju_analize["G278"].value, 4)
-        fnis = self.__round_ratio(self.sheet_scenariju_analize["G279"].value, 2)
+        fgdv = ProjectParser.round_ratio(
+            ratio=self.sheet_scenariju_analize["G277"].value,
+            ratio_name="fgdv",
+        )
+        fvgn = ProjectParser.round_ratio(
+            ratio=self.sheet_scenariju_analize["G278"].value,
+            ratio_name="fvgn",
+        )
+        fnis = ProjectParser.round_ratio(
+            ratio=self.sheet_scenariju_analize["G279"].value,
+            ratio_name="fnis",
+        )
         result = Ratios_tuple(
             enis=enis,
             egdv=egdv,

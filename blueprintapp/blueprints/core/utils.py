@@ -1,10 +1,16 @@
 import pandas as pd
 from blueprintapp.app import db_column_map
+from blueprintapp.blueprints.upload.parse_project import ProjectParser
 
 
 def pandas_convert_db_ratios_to_df(ratios_data: list) -> pd.DataFrame:
+    # Map ndigits to round ratios
     # Create a dictionary to hold the ratio and average values
-    data = {row.ratio: row.average for row in ratios_data}
+    data = {
+        row.ratio: ProjectParser.round_ratio(ratio=row.average, ratio_name=row.ratio)
+        for row in ratios_data
+    }
+    print(data)
     # Create the DataFrame from the dictionary
     df = pd.DataFrame(data, index=["Value"])
     # print(df)
