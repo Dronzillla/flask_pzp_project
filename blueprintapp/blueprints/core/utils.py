@@ -10,7 +10,7 @@ def pandas_convert_db_ratios_to_df(ratios_data: list) -> pd.DataFrame:
         row.ratio: ProjectParser.round_ratio(ratio=row.average, ratio_name=row.ratio)
         for row in ratios_data
     }
-    print(data)
+    # print(data)
     # Create the DataFrame from the dictionary
     df = pd.DataFrame(data, index=["Value"])
     # print(df)

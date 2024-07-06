@@ -189,6 +189,7 @@ class ProjectParser:
         """
         code = self.sheet_pradzia["E4"].value
         name = self.sheet_pradzia["E6"].value
+        name = name.strip().lower().capitalize()
         result = Project_tuple(code=code, name=name)
         print(result)
         return result
@@ -388,7 +389,7 @@ class ProjectParser:
             if benefit_component == None or benefit_component_total_values == 0:
                 continue
             values = self.get_budget_line_values("benefit", index=i)
-            benefit = Benefit_tuple(name=benefit_component, values=values)
+            benefit = Benefit_tuple(name=benefit_component.strip(), values=values)
             result.append(benefit)
         print(result)
         return result
