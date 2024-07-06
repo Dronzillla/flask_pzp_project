@@ -7,8 +7,6 @@ from blueprintapp.blueprints.upload.models import (
     Benefit,
     BenefitComponent,
 )
-from blueprintapp.blueprints.auth.models import User
-from sqlalchemy import func
 from typing import Optional
 
 
@@ -28,7 +26,11 @@ def db_delete_project(project: Project) -> None:
 
 
 def db_read_cashflow_by_project_id(project_id: int) -> list:
-    cashflow_data = Cashflow.query.filter_by(project_id=project_id).all()
+    cashflow_data = (
+        db.session.query(Cashflow.year, Cashflow.amount, Cashflow.category)
+        .filter_by(project_id=project_id)
+        .all()
+    )
     return cashflow_data
 
 

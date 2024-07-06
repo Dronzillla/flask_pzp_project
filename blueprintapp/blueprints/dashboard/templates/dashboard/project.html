@@ -2,14 +2,35 @@
 {% block title %}Project{% endblock %}
 {% block content %}
 
-<p>ID: {{ project.id }}</p>
-<p>Name: {{ project.name }}</p>
-<p>Code: {{ project.code }}</p>
+<body>
+    <section>
+        <h3>National Progress Plan</h3>
+        <!-- <p>ID: {{ project.id }}</p> -->
+        <p>Name: {{ project.name }}</p>
+        <p>Code: {{ project.code }}</p>
+    </section>
 
-<div>{{ graph_cashflows_html | safe }}</div>
-<div>{{ table_ratios_html | safe }}</div>
-<div>{{ table_general_html | safe }}</div>
-<div>{{ graph_benefits_html | safe }}</div>
+    <section>
+        <h3>General Statistics</h3>
+        <div>{{ table_general_html | safe }}</div>
+    </section>
+
+    <section>
+        <h3>Financial Cashflows</h3>
+        <div>{{ graph_cashflows_html | safe }}</div>
+    </section>
+
+    <section>
+        <h3>Social Impact</h3>
+        <div>{{ graph_benefits_html | safe }}</div>
+    </section>
+
+    <section>
+        <h3>Ratios</h3>
+        <div>{{ table_ratios_html | safe }}</div>
+    </section>
+    
+</body>
 
 
 {% endblock %}

@@ -28,7 +28,6 @@ def index():
 @dashboard.route("/project/<int:id>")
 @login_required
 def project(id):
-
     # TODO Make View and Delete as buttons
     # Get user id
     user_id = current_user.id

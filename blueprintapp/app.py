@@ -2,10 +2,11 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
-
+from db_map import DB_COLUMN_MAP
 
 db = SQLAlchemy()
 login = LoginManager()
+db_column_map = DB_COLUMN_MAP
 
 
 def create_app():
