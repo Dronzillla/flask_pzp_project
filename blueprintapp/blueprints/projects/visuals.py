@@ -1,4 +1,4 @@
-from blueprintapp.blueprints.dashboard.db_operations import (
+from blueprintapp.blueprints.projects.db_operations import (
     db_read_cashflow_by_project_id,
     db_read_ratios_by_project_id,
     db_read_general_by_project_id,

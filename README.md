@@ -29,3 +29,15 @@ Requirements:
 - Validate eligble to upload excel files.
 - Create visuals of aggregate data.
 - Create visuals for viewing specific project data.
+
+
+### Stage 4: 
+Objective: Implement search
+
+Requirements:
+- Non-registered user can see all uploaded projects.
+- Users can search for projects.
+- Create header.
+- Create footer.
+- Create basic styling.
+- If user is logged in show his username in header.

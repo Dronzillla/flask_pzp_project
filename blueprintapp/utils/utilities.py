@@ -1,6 +1,8 @@
 from blueprintapp.app import db_column_map
 import pandas as pd
 import plotly.graph_objects as go
+from flask_paginate import Pagination, get_page_parameter
+from flask import request
 
 
 def pandas_sort_df_columns(df: pd.DataFrame) -> pd.DataFrame:
@@ -95,3 +97,26 @@ def plotly_update_layout_table_default(fig: go.Figure, title: str = "") -> go.Fi
             margin=dict(t=60, b=0),
         )
         return fig
+
+
+def flask_paginate_page_pagination(items) -> tuple:
+    """Set up default page pagination using flask_paginate
+
+    Args:
+        items (_type_): any data items that should be paginated.
+
+    Returns:
+        tuple: displayed_items and 'Pagination' object
+    """
+    # Set up item pagination
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    per_page = 5  # Number of items per page
+    total = len(items)  # Total number of projects
+    # Get projects for the current page
+    start = (page - 1) * per_page
+    end = start + per_page
+    displayed_items = items[start:end]
+    pagination = Pagination(
+        page=page, per_page=per_page, total=total, css_framework="bootstrap5"
+    )
+    return (displayed_items, pagination)
