@@ -1,15 +1,15 @@
 {% extends "base.html" %}
 {% block title %}Upload{% endblock %}
 {% block content %}
-  <body>
-    <div class="container">
-      <h1>Upload .xlsm File</h1>
-      <form method="post" enctype="multipart/form-data">
-        {{ form.hidden_tag() }}
-        {{ form.file.label }}<br>
-        {{ form.file() }}<br><br>
-        {{ form.submit() }}
-      </form>
-    </div>
-  </body>
-  {% endblock %}
+<body>
+  <div>
+    <h1>Upload .xlsm File</h1>
+    <form method="post" enctype="multipart/form-data">
+      {{ form.hidden_tag() }}
+      {{ form.file.label }}<br>
+      {{ form.file() }}<br><br>
+      {{ form.submit() }}
+    </form>
+  </div>
+</body>
+{% endblock %}

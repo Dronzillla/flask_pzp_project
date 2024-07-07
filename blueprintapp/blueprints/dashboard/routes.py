@@ -1,5 +1,6 @@
 from flask import request, render_template, redirect, url_for, Blueprint
 from flask_login import login_required, current_user
+from flask_paginate import Pagination, get_page_parameter
 from blueprintapp.app import db
 from blueprintapp.blueprints.dashboard.db_operations import (
     db_read_all_user_projects,
@@ -22,7 +23,24 @@ dashboard = Blueprint("dashboard", __name__, template_folder="templates")
 def index():
     username = current_user.username
     projects = db_read_all_user_projects(user_id=current_user.id)
-    return render_template("dashboard/index.html", username=username, projects=projects)
+    # Set up project page pagination
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    per_page = 5  # Number of projects per page
+    total = len(projects)  # Total number of projects
+    # Get projects for the current page
+    start = (page - 1) * per_page
+    end = start + per_page
+    displayed_projects = projects[start:end]
+    pagination = Pagination(
+        page=page, per_page=per_page, total=total, css_framework="bootstrap5"
+    )
+    return render_template(
+        "dashboard/index.html",
+        username=username,
+        projects=displayed_projects,
+        pagination=pagination,
+    )
+    # return render_template("dashboard/index.html", username=username, projects=projects)
 
 
 @dashboard.route("/project/<int:id>")
