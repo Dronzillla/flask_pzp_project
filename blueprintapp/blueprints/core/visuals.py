@@ -49,8 +49,13 @@ def graph_general_indicator_pie(indicator: str) -> str:
     # Convert to pandas data frame
     df = pandas_convert_db_query_all_to_df(data=data)
     # Create general data count graph
-    fig = px.pie(df, values="count", names=indicator, title=title)
-    fig.update_layout(legend_title=legend_title)
+    fig = px.pie(df, values="count", names=indicator)
+    # fig = px.pie(df, values="count", names=indicator, title=title)
+    # Make legend horizontal
+    fig.update_layout(
+        legend_title=legend_title,
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+    )
     general_html_graph = fig.to_html(full_html=False)
     return general_html_graph
 

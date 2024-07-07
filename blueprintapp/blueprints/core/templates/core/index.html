@@ -1,51 +1,114 @@
 {% extends "base.html" %}
 {% block title %}Core{% endblock %}
 {% block content %}
-    
 <!-- <a href="{{ url_for('upload.delete_all') }}">Delete db data</a><br> -->
 <!-- <a href="{{ url_for('upload.delete_all_sector') }}">Delete sector data</a><br> -->
 <body>
+    <!-- Call to action -->
     <section>
-        <div>
-            <p>Already registered user?</p>
-            <form action="{{ url_for('upload.index') }}" method="get">
-                <button type="submit">Upload more</button>
-            </form>
-        </div>
-        <div>
-            <p>National progress plans uploaded: {{ project_count }}</p>
-        </div>
-        <div>
-            <p>Not a registered user?</p>
-            <form action="{{ url_for('auth.register') }}" method="get">
-                <button type="submit">Sign up</button>
-            </form>
-        </div>
-    </section>
-    <section>        
-        <h2>General Statistics</h2>
-        <div>
-            <div>{{ graph_general_method_html | safe }}</div>
-            <div>{{ graph_general_principle_html | safe }}</div>
-            <div>{{ graph_general_sector_html | safe }}</div>
+        <div class="container mb-4">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm text-center">
+                        <div class="card-body">
+                            <p class="mb-0">Already registered user?</p>
+                            <form action="{{ url_for('upload.index') }}" method="get">
+                                <button type="submit" class="btn btn-primary mt-3">Upload</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm text-center">
+                        <div class="card-body">
+                            <p class="mb-0">National progress plans uploaded: {{ project_count }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm text-center">
+                        <div class="card-body">
+                            <p class="mb-0">Not a registered user?</p>
+                            <form action="{{ url_for('auth.register') }}" method="get">
+                                <button type="submit" class="btn btn-success mt-3">Register</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
+    <!-- General statistics -->
     <section>
-        <h2>Financial Cashflows</h2>
-        <div>{{ graph_cashflows_html | safe }}</div>
-        <div>{{ table_cashflows_html | safe }}</div>
+        <div class="container mb-4">
+            <h2 class="mb-4">General Statistics</h2>
+            <div class="row g-3">
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-body">
+                            {{ graph_general_method_html | safe }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-body">
+                            {{ graph_general_principle_html | safe }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-body">
+                            {{ graph_general_sector_html | safe }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Financial cashflows -->
+    <section>
+        <div class="container mb-4">
+            <h2 class="mb-4">Financial Cashflows</h2>
+            <div class="card">
+                <div class="card-body">
+                    {{ graph_cashflows_html | safe }}   
+                    {{ table_cashflows_html | safe }}
+                </div>
+            </div>
+            
+        </div>
+    </section>
+    
+    <!-- Social impact -->
+    <section>
+        <div class="container mb-4">
+            <h2 class="mb-4">Social Impact</h2>
+            <div class="card">
+                <div class="card-body">
+                    {{ graph_benefits_html | safe }}   
+                </div>
+            </div>
+            
+        </div>
     </section>
 
-    <section>
-        <h2>Social Impact</h2>
-        <div>{{ graph_benefits_html | safe }}</div>
-    </section>
     
+    <!-- Ratios -->
     <section>
-        <h2>Ratios</h2>
-        <div>{{ table_ratios_html | safe }}</div>
+        <div class="container mb-4">
+            <h2 class="mb-4">Ratios</h2>
+            <div class="card">
+                <div class="card-body">
+                    {{ table_ratios_html | safe }}   
+                </div>
+            </div>
+            
+        </div>
     </section>
-    
+
 </body>
 {% endblock %}

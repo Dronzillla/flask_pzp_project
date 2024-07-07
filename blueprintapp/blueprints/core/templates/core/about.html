@@ -2,17 +2,20 @@
 {% block title %}Core{% endblock %}
 {% block content %}
 <body>
-    <div>
-        <h2>Project Context</h2>
-        <p>In 2021, an updated Strategic Management Law of the Republic of Lithuania came into effect. The purpose of this law is to establish the principles of the strategic management system, define the levels and types of planning documents, their interrelations and impact on the planning of progress funds and continuous activity funds, determine the participants of the strategic management system, their rights and obligations, and set the governance provisions of the strategic management system.</p>
-        <p>According to the provisions of this law, planning documents are divided into four levels: 1) state strategies, 2) strategic level planning documents, 3) programming level planning documents, and 4) activity level planning documents. When preparing programming level planning documents, one of the cornerstone documents prepared are the development programs. These are planning documents with a duration of 4–10 years, which specify how progress objectives will be implemented.</p>
-        <p>National development programs are mainly prepared by ministries responsible for the respective state activity areas. The development programs outline the planned national progress plans to be implemented. When planning progress funds, the financial and economic impact of the progress must be assessed. Therefore, when ministries prepare national progress plan, a standardized .xlsm format spreadsheet is filled out. This documents comprises financial and economic cash flow projections and assesses the financial and economic indicators of the national progress plans.</p>
-        <p>The main goal of this project is to create a tool that allows the collection and systematization of data presented in the progress plan spreadsheets, as well as to analyze and compare financial and economic cash flows and ratios of national progress plans.</p>
-    </div>
-    <div>
-        <h2>Website User Guide</h2>
-        <p>The main analytical data from the calculators are summarized on the main page. Only registered and logged-in users can upload a progress plan spreadsheet. Logged-in users can also view and, if necessary, delete spreadsheets they uploaded.
-        </p>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Project Context</h2>
+                <p class="mb-4">In 2021, an updated Strategic Management Law of the Republic of Lithuania came into effect. The purpose of this law is to establish the principles of the strategic management system, define the levels and types of planning documents, their interrelations and impact on the planning of progress funds and continuous activity funds, determine the participants of the strategic management system, their rights and obligations, and set the governance provisions of the strategic management system.</p>
+                <p class="mb-4">According to the provisions of this law, planning documents are divided into four levels: 1) state strategies, 2) strategic level planning documents, 3) programming level planning documents, and 4) activity level planning documents. When preparing programming level planning documents, one of the cornerstone documents prepared are the development programs. These are planning documents with a duration of 4–10 years, which specify how progress objectives will be implemented.</p>
+                <p class="mb-4">National development programs are mainly prepared by ministries responsible for the respective state activity areas. The development programs outline the planned national progress plans to be implemented. When planning progress funds, the financial and economic impact of the progress must be assessed. Therefore, when ministries prepare national progress plan, a standardized .xlsm format spreadsheet is filled out. This documents comprises financial and economic cash flow projections and assesses the financial and economic indicators of the national progress plans.</p>
+                <p>The main goal of this project is to create a tool that allows the collection and systematization of data presented in the progress plan spreadsheets, as well as to analyze and compare financial and economic cash flows and ratios of national progress plans.</p>
+            </div>
+            <div class="col-md-6">
+                <h2>Website User Guide</h2>
+                <p class="mb-4">The main analytical data from the spreadsheets are summarized on the <a href="/">main</a> page. Only registered and logged-in users can <a href="/upload">upload</a> a progress plan spreadsheet. Logged-in users can access <a href="/dashboard">dashboard</a> where they can view and delete spreadsheets they uploaded. All uploaded projects can be found in <a href="/projects">projects</a> section of a website. A user can use a search to search projects by name or code.</p>
+            </div>
+        </div>
     </div>
 </body>
 {% endblock %}
