@@ -1,21 +1,59 @@
 {% extends "base.html" %}
 {% block title %}Projects{% endblock %}
 {% block content %}
-<h2>Projects</h2>
-<div>
-    <ul class="list-group">
-        {% for project in projects %}
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                <div>{{ project.name }}</div>
-                <div class="d-flex">
-                    <a class="btn btn-primary btn-sm flex-fill mx-1" href="{{ url_for('projects.project', id=project.id) }}">View</a>
-                    <!-- <a class="btn btn-danger btn-sm flex-fill mx-1" href="{{ url_for('dashboard.delete_project', id=project.id) }}">Delete</a> -->
+<body>
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Projects</h2>
+            <!-- Search Project form -->
+            <form method="POST" action="{{ url_for('projects.index') }}">
+                {{ form.hidden_tag() }}
+                <div class="input-group">
+                    {{ form.query(class_="form-control", placeholder="Enter search term") }}
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-primary">{{ form.submit.label }}</button>
+                    </div>
                 </div>
-            </li>
-        {% endfor %}
-    </ul>
-</div>
-<div class="d-flex justify-content-center">
-    {{ pagination.links }}
-</div>
+            </form>
+        </div>
+    </div>
+
+    
+    <!--     
+    <div class="container">
+        <h2>Projects</h2>
+        <form method="POST" action="{{ url_for('projects.index') }}">
+            {{ form.hidden_tag() }}
+            <div class="input-group">
+            {{ form.query(class_="form-control", placeholder="Enter search term") }}
+            <button type="submit" class="btn btn-primary">{{ form.submit.label }}</button>
+            </div>
+        </form>
+    </div>
+     -->
+
+
+    <!-- If search query is empty -->
+    <!-- {% if search_query and not projects %}
+        <p>No projects found matching your query.</p>
+    {% endif %} -->
+
+    <div class="container">
+        <ul class="list-group">
+            {% for project in projects %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>{{ project.code }}</div>
+                    <div>{{ project.name }}</div>
+                    <div class="d-flex">
+                        <a class="btn btn-primary btn-sm flex-fill mx-1" href="{{ url_for('projects.project', id=project.id) }}">View</a>
+                        <!-- <a class="btn btn-danger btn-sm flex-fill mx-1" href="{{ url_for('dashboard.delete_project', id=project.id) }}">Delete</a> -->
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="d-flex justify-content-center">
+        {{ pagination.links }}
+    </div>
+</body>
 {% endblock %}
