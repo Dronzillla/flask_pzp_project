@@ -54,10 +54,15 @@ def graph_general_indicator_pie(indicator: str) -> str:
     fig = px.pie(df, values="count", names=indicator)
     # fig = px.pie(df, values="count", names=indicator, title=title)
     # Make legend horizontal
-    fig.update_layout(
-        legend_title=legend_title,
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-    )
+    if indicator != "main_sector":
+        fig.update_layout(
+            legend_title=legend_title,
+            legend=dict(
+                orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1
+            ),
+        )
+    else:
+        fig.update_layout(legend_title=legend_title)
     # Update font family to fit bootstrap
     plotly_update_font_family_bootstrap(fig=fig)
     general_html_graph = fig.to_html(full_html=False)

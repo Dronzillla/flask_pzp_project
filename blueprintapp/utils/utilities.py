@@ -102,6 +102,11 @@ def plotly_update_layout_table_default(fig: go.Figure, title: str = "") -> go.Fi
 
 
 def plotly_update_layout_scatter_default(fig: go.Figure) -> None:
+    """Make default scatter plot layout.
+
+    Args:
+        fig (go.Figure): plotly go.Figure object.
+    """
     # Update font family to fit bootstrap
     plotly_update_font_family_bootstrap(fig=fig)
     # Update common layout features
