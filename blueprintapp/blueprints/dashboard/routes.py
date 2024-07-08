@@ -5,6 +5,7 @@ from blueprintapp.blueprints.dashboard.db_operations import (
     db_read_all_user_projects,
     db_read_project_by_id_and_user_id,
     db_delete_project,
+    db_search_all_user_projects,
 )
 from blueprintapp.utils.utilities import flask_paginate_page_pagination
 from blueprintapp.blueprints.projects.forms import SearchForm
@@ -23,7 +24,9 @@ def index():
     # POST method
     if form.validate_on_submit():
         search_query = form.query.data
-        projects = db_read_all_user_projects(user_id=current_user.id)
+        projects = db_search_all_user_projects(
+            search_query=search_query, user_id=current_user.id
+        )
         # If there are no projects flash a message.
         if search_query and not projects:
             flash("No projects found matching your query.")

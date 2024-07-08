@@ -16,3 +16,12 @@ def db_read_project_by_id_and_user_id(id: int, user_id: int) -> Optional[Project
 def db_delete_project(project: Project) -> None:
     db.session.delete(project)
     db.session.commit()
+
+
+def db_search_all_user_projects(search_query: str, user_id: int) -> list[Project]:
+    projects = Project.query.filter(
+        (Project.name.ilike(f"%{search_query}%"))
+        | (Project.code.ilike(f"%{search_query}%")),
+        Project.user_id == user_id,
+    ).all()
+    return projects

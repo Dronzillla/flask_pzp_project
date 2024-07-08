@@ -51,7 +51,7 @@ def db_read_benefits_by_project_id(
     return benefits
 
 
-def db_search_all_projects(search_query: str):
+def db_search_all_projects(search_query: str) -> list[Project]:
     projects = Project.query.filter(
         (Project.name.ilike(f"%{search_query}%"))
         | (Project.code.ilike(f"%{search_query}%"))
