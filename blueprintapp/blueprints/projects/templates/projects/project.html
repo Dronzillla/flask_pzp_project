@@ -1,36 +1,67 @@
 {% extends "base.html" %}
 {% block title %}Project{% endblock %}
 {% block content %}
-
 <body>
+    <!-- Project Information -->
     <section>
-        <h3>National Progress Plan</h3>
-        <!-- <p>ID: {{ project.id }}</p> -->
-        <p>Name: {{ project.name }}</p>
-        <p>Code: {{ project.code }}</p>
+        <div class="container mb-4">
+            <h3>National Progress Plan</h3>
+            <!-- <p>ID: {{ project.id }}</p> -->
+            <p>Name: {{ project.name }}</p>
+            <p>Code: {{ project.code }}</p>
+        </div>
     </section>
 
+    <!-- General Information -->
     <section>
-        <h3>General Information</h3>
-        <div>{{ table_general_html | safe }}</div>
+        <div class="container mb-4">
+            <h3 class="mb-4">General Information</h3>
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    {{ table_general_html | safe }}   
+                </div>
+            </div>
+            
+        </div>
     </section>
 
+    <!-- Financial Cashflows -->
     <section>
-        <h3>Financial Cashflows</h3>
-        <div>{{ graph_cashflows_html | safe }}</div>
-    </section>
-
-    <section>
-        <h3>Social Impact</h3>
-        <div>{{ graph_benefits_html | safe }}</div>
-    </section>
-
-    <section>
-        <h3>Ratios</h3>
-        <div>{{ table_ratios_html | safe }}</div>
+        <div class="container mb-4">
+            <h3 class="mb-4">Financial Cashflows</h3>
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    {{ graph_cashflows_html | safe }}   
+                </div>
+            </div>
+            
+        </div>
     </section>
     
+    <!-- Social Impact -->
+    <section>
+        <div class="container mb-4">
+            <h3 class="mb-4">Social Impact</h3>
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    {{ graph_benefits_html  | safe }}   
+                </div>
+            </div>
+            
+        </div>
+    </section>
+    
+    <!-- Ratios -->
+    <section>
+        <div class="container mb-4">
+            <h3 class="mb-4">Ratios</h3>
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    {{ table_ratios_html | safe }}   
+                </div>
+            </div>
+            
+        </div>
+    </section>
 </body>
-
-
 {% endblock %}
