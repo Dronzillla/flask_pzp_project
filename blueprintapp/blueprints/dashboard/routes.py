@@ -1,4 +1,4 @@
-from flask import request, render_template, redirect, url_for, Blueprint
+from flask import request, render_template, redirect, url_for, Blueprint, flash
 from flask_login import login_required, current_user
 from blueprintapp.app import db
 from blueprintapp.blueprints.dashboard.db_operations import (
@@ -7,16 +7,28 @@ from blueprintapp.blueprints.dashboard.db_operations import (
     db_delete_project,
 )
 from blueprintapp.utils.utilities import flask_paginate_page_pagination
+from blueprintapp.blueprints.projects.forms import SearchForm
 
 
 dashboard = Blueprint("dashboard", __name__, template_folder="templates")
 
 
-@dashboard.route("/")
+@dashboard.route("/", methods=["GET", "POST"])
 @login_required
 def index():
+    form = SearchForm()
+    search_query = None
+    projects = []
     username = current_user.username
-    projects = db_read_all_user_projects(user_id=current_user.id)
+    # POST method
+    if form.validate_on_submit():
+        search_query = form.query.data
+        projects = db_read_all_user_projects(user_id=current_user.id)
+        # If there are no projects flash a message.
+        if search_query and not projects:
+            flash("No projects found matching your query.")
+    else:
+        projects = db_read_all_user_projects(user_id=current_user.id)
     # Set up project page pagination
     displayed_projects, pagination = flask_paginate_page_pagination(items=projects)
     return render_template(
@@ -24,6 +36,8 @@ def index():
         username=username,
         projects=displayed_projects,
         pagination=pagination,
+        form=form,
+        search_query=search_query,
     )
 
 
