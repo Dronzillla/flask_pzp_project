@@ -13,6 +13,8 @@ from blueprintapp.blueprints.core.utils import (
 from blueprintapp.utils.utilities import (
     plotly_make_table_from_pandas_df,
     plotly_update_layout_table_default,
+    plotly_update_font_family_bootstrap,
+    plotly_update_layout_scatter_default,
     pandas_convert_db_query_all_to_df,
     pandas_sort_df_columns,
 )
@@ -33,15 +35,15 @@ def graph_general_indicator_pie(indicator: str) -> str:
     """
     # Get database data from General models
     if indicator == "analysis_method":
-        title = "Analysis Methods Used"
+        # title = "Analysis Methods Used"
         data = db_aggregate_general_analysis_methods_count()
         legend_title = "Analysis method"
     elif indicator == "analysis_principle":
-        title = "Analysis Principles Used"
+        # title = "Analysis Principles Used"
         data = db_aggregate_general_analysis_principle_count()
         legend_title = "Analysis principle"
     elif indicator == "main_sector":
-        title = "Main Economic Sectors"
+        # title = "Main Economic Sectors"
         data = db_aggregate_general_main_sector_count()
         legend_title = "Main economic sector"
     if len(data) == 0:
@@ -56,6 +58,8 @@ def graph_general_indicator_pie(indicator: str) -> str:
         legend_title=legend_title,
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
     )
+    # Update font family to fit bootstrap
+    plotly_update_font_family_bootstrap(fig=fig)
     general_html_graph = fig.to_html(full_html=False)
     return general_html_graph
 
@@ -74,15 +78,15 @@ def graph_cashflows_scatter() -> str:
     df = pandas_convert_db_query_all_to_df(data=data)
     # Create aggregate cashflows graph
     fig = px.scatter(df, x="year", y="total_amount", color="category")
+    # Update graph with default preset
+    plotly_update_layout_scatter_default(fig=fig)
+    # Update graph with specific properties
     fig.update_layout(
         title="Aggregate Cashflows by Category and Year",
         xaxis_title="Year",
         yaxis_title="Amount",
-        yaxis=dict(type="log"),
         legend_title="Category",
-        barmode="group",
     )
-    fig.update_traces(hovertemplate="Year: %{x}<br>Amount: %{y:.2s} EUR<br>")
     # Create HTML representation of the Plotly figure
     html_graph = fig.to_html(full_html=False)
     return html_graph
@@ -104,16 +108,15 @@ def graph_benefits_scatter_top5() -> str:
     df = pandas_filter_benefits_pd_df_top5(df=df)
     # Create aggregate benefits graph
     fig = px.scatter(df, x="year", y="total_amount", color="name")
+    # Update graph with default preset
+    plotly_update_layout_scatter_default(fig=fig)
+    # Update graph with specific properties
     fig.update_layout(
         title="Top 5 Aggregate Benefits by Benefit Component and Year",
         xaxis_title="Year",
         yaxis_title="Amount",
-        yaxis=dict(type="log"),
-        # yaxis=dict(type="log", dtick=1, tickvals=y_ticks, ticktext=y_labels),
         legend_title="Component",
-        barmode="group",
     )
-    fig.update_traces(hovertemplate="Year: %{x}<br>Amount: %{y:.2s} EUR<br>")
     # Create HTML representation of the Plotly figure
     html_graph = fig.to_html(full_html=False)
     return html_graph

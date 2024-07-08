@@ -84,6 +84,8 @@ def plotly_update_layout_table_default(fig: go.Figure, title: str = "") -> go.Fi
     Returns:
         go.Figure: updated plotly go.Figure object.
     """
+    # Update font family to fit bootstrap
+    plotly_update_font_family_bootstrap(fig=fig)
     if title == "":
         fig.update_layout(
             height=100,
@@ -97,6 +99,32 @@ def plotly_update_layout_table_default(fig: go.Figure, title: str = "") -> go.Fi
             margin=dict(t=60, b=0),
         )
         return fig
+
+
+def plotly_update_layout_scatter_default(fig: go.Figure) -> None:
+    # Update font family to fit bootstrap
+    plotly_update_font_family_bootstrap(fig=fig)
+    # Update common layout features
+    fig.update_layout(
+        yaxis=dict(type="log"),
+        barmode="group",
+    )
+    # Update hoover template
+    fig.update_traces(hovertemplate="Year: %{x}<br>Amount: %{y:.2s} EUR<br>")
+
+
+def plotly_update_font_family_bootstrap(fig: go.Figure) -> None:
+    """Updates plotly font-family and font-color to fit default bootstrap font styles.
+
+    Args:
+        fig (go.Figure): plotly figure.
+    """
+    font_family: str = (
+        "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'"
+    )
+    font_color: str = "#212529"
+    font_properties = dict(family=font_family, color=font_color)
+    fig.update_layout(font=font_properties, hoverlabel=dict(font=font_properties))
 
 
 def flask_paginate_page_pagination(items) -> tuple:

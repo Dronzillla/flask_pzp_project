@@ -8,6 +8,7 @@ from blueprintapp.blueprints.projects.db_operations import (
 from blueprintapp.utils.utilities import (
     pandas_convert_db_query_one_to_none_to_df,
     plotly_make_table_from_pandas_df,
+    plotly_update_layout_scatter_default,
 )
 import plotly.express as px
 import pandas as pd
@@ -35,15 +36,15 @@ def graph_project_cashflows_scatter(project_id: int) -> str:
     # print(df)
     # Create graph for cashflows
     fig = px.scatter(df, x="year", y="amount", color="category")
+    # Update graph with default preset
+    plotly_update_layout_scatter_default(fig=fig)
+    # Update graph with specific properties
     fig.update_layout(
         title=f"Progress Plan No. {db_read_project_by_id(id=project_id).code} Financial Cashflows by Category and Year",
         xaxis_title="Year",
         yaxis_title="Amount",
-        yaxis=dict(type="log"),
         legend_title="Category",
     )
-    # Update hoover template
-    fig.update_traces(hovertemplate="Year: %{x}<br>Amount: %{y:.2s} EUR<br>")
     # Create HTML graph
     html_graph = fig.to_html(full_html=False)
     return html_graph
@@ -64,15 +65,15 @@ def graph_project_benefits_scatter(project_id: int):
     # print(df)
     # Create graph
     fig = px.scatter(df, x="year", y="amount", color="name")
+    # Update graph with default preset
+    plotly_update_layout_scatter_default(fig=fig)
+    # Update graph with specific properties
     fig.update_layout(
         title=f"Progress Plan No. {db_read_project_by_id(id=project_id).code} Social Impact by Component and Year",
         xaxis_title="Year",
         yaxis_title="Amount",
-        yaxis=dict(type="log"),
         legend_title="Component",
     )
-    # Update hoover template
-    fig.update_traces(hovertemplate="Year: %{x}<br>Amount: %{y:.2s} EUR<br>")
     # Create HTML graph
     html_graph = fig.to_html(full_html=False)
     return html_graph

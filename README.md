@@ -19,7 +19,6 @@ Requirements:
 - User can see menu items based on log in fact.
 - User can access upload, dashboard and auth/logout routes only if he is logged in.
 
-
 ### Stage 3: Basic visualization for data
 Objectives: 
 - Enforce uploading only valid files.
@@ -30,14 +29,16 @@ Requirements:
 - Create visuals of aggregate data.
 - Create visuals for viewing specific project data.
 
-
 ### Stage 4: 
 Objective: Implement search
 
 Requirements:
 - Non-registered user can see all uploaded projects.
 - Users can search for projects.
+- Registered users can search for uploaded projects in dashboard.
 - Create header.
 - Create footer.
-- Create basic styling.
+- Create basic styling for all pages.
+- Map basic plotly style to fit default bootstrap style.
 - If user is logged in show his username in header.
+- Create Privacy Policy and Terms of Service routes.
