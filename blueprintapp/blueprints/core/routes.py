@@ -43,3 +43,13 @@ def index():
 @core.route("/about")
 def about():
     return render_template("core/about.html")
+
+
+@core.route("/privacy")
+def privacy():
+    return render_template("core/privacy_policy.html")
+
+
+@core.route("/terms")
+def terms():
+    return render_template("core/terms_of_service.html")
