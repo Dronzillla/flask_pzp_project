@@ -29,8 +29,8 @@ Requirements:
 - Create visuals of aggregate data.
 - Create visuals for viewing specific project data.
 
-### Stage 4: 
-Objective: Implement search
+### Stage 4: Minimal application
+Objective: Implement search for projects.
 
 Requirements:
 - Non-registered user can see all uploaded projects.
@@ -42,3 +42,16 @@ Requirements:
 - Map basic plotly style to fit default bootstrap style.
 - If user is logged in show his username in header.
 - Create Privacy Policy and Terms of Service routes.
+
+### Stage 5: Flask admin
+Objective: Implement admin dashboard.
+
+Requirements:
+- When registering user must enter a complex password.
+- Logged in user can delete his account.
+- Logged in user can change his password.
+- Create admin page.
+- Admin user can create another admin user.
+- Admin user can delete any account.
+- Registration of new user should be confirmed by admin user.
+- When new user registers an email is sent to admin emails.

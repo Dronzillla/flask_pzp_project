@@ -3,6 +3,7 @@ import pandas as pd
 import plotly.graph_objects as go
 from flask_paginate import Pagination, get_page_parameter
 from flask import request
+import re
 
 
 def pandas_sort_df_columns(df: pd.DataFrame) -> pd.DataFrame:
@@ -153,3 +154,18 @@ def flask_paginate_page_pagination(items) -> tuple:
         page=page, per_page=per_page, total=total, css_framework="bootstrap5"
     )
     return (displayed_items, pagination)
+
+
+def auth_is_valid_password(password: str) -> bool:
+    # Psw is at least 8 characters, 1 uppercase, 1 lowercase, 1 digit, 1 special character
+    if len(password) < 8:
+        return False
+    if not any(char.isupper() for char in password):
+        return False
+    if not any(char.islower() for char in password):
+        return False
+    if not any(char.isdigit() for char in password):
+        return False
+    if not any(char in "!@#$%^&*()-_=+[{]};:'\",<.>/?" for char in password):
+        return False
+    return True
