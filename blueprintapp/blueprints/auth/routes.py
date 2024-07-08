@@ -26,7 +26,7 @@ def register():
 
 @auth.route("/login", methods=["GET", "POST"])
 def login():
-    nologin = False
+    # nologin = False
     if current_user.is_authenticated:
         # return f"{current_user.username}"
         return redirect(url_for("dashboard.index"))
@@ -34,7 +34,8 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data.lower()).first()
         if user is None or not user.check_password(form.password.data):
-            nologin = True
+            # nologin = True
+            flash("Invalid username or password", "error")
         # if user is None:
         #     nologin = True
         #     # form.email.errors.append("Invalid email")
@@ -47,7 +48,8 @@ def login():
             if not next_page or urlparse(next_page).netloc != "":
                 next_page = url_for("dashboard.index")
             return redirect(next_page)
-    return render_template("auth/login.html", form=form, message=nologin)
+    # return render_template("auth/login.html", form=form, message=nologin)
+    return render_template("auth/login.html", form=form)
 
 
 @auth.route("/logout")
