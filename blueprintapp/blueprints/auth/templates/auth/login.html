@@ -1,42 +1,50 @@
 {% extends "base.html" %}
 {% block title %}Login{% endblock %}
 {% block content %}
-    
-{% if message %}
-<div class="alert alert-warning" role="alert">
-    <span class="closebtns" onclick="this.parentElement.style.display='none';">&times;</span>Invalid username or password
-</div>
-{% endif %}
-
-<div>
-    <form action="" method="post">
-        {{ form.hidden_tag() }}
-        <div>
-            <h1>Login</h1>
-        </div>
-        <p>
-            {{ form.email.label }}<br>
-            {{ form.email(size=32) }}<br>
-            {% for error in form.email.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.password.label }}<br>
-            {{ form.password(size=32) }}<br>
-            {% for error in form.password.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
-        <div>
-            {{ form.submit() }}
-        </div>
-    </form>
-    <div> 
-        <span>Dont have an account yet?</span> 
-        <a href="{{ url_for('auth.register') }}"> <i aria-hidden="true"></i>Register</a> 
+<body>
+    {% if message %}
+    <div class="alert alert-warning" role="alert">
+        <span class="closebtns" onclick="this.parentElement.style.display='none';">&times;</span>Invalid username or password
     </div>
-</div>
+    {% endif %}
 
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form action="" method="post">
+                    {{ form.hidden_tag() }}
+                    <div>
+                        <h1 class="text-center">Login</h1>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email">{{ form.email.label }}</label>
+                        {{ form.email(class_="form-control", size=32) }}
+                        {% for error in form.email.errors %}
+                        <span class="text-danger">[{{ error }}]</span>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="password">{{ form.password.label }}</label>
+                        {{ form.password(class_="form-control", size=32) }}
+                        {% for error in form.password.errors %}
+                        <span class="text-danger">[{{ error }}]</span>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-3 form-check">
+                        {{ form.remember_me(class_="form-check-input") }}
+                        <label class="form-check-label" for="remember_me">{{ form.remember_me.label }}</label>
+                    </div>
+                    <div class="text-center">
+                        {{ form.submit(class_="btn btn-primary") }}
+                    </div>
+                </form>
+                <div class="text-center mt-3">
+                    <span>Don't have an account yet?</span> 
+                    <a href="{{ url_for('auth.register') }}">Register</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</body>
 {% endblock %}
