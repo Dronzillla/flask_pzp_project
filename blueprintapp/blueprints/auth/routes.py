@@ -5,12 +5,15 @@ from blueprintapp.blueprints.auth.forms import (
     LoginForm,
     RegistrationForm,
     UpdatePasswordForm,
+    ConfirmDeleteForm,
 )
 from blueprintapp.blueprints.auth.models import User
 from blueprintapp.blueprints.auth.db_operations import (
     db_create_new_user,
     db_read_user_by_email,
     db_update_current_user_password,
+    db_read_user_by_id,
+    db_delete_user,
 )
 from urllib.parse import urlparse
 
@@ -74,3 +77,32 @@ def update_password():
             url_for("dashboard.index")
         )  # Redirect to the dashboard or another appropriate page
     return render_template("auth/update_password.html", form=form)
+
+
+@auth.route("/user/delete", methods=["GET"])
+@login_required
+def confirm_delete_user():
+    form = ConfirmDeleteForm()
+    form.user_id.data = current_user.id
+    return render_template("auth/confirm_delete.html", form=form)
+
+
+@auth.route("/user/delete", methods=["POST"])
+@login_required
+def delete_user():
+    form = ConfirmDeleteForm()
+    if form.validate_on_submit():
+        user_id = form.user_id.data
+        if current_user.id != int(user_id):
+            return "Unauthorized", 403
+        user = db_read_user_by_id(id=user_id)
+        if user is None:
+            return "User not found", 404
+        # Delete user and any related data
+        db_delete_user(user=user)
+        # Logout user
+        logout_user()
+        flash("Your account has been successfully deleted.", "success")
+        return redirect(url_for("core.index"))
+    else:
+        return "Invalid form submission", 400

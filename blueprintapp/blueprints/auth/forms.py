@@ -6,6 +6,7 @@ from wtforms import (
     BooleanField,
     SubmitField,
     ValidationError,
+    HiddenField,
 )
 from wtforms.validators import DataRequired, Length, Email, EqualTo
 from blueprintapp.blueprints.auth.models import User
@@ -64,3 +65,8 @@ class UpdatePasswordForm(FlaskForm):
         user = current_user
         if not user.check_password(current_password.data):
             raise ValidationError("Current password is incorrect.")
+
+
+class ConfirmDeleteForm(FlaskForm):
+    user_id = HiddenField("User ID")
+    submit = SubmitField("Yes")

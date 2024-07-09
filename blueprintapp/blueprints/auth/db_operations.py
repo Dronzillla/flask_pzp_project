@@ -19,3 +19,13 @@ def db_create_new_user(username: str, email: str, password: str) -> User:
 def db_update_current_user_password(password: str) -> None:
     current_user.set_password(password=password)
     db.session.commit()
+
+
+def db_delete_user(user: User) -> None:
+    db.session.delete(user)
+    db.session.commit()
+
+
+def db_read_user_by_id(id: int) -> Optional[User]:
+    result = User.query.filter_by(id=id).one_or_none()
+    return result
