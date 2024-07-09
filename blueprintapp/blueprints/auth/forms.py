@@ -1,3 +1,4 @@
+from flask_login import current_user
 from flask_wtf import FlaskForm
 from wtforms import (
     StringField,
@@ -42,3 +43,24 @@ class RegistrationForm(FlaskForm):
             raise ValidationError(
                 "Password must be at least 8 characters long, must containt at least 1 lower and 1 upper case letters, 1 digit and 1 special symbol !@#$%^&*()-_=+[{]};:'\",<.>/?"
             )
+
+
+class UpdatePasswordForm(FlaskForm):
+    current_password = PasswordField("Current Password", validators=[DataRequired()])
+    new_password = PasswordField("New Password", validators=[DataRequired()])
+    new_password2 = PasswordField(
+        "Repeat New Password", validators=[DataRequired(), EqualTo("new_password")]
+    )
+    submit = SubmitField("Update Password")
+
+    def validate_new_password(self, new_password):
+        if not auth_is_valid_password(password=new_password.data):
+            raise ValidationError(
+                "Password must be at least 8 characters long, must contain at least 1 lower and 1 upper case letters, 1 digit and 1 special symbol !@#$%^&*()-_=+[{]};:'\",<.>/?"
+            )
+
+    def validate_current_password(self, current_password):
+        # Check if current password is correct
+        user = current_user
+        if not user.check_password(current_password.data):
+            raise ValidationError("Current password is incorrect.")
