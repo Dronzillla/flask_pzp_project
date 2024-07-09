@@ -23,7 +23,6 @@ def index():
     form = SearchForm()
     search_query = None
     projects = []
-    username = current_user.username
     # POST method
     if form.validate_on_submit():
         search_query = form.query.data
@@ -39,7 +38,6 @@ def index():
     displayed_projects, pagination = flask_paginate_page_pagination(items=projects)
     return render_template(
         "dashboard/index.html",
-        username=username,
         projects=displayed_projects,
         pagination=pagination,
         form=form,
@@ -61,10 +59,10 @@ def delete_project(id):
     return redirect(url_for("dashboard.index"))
 
 
-@dashboard.route("/settings")
+@dashboard.route("/user/update_password")
 @login_required
-def settings():
-    return render_template("dashboard/settings.html")
+def update_password():
+    return render_template("dashboard/update_password.html")
 
 
 @dashboard.route("/user/delete", methods=["GET"])
