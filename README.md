@@ -55,3 +55,4 @@ Requirements:
 - Admin user can delete any account.
 - Registration of new user should be confirmed by admin user.
 - When new user registers an email is sent to admin emails.
+- Implement page not found template.

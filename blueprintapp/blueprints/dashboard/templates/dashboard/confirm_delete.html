@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Delete user account{% endblock %}
+{% block content %}
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <form method="POST" action="{{ url_for('dashboard.delete_user') }}">
+                            {{ form.hidden_tag() }}
+                            {{ form.user_id(class="form-control") }}
+                            <div class="mb-3">
+                                <p>Are you sure you want to delete the account for <strong>{{ current_user.email }}</strong>? This action cannot be undone.</p>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                {{ form.submit(class="btn btn-danger") }}
+                                <a href="{{ url_for('dashboard.index') }}" class="btn btn-secondary">No</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    
+</body>
+{% endblock %}
