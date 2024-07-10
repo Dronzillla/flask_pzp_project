@@ -29,3 +29,16 @@ def db_delete_user(user: User) -> None:
 def db_read_user_by_id(id: int) -> Optional[User]:
     result = User.query.filter_by(id=id).one_or_none()
     return result
+
+
+def db_admin_user_created(username: str, email: str, password: str) -> bool:
+    # Check if user with provided email already exists
+    existing_user = db_read_user_by_email(email=email)
+    if existing_user:
+        return False
+    # If not create new admin user
+    user = User(username=username, email=email, is_admin=True, is_verified=True)
+    user.set_password(password=password)
+    db.session.add(user)
+    db.session.commit()
+    return True

@@ -51,8 +51,10 @@ Requirements:
 - Logged in user can delete his account.
 - Logged in user can change his password.
 - Create admin page.
-- Admin user can create another admin user.
-- Admin user can delete any account.
+- Admin user can make another registered user an admin user.
+- Admin user can delete any user and any project.
+- Admin user can't create new user.
+- Admin user can't create new project.
 - Registration of new user should be confirmed by admin user.
 - When new user registers an email is sent to admin emails.
 - Implement page not found template.

@@ -42,6 +42,18 @@ def create_app():
     # Initialize Flask-Admin with the app context
     init_admin(app)
 
+    from blueprintapp.blueprints.auth.db_operations import db_admin_user_created
+
+    # Create admin user if user does not exist
+    with app.app_context():
+        db.create_all()
+        admin_username = "admin"
+        admin_email = "admin@example.com"
+        admin_password = "ASD15asdi..as"
+        db_admin_user_created(
+            username=admin_username, email=admin_email, password=admin_password
+        )
+
     # SQL does not support alter tables. Might include: render_as_batch=True
     migrate = Migrate(app, db)
     # To create db go to blueprintapp folder where app.py is
