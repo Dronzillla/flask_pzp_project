@@ -27,6 +27,7 @@ def create_app():
     from blueprintapp.blueprints.auth.routes import auth
     from blueprintapp.blueprints.dashboard.routes import dashboard
     from blueprintapp.blueprints.projects.routes import projects
+    from blueprintapp.blueprints.admin_bp.routes import admin_bp, init_admin
 
     # in order to go to index we need to go to -> todos/
     # to create an account /todos/create
@@ -36,6 +37,10 @@ def create_app():
     app.register_blueprint(auth, url_prefix="/auth")
     app.register_blueprint(dashboard, url_prefix="/dashboard")
     app.register_blueprint(projects, url_prefix="/projects")
+    app.register_blueprint(admin_bp, url_prefix="/admin")
+
+    # Initialize Flask-Admin with the app context
+    init_admin(app)
 
     # SQL does not support alter tables. Might include: render_as_batch=True
     migrate = Migrate(app, db)
