@@ -2,7 +2,9 @@ from blueprintapp.app import db_column_map
 import pandas as pd
 import plotly.graph_objects as go
 from flask_paginate import Pagination, get_page_parameter
-from flask import request
+from flask import request, flash, abort, redirect, url_for
+from flask_login import current_user
+from functools import wraps
 import re
 
 
@@ -157,7 +159,14 @@ def flask_paginate_page_pagination(items) -> tuple:
 
 
 def auth_is_valid_password(password: str) -> bool:
-    # Psw is at least 8 characters, 1 uppercase, 1 lowercase, 1 digit, 1 special character
+    """Checks for password strength. Password is at least 8 characters long, has at least 1 uppercase, 1 lowercase, 1 digit and 1 special character (!@#$%^&*()-_=+[{]};:'\",<.>/?).
+
+    Args:
+        password (str): Password as string
+
+    Returns:
+        bool: Returns 'True' if password strength is sufficient, 'False' if any condition is not met.
+    """
     if len(password) < 8:
         return False
     if not any(char.isupper() for char in password):
@@ -169,3 +178,24 @@ def auth_is_valid_password(password: str) -> bool:
     if not any(char in "!@#$%^&*()-_=+[{]};:'\",<.>/?" for char in password):
         return False
     return True
+
+
+def admin_user(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not current_user.is_admin:
+            abort(403)
+        return f(*args, **kwargs)
+
+    return decorated_function
+
+
+def verified_user(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not current_user.is_verified:
+            flash("You need to be verified to access this page.", "error")
+            return redirect(url_for("core.index"))
+        return f(*args, **kwargs)
+
+    return decorated_function

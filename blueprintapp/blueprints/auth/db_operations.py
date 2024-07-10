@@ -10,7 +10,7 @@ def db_read_user_by_email(email: str) -> Optional[User]:
 
 
 def db_create_new_user(username: str, email: str, password: str) -> User:
-    user = User(username=username, email=email)
+    user = User(username=username, email=email, is_admin=False, is_verified=False)
     user.set_password(password=password)
     db.session.add(user)
     db.session.commit()

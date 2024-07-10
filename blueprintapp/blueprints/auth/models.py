@@ -9,7 +9,9 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True)
     email = db.Column(db.String(80), unique=True)
-    password_hash = db.Column(db.String(80))
+    is_admin = db.Column(db.Boolean)
+    is_verified = db.Column(db.Boolean)
+    password_hash = db.Column(db.String(200))
 
     # Relationships (PK) one to many
     project = db.relationship(

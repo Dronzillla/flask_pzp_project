@@ -16,6 +16,8 @@ from blueprintapp.blueprints.auth.db_operations import (
     db_delete_user,
 )
 from urllib.parse import urlparse
+from blueprintapp.utils.utilities import verified_user
+
 
 auth = Blueprint("auth", __name__, template_folder="templates")
 
@@ -45,6 +47,12 @@ def login():
         user = db_read_user_by_email(email=form.email.data.lower())
         if user is None or not user.check_password(form.password.data):
             flash("Invalid username or password.", "error")
+        # Check if user is verified
+        elif not user.is_verified:
+            flash(
+                "Your account needs to be verified by an admin for you to log in.",
+                "error",
+            )
         else:
             login_user(user, remember=form.remember_me.data)
             next_page = request.args.get("next")
@@ -56,6 +64,7 @@ def login():
 
 @auth.route("/logout")
 @login_required
+@verified_user
 def logout():
     logout_user()
     return redirect(url_for("core.index"))
@@ -63,6 +72,7 @@ def logout():
 
 @auth.route("/update_password", methods=["GET", "POST"])
 @login_required
+@verified_user
 def update_password():
     form = UpdatePasswordForm()
     if form.validate_on_submit():
@@ -81,6 +91,7 @@ def update_password():
 
 @auth.route("/user/delete", methods=["GET"])
 @login_required
+@verified_user
 def confirm_delete_user():
     form = ConfirmDeleteForm()
     form.user_id.data = current_user.id
@@ -89,6 +100,7 @@ def confirm_delete_user():
 
 @auth.route("/user/delete", methods=["POST"])
 @login_required
+@verified_user
 def delete_user():
     form = ConfirmDeleteForm()
     if form.validate_on_submit():

@@ -21,6 +21,7 @@ from blueprintapp.blueprints.upload.db_operations import (
     db_delete_sector_and_components,
 )
 from blueprintapp.blueprints.upload.utils import is_valid_excel_file
+from blueprintapp.utils.utilities import verified_user
 
 
 upload = Blueprint("upload", __name__, template_folder="templates")
@@ -29,6 +30,7 @@ upload = Blueprint("upload", __name__, template_folder="templates")
 # Only registered user can upload files
 @upload.route("/", methods=["GET", "POST"])
 @login_required
+@verified_user
 def index():
     form = UploadForm()
     # Get current user id

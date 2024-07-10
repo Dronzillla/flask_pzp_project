@@ -7,7 +7,7 @@ from blueprintapp.blueprints.dashboard.db_operations import (
     db_delete_project,
     db_search_all_user_projects,
 )
-from blueprintapp.utils.utilities import flask_paginate_page_pagination
+from blueprintapp.utils.utilities import flask_paginate_page_pagination, verified_user
 from blueprintapp.blueprints.projects.forms import SearchForm
 
 
@@ -16,6 +16,7 @@ dashboard = Blueprint("dashboard", __name__, template_folder="templates")
 
 @dashboard.route("/", methods=["GET", "POST"])
 @login_required
+@verified_user
 def index():
     form = SearchForm()
     search_query = None
@@ -44,6 +45,7 @@ def index():
 
 @dashboard.route("/project/delete/<int:id>")
 @login_required
+@verified_user
 def delete_project(id):
     # Get user id
     user_id = current_user.id
