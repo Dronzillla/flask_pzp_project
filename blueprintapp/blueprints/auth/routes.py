@@ -17,6 +17,7 @@ from blueprintapp.blueprints.auth.db_operations import (
 )
 from urllib.parse import urlparse
 from blueprintapp.utils.utilities import verified_user
+from blueprintapp.blueprints.auth.emails import mail_admins_new_user_registration
 
 
 auth = Blueprint("auth", __name__, template_folder="templates")
@@ -33,7 +34,11 @@ def register():
             email=form.email.data.lower(),
             password=form.password.data,
         )
-        flash("Congratulations, you are now a registered user!")
+        flash(
+            "Congratulations, you are now a registered user. Note that admin user has to confirm your account.",
+            "info",
+        )
+        mail_admins_new_user_registration(email=form.email.data.lower())
         return redirect(url_for("auth.login"))
     return render_template("auth/register.html", form=form)
 

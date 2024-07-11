@@ -2,6 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
+from flask_mail import Mail
 from db_map import DB_COLUMN_MAP
 from dotenv import load_dotenv
 import os
@@ -9,6 +10,7 @@ import os
 load_dotenv()
 db = SQLAlchemy()
 login = LoginManager()
+mail = Mail()
 db_column_map = DB_COLUMN_MAP
 
 
@@ -19,9 +21,12 @@ def create_app(config_class="config.config.DevelopmentConfig"):
     # Set up db
     db.init_app(app)
 
-    # Set up the LoginManager
+    # Set up LoginManager
     login.init_app(app)
     login.login_view = "auth.login"
+
+    # Set up Mail
+    mail.init_app(app)
 
     # Import and register all blueprints
     from blueprintapp.blueprints.core.routes import core

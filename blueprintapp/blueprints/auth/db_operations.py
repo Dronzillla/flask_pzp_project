@@ -42,3 +42,8 @@ def db_admin_user_created(username: str, email: str, password: str) -> bool:
     db.session.add(user)
     db.session.commit()
     return True
+
+
+def db_read_admin_users_emails() -> list:
+    result = User.query.with_entities(User.email).filter_by(is_admin=True).all()
+    return [email for (email,) in result]
