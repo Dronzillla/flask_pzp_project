@@ -3,24 +3,27 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from db_map import DB_COLUMN_MAP
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
 db = SQLAlchemy()
 login = LoginManager()
 db_column_map = DB_COLUMN_MAP
 
 
-def create_app():
+def create_app(config_class="config.config.DevelopmentConfig"):
     app = Flask(__name__, template_folder="templates")
-    app.config["SECRET_KEY"] = "your_secret_key"
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///./app.db"
+    app.config.from_object(config_class)
+
+    # Set up db
     db.init_app(app)
 
     # Set up the LoginManager
     login.init_app(app)
     login.login_view = "auth.login"
 
-    # import and register all blueprints
-    # todos is not a file, it is blueprint
+    # Import and register all blueprints
     from blueprintapp.blueprints.core.routes import core
     from blueprintapp.blueprints.upload.routes import upload
     from blueprintapp.blueprints.people.routes import people
@@ -29,8 +32,7 @@ def create_app():
     from blueprintapp.blueprints.projects.routes import projects
     from blueprintapp.blueprints.admin_bp.routes import admin_bp, init_admin
 
-    # in order to go to index we need to go to -> todos/
-    # to create an account /todos/create
+    # Register blueprints
     app.register_blueprint(core, url_prefix="/")
     app.register_blueprint(upload, url_prefix="/upload")
     app.register_blueprint(people, url_prefix="/people")
@@ -42,14 +44,14 @@ def create_app():
     # Initialize Flask-Admin with the app context
     init_admin(app)
 
+    # Create admin user if first admin user does not exist
     from blueprintapp.blueprints.auth.db_operations import db_admin_user_created
 
-    # Create admin user if user does not exist
     with app.app_context():
         db.create_all()
-        admin_username = "admin"
-        admin_email = "admin@example.com"
-        admin_password = "ASD15asdi..as"
+        admin_username = os.getenv("ADMIN_USERNAME")
+        admin_email = os.getenv("ADMIN_EMAIL")
+        admin_password = os.getenv("ADMIN_PASSWORD")
         db_admin_user_created(
             username=admin_username, email=admin_email, password=admin_password
         )
