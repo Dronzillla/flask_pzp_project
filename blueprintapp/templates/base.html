@@ -11,71 +11,76 @@
 <body>
     <!-- Navigation menu -->
     <nav class="navbar navbar-expand-md navbar-light bg-light mb-5">
-      <div class="container-fluid">
-          <!-- Brand/logo -->
-          <!-- <a class="navbar-brand" href="{{ url_for('core.index') }}">Brand</a> -->
+        <div class="container-fluid">
+            <!-- Brand/logo -->
+            <!-- <a class="navbar-brand" href="{{ url_for('core.index') }}">Brand</a> -->
 
-          <!-- Toggler/collapsibe Button -->
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-              <span class="navbar-toggler-icon"></span>
-          </button>
+            <!-- Toggler/collapsibe Button -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-          <!-- Navbar links -->
-          <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
-              <!-- Left side links -->
-              <ul class="navbar-nav">
-                  <li class="nav-item">
-                      <a class="nav-link" href="{{ url_for('core.index') }}">Main</a>
-                  </li>
-                  <li class="nav-item">
-                      <a class="nav-link" href="{{ url_for('core.about') }}">About</a>
-                  </li>
-                  <li class="nav-item">
-                      <a class="nav-link" href="{{ url_for('projects.index') }}">Projects</a>
-                  </li>
-              </ul>
+            <!-- Navbar links -->
+            <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+                    <!-- Left side links -->
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('core.index') }}">Main</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('core.about') }}">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('projects.index') }}">Projects</a>
+                        </li>
+                    </ul>
 
-              <!-- Right side links -->
-              <ul class="navbar-nav">
-                  {% if current_user.is_authenticated %}
-                  <li class="nav-item">
-                      <div class="navbar-text text-success">Logged in as: {{ current_user.username }}</div>
-                  </li>
-                  <li class="nav-item">
-                      <a class="nav-link" href="{{ url_for('dashboard.index') }}">Dashboard</a>
-                  </li>
-                  <li class="nav-item">
-                      <a class="nav-link" href="{{ url_for('upload.index') }}">Upload</a>
-                  </li>
-                  <li class="nav-item">
-                      <a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a>
-                  </li>
-                  {% else %}
-                  <li class="nav-item">
-                      <a class="nav-link" href="{{ url_for('auth.register') }}">Register</a>
-                  </li>
-                  <li class="nav-item">
-                      <a class="nav-link" href="{{ url_for('auth.login') }}">Login</a>
-                  </li>
-                  {% endif %}
-              </ul>
+                <!-- Right side links -->
+                <ul class="navbar-nav"> 
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <div class="navbar-text text-success">Logged in as: {{ current_user.username }}</div>
+                    </li>
+                    {% if current_user.is_admin %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('admin.index') }}">Admin</a>
+                    </li>
+                    {% endif %}      
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('dashboard.index') }}">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('upload.index') }}">Upload</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('auth.register') }}">Register</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('auth.login') }}">Login</a>
+                    </li>
+                    {% endif %}
+                </ul>
           </div>
-      </div>
+        </div>
     </nav>
 
     <!-- Flash messages -->
     <div class="container mt-4">
         {% with messages = get_flashed_messages(with_categories=true) %}
-          {% if messages %}
+            {% if messages %}
             <div>
-              {% for category, message in messages %}
-                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                  {{ message }}
-                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-              {% endfor %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
             </div>
-          {% endif %}
+            {% endif %}
         {% endwith %}
       </div>
 
