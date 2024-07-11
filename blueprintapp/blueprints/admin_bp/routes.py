@@ -4,6 +4,13 @@ from flask_admin.contrib.sqla import ModelView
 from blueprintapp.app import db
 from blueprintapp.blueprints.auth.models import User
 from blueprintapp.blueprints.upload.models import Project
+from blueprintapp.blueprints.admin_bp.db_operations import (
+    db_read_admin_user_count,
+    db_read_is_verified_user_count,
+)
+from blueprintapp.blueprints.core.db_operations import (
+    db_aggregate_project_count,
+)
 from flask_admin.menu import MenuLink
 from blueprintapp.utils.utilities import admin_required
 from flask_login import login_required, current_user
@@ -17,7 +24,18 @@ class MyHomeView(AdminIndexView):
     @login_required
     def index(self):
         if current_user.is_authenticated and current_user.is_admin:
-            return self.render("admin/index.html")
+
+            admin_user_count = db_read_admin_user_count()
+            verified_users_count = db_read_is_verified_user_count(condition=True)
+            unverified_users_count = db_read_is_verified_user_count(condition=False)
+            projecs_count = db_aggregate_project_count()
+            return self.render(
+                "admin/index.html",
+                admin_user_count=admin_user_count,
+                verified_users_count=verified_users_count,
+                unverified_users_count=unverified_users_count,
+                projecs_count=projecs_count,
+            )
         flash(
             "You either have to log in or you don't have permission to view that page. "
         )
@@ -30,6 +48,8 @@ admin = Admin(name="Admin page", template_mode="bootstrap4", index_view=MyHomeVi
 
 # Only logged in admin user can view admin pages
 class AdminModelView(ModelView):
+    can_create = False
+
     def is_accessible(self):
         if current_user.is_authenticated:
             if current_user.is_admin:

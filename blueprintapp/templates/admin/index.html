@@ -1,4 +1,39 @@
 {% extends "admin/master.html" %}
 {% block body %}
-  <p>Hello world</p>
+
+<body>
+    <div class="container mt-5 mb-5">
+        <h1 class="mb-4">Admin Dashboard</h1>
+        <p>Welcome to admin dashboard. Here you can delete and update information about users, delete and update project name and code. </p> 
+        <div class="row">
+            
+            <div class="col-md-6 mb-4">
+                <h3>Admin Information</h3>
+                <div class="border rounded p-3 bg-light">
+                    <p><strong>Username:</strong> {{ current_user.username }}</p>
+                    <p><strong>Email:</strong> {{ current_user.email }}</p>
+                </div>
+            </div>
+            
+            <div class="col-md-6 mb-4">
+              <h3>Users Information</h3>
+              <div class="border rounded p-3 bg-light">
+                  <p><strong>Total user count:</strong> {{ verified_users_count+unverified_users_count }}</p>
+                  <!-- <p><strong>Verified user count:</strong> {{ verified_users_count }}</p> -->
+                  <p><strong>Unverified users count:</strong> {{ unverified_users_count }}</p>
+              </div>
+            </div>
+            
+
+            <div class="col-md-6 mb-4">
+              <h3>Projects Information</h3>
+              <div class="border rounded p-3 bg-light">
+                  <p><strong>Total projects uploaded: </strong> {{ projects_count }}</p>
+              </div>
+            </div>
+
+
+        </div>
+    </div> 
+</body>
 {% endblock %}

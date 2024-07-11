@@ -7,6 +7,7 @@ website_mail_password = os.getenv("MAIL_PASSWORD_SECURED")
 
 
 class Config:
+    # TODO Update secret key
     SECRET_KEY = "your_secret_key"
     SQLALCHEMY_DATABASE_URI = "sqlite:///./app.db"
     # Mail config
