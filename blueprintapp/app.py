@@ -31,7 +31,6 @@ def create_app(config_class="config.config.DevelopmentConfig"):
     # Import and register all blueprints
     from blueprintapp.blueprints.core.routes import core
     from blueprintapp.blueprints.upload.routes import upload
-    from blueprintapp.blueprints.people.routes import people
     from blueprintapp.blueprints.auth.routes import auth
     from blueprintapp.blueprints.dashboard.routes import dashboard
     from blueprintapp.blueprints.projects.routes import projects
@@ -40,7 +39,6 @@ def create_app(config_class="config.config.DevelopmentConfig"):
     # Register blueprints
     app.register_blueprint(core, url_prefix="/")
     app.register_blueprint(upload, url_prefix="/upload")
-    app.register_blueprint(people, url_prefix="/people")
     app.register_blueprint(auth, url_prefix="/auth")
     app.register_blueprint(dashboard, url_prefix="/dashboard")
     app.register_blueprint(projects, url_prefix="/projects")
