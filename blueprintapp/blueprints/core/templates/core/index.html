@@ -7,10 +7,10 @@
     <!-- Call to action -->
     <section>
         <div class="container mb-4">
-            <div class="row">
+            <div class="row g-3">
                 <div class="col-md-4">
                     <div class="card h-100 border-0 shadow-sm text-center">
-                        <div class="card-body">
+                        <div class="card-body bg-light">
                             <p class="mb-0">Already registered user?</p>
                             <form action="{{ url_for('upload.index') }}" method="get">
                                 <button type="submit" class="btn btn-primary mt-3 normal-btn">Upload</button>
@@ -20,14 +20,14 @@
                 </div>
                 <div class="col-md-4">
                     <div class="card h-100 border-0 shadow-sm text-center">
-                        <div class="card-body">
+                        <div class="card-body bg-light">
                             <p class="mb-0">National progress plans uploaded: {{ project_count }}</p>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="card h-100 border-0 shadow-sm text-center">
-                        <div class="card-body">
+                        <div class="card-body bg-light">
                             <p class="mb-0">Not a registered user?</p>
                             <form action="{{ url_for('auth.register') }}" method="get">
                                 <button type="submit" class="btn btn-success mt-3 normal-btn">Register</button>

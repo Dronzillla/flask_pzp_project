@@ -8,14 +8,13 @@ from blueprintapp.blueprints.projects.db_operations import (
 from blueprintapp.utils.utilities import (
     pandas_convert_db_query_one_to_none_to_df,
     plotly_make_table_from_pandas_df,
-    plotly_update_layout_scatter_default,
+    plotly_make_scatter,
 )
-import plotly.express as px
 import pandas as pd
 
 
 """
-Functions to make plotly graphs
+Functions to make plotly graphs for specific project
 """
 
 
@@ -29,15 +28,10 @@ def graph_project_cashflows_scatter(project_id: int) -> str:
     data = db_read_cashflow_by_project_id(project_id=project_id)
     if len(data) == 0:
         return "-"
-    # Convert db cashflow data to pandas DataFrame
-    # df = convert_db_project_cashflows_to_pd_df(cashflow_data=data)
     # Convert db data to pandas DataFrame
     df = pd.DataFrame(data=data)
-    # print(df)
     # Create graph for cashflows
-    fig = px.scatter(df, x="year", y="amount", color="category")
-    # Update graph with default preset
-    plotly_update_layout_scatter_default(fig=fig)
+    fig = plotly_make_scatter(df=df, x="year", y="amount", color="category")
     # Update graph with specific properties
     fig.update_layout(
         title=f"Progress Plan No. {db_read_project_by_id(id=project_id).code} Financial Cashflows by Category and Year",
@@ -50,7 +44,7 @@ def graph_project_cashflows_scatter(project_id: int) -> str:
     return html_graph
 
 
-def graph_project_benefits_scatter(project_id: int):
+def graph_project_benefits_scatter(project_id: int) -> str:
     """Create plotly scatter plot to graph project yearly benefits.
 
     Returns:
@@ -62,12 +56,8 @@ def graph_project_benefits_scatter(project_id: int):
         return "-"
     # Convert db data to pandas DataFrame
     df = pd.DataFrame(data=data)
-    # print(df)
     # Create graph
-    fig = px.scatter(df, x="year", y="amount", color="name")
-    # Update graph with default preset
-    plotly_update_layout_scatter_default(fig=fig)
-    # Update graph with specific properties
+    fig = plotly_make_scatter(df=df, x="year", y="amount", color="name")
     fig.update_layout(
         title=f"Progress Plan No. {db_read_project_by_id(id=project_id).code} Social Impact by Component and Year",
         xaxis_title="Year",
@@ -80,7 +70,7 @@ def graph_project_benefits_scatter(project_id: int):
 
 
 """
-Functions to make plotly tables
+Functions to make plotly tables for specific project
 """
 
 
@@ -98,8 +88,21 @@ def table_project_ratios(project_id: int) -> str:
     drop_columns = ["_sa_instance_state", "id", "project_id"]
     df = pandas_convert_db_query_one_to_none_to_df(data=data, drop_columns=drop_columns)
     # Create plotly figure
-    fig = plotly_make_table_from_pandas_df(df=df)
-    # # Create html table
+    fig = plotly_make_table_from_pandas_df(
+        df=df,
+        title=f"Progress Plan No. {db_read_project_by_id(id=project_id).code} Financial and Economic Ratios Values",
+    )
+    # Add an annotation for explaining ratios
+    fig.update_layout(
+        annotations=[
+            dict(
+                text="Note! If the ratio value is '-9999', the ratio calculation was not successful. If the ratio value is 'null', the ratio should not have been calculated.",
+                y=0,
+                showarrow=False,
+            )
+        ]
+    )
+    # Create html table
     html_table = fig.to_html(full_html=False)
     return html_table
 
@@ -118,7 +121,10 @@ def table_project_general(project_id: int) -> str:
     drop_columns = ["_sa_instance_state", "id", "project_id"]
     df = pandas_convert_db_query_one_to_none_to_df(data=data, drop_columns=drop_columns)
     # Create plotly figure
-    fig = plotly_make_table_from_pandas_df(df=df)
+    fig = plotly_make_table_from_pandas_df(
+        df=df,
+        title=f"Progress Plan No. {db_read_project_by_id(id=project_id).code} General Information",
+    )
     # Create html table
     html_table = fig.to_html(full_html=False)
     return html_table

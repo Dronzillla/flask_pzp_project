@@ -11,19 +11,19 @@ from blueprintapp.blueprints.core.utils import (
     pandas_filter_benefits_pd_df_top5,
 )
 from blueprintapp.utils.utilities import (
-    plotly_make_table_from_pandas_df,
-    plotly_update_layout_table_default,
-    plotly_update_font_family_bootstrap,
-    plotly_update_layout_scatter_default,
     pandas_convert_db_query_all_to_df,
     pandas_sort_df_columns,
+    plotly_make_table_from_pandas_df,
+    plotly_update_font_family_bootstrap,
+    plotly_graphs_colors_map,
+    plotly_make_scatter,
+    plotly_make_table,
 )
-import plotly.graph_objects as go
 import plotly.express as px
 
 
 """
-Functions to make plotly graphs
+Functions to make plotly graphs for aggregate data
 """
 
 
@@ -51,8 +51,12 @@ def graph_general_indicator_pie(indicator: str) -> str:
     # Convert to pandas data frame
     df = pandas_convert_db_query_all_to_df(data=data)
     # Create general data count graph
-    fig = px.pie(df, values="count", names=indicator)
-    # fig = px.pie(df, values="count", names=indicator, title=title)
+    fig = px.pie(
+        df,
+        values="count",
+        names=indicator,
+        color_discrete_sequence=plotly_graphs_colors_map(),
+    )
     # Make legend horizontal
     if indicator != "main_sector":
         fig.update_layout(
@@ -81,10 +85,9 @@ def graph_cashflows_scatter() -> str:
         return "-"
     # Convert db cashflow data to pandas data frame
     df = pandas_convert_db_query_all_to_df(data=data)
+    print(df)
     # Create aggregate cashflows graph
-    fig = px.scatter(df, x="year", y="total_amount", color="category")
-    # Update graph with default preset
-    plotly_update_layout_scatter_default(fig=fig)
+    fig = plotly_make_scatter(df=df, x="year", y="total_amount", color="category")
     # Update graph with specific properties
     fig.update_layout(
         title="Aggregate Cashflows by Category and Year",
@@ -112,9 +115,7 @@ def graph_benefits_scatter_top5() -> str:
     # Get top 5 values
     df = pandas_filter_benefits_pd_df_top5(df=df)
     # Create aggregate benefits graph
-    fig = px.scatter(df, x="year", y="total_amount", color="name")
-    # Update graph with default preset
-    plotly_update_layout_scatter_default(fig=fig)
+    fig = plotly_make_scatter(df=df, x="year", y="total_amount", color="name")
     # Update graph with specific properties
     fig.update_layout(
         title="Top 5 Aggregate Benefits by Benefit Component and Year",
@@ -128,7 +129,7 @@ def graph_benefits_scatter_top5() -> str:
 
 
 """
-Functions to make plotly tables
+Functions to make plotly tables for aggregate data
 """
 
 
@@ -153,10 +154,10 @@ def table_cashflows_totals() -> str:
     header = dict(values=category_header, align="left")
     cells = dict(values=values_header, align="left")
     # Create plotly table
-    fig = go.Figure(data=[go.Table(header=header, cells=cells)])
-    # Update table layout
-    fig = plotly_update_layout_table_default(
-        fig=fig, title="Aggregate Total Cashflows by Category in mil. Eur"
+    fig = plotly_make_table(
+        header=header,
+        cells=cells,
+        title="Aggregate Total Cashflows by Category in mil. Eur",
     )
     # Create HTML representation of the Plotly figure
     html_table = fig.to_html(full_html=False)
@@ -180,6 +181,16 @@ def table_ratios_averages() -> str:
     # Create plotly figure
     fig = plotly_make_table_from_pandas_df(
         df=df, title="Aggregate Average values of Ratios"
+    )
+    # Add an annotation for explaining ratios at the bottom
+    fig.update_layout(
+        annotations=[
+            dict(
+                text="Note! If the ratio value is '-9999', the ratio calculation was not successful. If the ratio value is 'null', the ratio should not have been calculated.",
+                y=0,
+                showarrow=False,
+            )
+        ]
     )
     # Create html table
     html_table = fig.to_html(full_html=False)

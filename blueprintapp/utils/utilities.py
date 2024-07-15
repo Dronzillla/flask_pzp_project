@@ -1,11 +1,12 @@
 from blueprintapp.app import db_column_map
 import pandas as pd
 import plotly.graph_objects as go
+import plotly.express as px
 from flask_paginate import Pagination, get_page_parameter
 from flask import request, flash, abort, redirect, url_for
 from flask_login import current_user
 from functools import wraps
-import re
+from flask import current_app
 
 
 def pandas_sort_df_columns(df: pd.DataFrame) -> pd.DataFrame:
@@ -57,6 +58,39 @@ def pandas_convert_db_query_all_to_df(data) -> pd.DataFrame:
     return df
 
 
+def plotly_tables_colors_map() -> dict:
+    """Gets default style colors for plotly table from config.py file.
+
+    Returns:
+        dict: a dictionary with bootstrap color name and color code for default table design.
+    """
+    # Access PLOTLY_COLORS_GRAPHS from the current application context
+    colors = current_app.config["PLOTLY_COLORS_TABLES"]
+    return colors
+
+
+def plotly_make_table(header: dict, cells: dict, title: str = "") -> go.Figure:
+    """Creates plotly table with provided header, cells and title values. Also, updates table header and cells color to match bootstrap color scheme.
+
+    Args:
+        header (dict): header items for table
+        cells (dict): cells items for table
+        title (str, optional): title for table if it exists. Defaults to "".
+
+    Returns:
+        go.Figure: plotly table object with colored to match bootstrap styling.
+    """
+    # Map default colors to a table
+    colors = plotly_tables_colors_map()
+    header["fill_color"] = colors.get("bg-secondary-subtle")
+    cells["fill_color"] = colors.get("bg-light")
+    # Create a table
+    fig = go.Figure(data=[go.Table(header=header, cells=cells)])
+    # Update table layout to default
+    fig = plotly_update_layout_table_default(fig=fig, title=title)
+    return fig
+
+
 def plotly_make_table_from_pandas_df(df: pd.DataFrame, title: str = "") -> go.Figure:
     """Creates plotly table from pandas DataFrame, where each DataFrame column corresponds to column.
 
@@ -66,10 +100,16 @@ def plotly_make_table_from_pandas_df(df: pd.DataFrame, title: str = "") -> go.Fi
     Returns:
         go.Figure: plotly table object with default height 80.
     """
-    header = dict(values=list(df.columns), align="left")
+    colors = plotly_tables_colors_map()
+    header = dict(
+        values=list(df.columns),
+        align="left",
+        fill_color=colors.get("bg-secondary-subtle"),
+    )
     cells = dict(
         values=[df[col] for col in df.columns],
         align="left",
+        fill_color=colors.get("bg-light"),
     )
     fig = go.Figure(data=[go.Table(header=header, cells=cells)])
     # Update table layout to default
@@ -113,10 +153,7 @@ def plotly_update_layout_scatter_default(fig: go.Figure) -> None:
     # Update font family to fit bootstrap
     plotly_update_font_family_bootstrap(fig=fig)
     # Update common layout features
-    fig.update_layout(
-        yaxis=dict(type="log"),
-        barmode="group",
-    )
+    fig.update_layout(yaxis=dict(type="log"), barmode="group", template="plotly_white")
     # Update hoover template
     fig.update_traces(hovertemplate="Year: %{x}<br>Amount: %{y:.2s} EUR<br>")
 
@@ -133,6 +170,40 @@ def plotly_update_font_family_bootstrap(fig: go.Figure) -> None:
     font_color: str = "#212529"
     font_properties = dict(family=font_family, color=font_color)
     fig.update_layout(font=font_properties, hoverlabel=dict(font=font_properties))
+
+
+def plotly_graphs_colors_map() -> list:
+    """Gets default style colors for plotly graph from config.py file.
+
+    Returns:
+        list: a list of color codes that matches default bootstrap style.
+    """
+    colors = current_app.config["PLOTLY_COLORS_GRAPHS"]
+    result = list(colors.values())
+    return result
+
+
+def plotly_make_scatter(df: pd.DataFrame, x: str, y: str, color: str) -> go.Figure:
+    """Create
+
+    Args:
+        df (pd.DataFrame): _description_
+        x (str): _description_
+        y (str): _description_
+        color (str): _description_
+
+    Returns:
+        go.Figure: _description_
+    """
+    fig = px.scatter(
+        data_frame=df,
+        x=x,
+        y=y,
+        color=color,
+        color_discrete_sequence=plotly_graphs_colors_map(),
+    )
+    plotly_update_layout_scatter_default(fig=fig)
+    return fig
 
 
 def flask_paginate_page_pagination(items) -> tuple:
