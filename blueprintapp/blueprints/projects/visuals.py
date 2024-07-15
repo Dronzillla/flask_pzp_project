@@ -7,6 +7,7 @@ from blueprintapp.blueprints.projects.db_operations import (
 )
 from blueprintapp.utils.utilities import (
     pandas_convert_db_query_one_to_none_to_df,
+    pandas_map_db_cashflows,
     plotly_make_table_from_pandas_df,
     plotly_make_scatter,
 )
@@ -30,6 +31,8 @@ def graph_project_cashflows_scatter(project_id: int) -> str:
         return "-"
     # Convert db data to pandas DataFrame
     df = pd.DataFrame(data=data)
+    # Map cashflow names to human readible format
+    df = pandas_map_db_cashflows(df=df)
     # Create graph for cashflows
     fig = plotly_make_scatter(df=df, x="year", y="amount", color="category")
     # Update graph with specific properties

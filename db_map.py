@@ -22,8 +22,8 @@ DB_COLUMN_MAP = {
     "reinvestment": "Reinvestments",
     "opex": "Operating expenditure (OPEX)",
     "revenue": "Revenue",
-    "tax_revenue": "Revenue from tax (without VAT)",
-    "vat": "Value added tax balance (VAT)",
+    "tax_revenue": "Revenue from taxes (without VAT)",
+    "vat": "Value added tax (VAT) balance",
     "private_cf_cost": "Private sector CAPEX and OPEX",
     "private_cf_revenue": "Private sector revenue",
 }

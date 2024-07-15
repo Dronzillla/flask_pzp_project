@@ -13,6 +13,7 @@ from blueprintapp.blueprints.core.utils import (
 from blueprintapp.utils.utilities import (
     pandas_convert_db_query_all_to_df,
     pandas_sort_df_columns,
+    pandas_map_db_cashflows,
     plotly_make_table_from_pandas_df,
     plotly_update_font_family_bootstrap,
     plotly_graphs_colors_map,
@@ -48,7 +49,7 @@ def graph_general_indicator_pie(indicator: str) -> str:
         legend_title = "Main economic sector"
     if len(data) == 0:
         return "-"
-    # Convert to pandas data frame
+    # Convert to pandas DataFrame
     df = pandas_convert_db_query_all_to_df(data=data)
     # Create general data count graph
     fig = px.pie(
@@ -83,9 +84,10 @@ def graph_cashflows_scatter() -> str:
     data = db_aggregate_cashflow_data()
     if len(data) == 0:
         return "-"
-    # Convert db cashflow data to pandas data frame
+    # Convert db cashflow data to pandas DataFrame
     df = pandas_convert_db_query_all_to_df(data=data)
-    print(df)
+    # Map cashflow names to human readible format
+    df = pandas_map_db_cashflows(df=df)
     # Create aggregate cashflows graph
     fig = plotly_make_scatter(df=df, x="year", y="total_amount", color="category")
     # Update graph with specific properties
@@ -110,7 +112,7 @@ def graph_benefits_scatter_top5() -> str:
     data = db_aggregate_benefits_by_component_by_year()
     if len(data) == 0:
         return "-"
-    # Convert db benefits data to pandas Data Frame
+    # Convert db benefits data to pandas DataFrame
     df = pandas_convert_db_query_all_to_df(data=data)
     # Get top 5 values
     df = pandas_filter_benefits_pd_df_top5(df=df)
@@ -145,6 +147,8 @@ def table_cashflows_totals() -> str:
         return "-"
     # Convert db cashflow data to pandas DataFrame
     df = pandas_convert_db_query_all_to_df(data=data)
+    # Map cashflow names to human readible format
+    df = pandas_map_db_cashflows(df=df)
     # Group by category and sum total_amount to show in millions
     category_sum = df.groupby("category")["total_amount"].sum() / 1000000
     category_sum = category_sum.round(0)

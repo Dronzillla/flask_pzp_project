@@ -45,6 +45,19 @@ def pandas_convert_db_query_one_to_none_to_df(
     return df
 
 
+def pandas_map_db_cashflows(df: pd.DataFrame) -> pd.DataFrame:
+    """Maps list of columns in dataframe to user friendly names.
+
+    Args:
+        df (pd.DataFrame): pandas df with column 'category' where values are respective cashflow values in database.
+
+    Returns:
+        pd.DataFrame: pandas DataFrame with converted values for cashflow categories in column 'category'.
+    """
+    df["category"] = df["category"].map(db_column_map)
+    return df
+
+
 def pandas_convert_db_query_all_to_df(data) -> pd.DataFrame:
     """Convert database query where method (.all) was used to pandas DataFrame.
 
