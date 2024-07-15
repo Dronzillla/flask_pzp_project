@@ -1,7 +1,7 @@
 ## Project 1: National progress plans data extraction project 
 
 ### Stage 1: Basic data extraction
-Objective: Create a basic application to extract data from standartized excel spreadsheets, which are used for preparing national progress plans.
+Objective: Create a basic application to extract data from standardized excel spreadsheets, which are used for preparing national progress plans.
 
 Requirements:
 - Enable file upload in flask application. 
@@ -48,12 +48,39 @@ Objective: Implement admin dashboard.
 
 Requirements:
 - When registering user must enter a complex password.
-- Logged-in user can delete his account.
-- Logged-in user can change his password.
+- Logged-in user can delete their account.
+- Logged-in user can change their password.
 - Create an admin page.
 - Admin user can make another registered user an admin user.
 - Admin user can delete any user and any project.
 - Admin user can't create new user.
 - Admin user can't create new project.
 - All new users must be verified by an admin user.
+
+### Stage 6: Improved UX
+Objective: Implement features that improves user experience.
+
+Requirements:
+- When user registers an email is sent to user email.
 - When new user registers an email is sent to all admin users emails.
+- When admin user verifies user account an email is sent to user email.
+- Include GDPR pop-up for cookie managment.
+- Merge Plotly and bootstrap colors.
+- Add comments in tables for invalid ratios values.
+- Map database cashflows categories with user friendly category names.
+- Restyle index page upper part.
+
+### Stage 7: Testing (draft)
+Objective: Create tests and clean up code.
+
+Requirements:
+- Create unit tests for testing application functionality.
+- Clean up code from unused code.
+- Add docstrings to all functions that are used in routes files.
+
+### Stage 8: Deployment (draft)
+Objective: Deploy an application.
+
+Requirements:
+- Add requirements.txt
+- Deploy an app.

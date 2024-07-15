@@ -6,18 +6,25 @@ from blueprintapp.blueprints.auth.forms import (
     RegistrationForm,
     UpdatePasswordForm,
     ConfirmDeleteForm,
+    PasswordResetRequestForm,
+    ResetPasswordForm,
 )
 from blueprintapp.blueprints.auth.models import User
 from blueprintapp.blueprints.auth.db_operations import (
     db_create_new_user,
     db_read_user_by_email,
     db_update_current_user_password,
+    db_update_user_password,
     db_read_user_by_id,
     db_delete_user,
 )
 from urllib.parse import urlparse
 from blueprintapp.utils.utilities import verified_user
-from blueprintapp.blueprints.auth.emails import mail_admins_new_user_registration
+from blueprintapp.blueprints.auth.emails import (
+    mail_admins_new_user_registration,
+    mail_send_reset_email,
+    verify_reset_token,
+)
 
 
 auth = Blueprint("auth", __name__, template_folder="templates")
@@ -123,3 +130,30 @@ def delete_user():
         return redirect(url_for("core.index"))
     else:
         return "Invalid form submission", 400
+
+
+@auth.route("/reset_password_request", methods=["GET", "POST"])
+def reset_password_request():
+    form = PasswordResetRequestForm()
+    if form.validate_on_submit():
+        email = form.email.data
+        user = db_read_user_by_email(email=email)
+        if user:
+            mail_send_reset_email(user)
+        flash("Check your email for the instructions to reset your password", "info")
+        return redirect(url_for("auth.login"))
+    return render_template("auth/reset_password_request.html", form=form)
+
+
+@auth.route("/reset_password/<token>", methods=["GET", "POST"])
+def reset_password(token):
+    user = verify_reset_token(token)
+    if not user:
+        flash("That is an invalid or expired token", "warning")
+        return redirect(url_for("auth.reset_password_request"))
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        db_update_user_password(user=user, password=form.new_password.data)
+        flash("Your password has been updated!", "success")
+        return redirect(url_for("auth.login"))
+    return render_template("auth/reset_password.html", form=form)

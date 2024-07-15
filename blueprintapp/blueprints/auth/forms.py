@@ -11,6 +11,7 @@ from wtforms import (
 from wtforms.validators import DataRequired, Length, Email, EqualTo
 from blueprintapp.blueprints.auth.models import User
 from blueprintapp.utils.utilities import auth_is_valid_password
+from blueprintapp.blueprints.auth.db_operations import db_read_user_by_email
 
 
 class LoginForm(FlaskForm):
@@ -70,3 +71,29 @@ class UpdatePasswordForm(FlaskForm):
 class ConfirmDeleteForm(FlaskForm):
     user_id = HiddenField("User ID")
     submit = SubmitField("Yes")
+
+
+class ResetPasswordForm(FlaskForm):
+    new_password = PasswordField("New Password", validators=[DataRequired()])
+    new_password2 = PasswordField(
+        "Repeat New Password", validators=[DataRequired(), EqualTo("new_password")]
+    )
+    submit = SubmitField("Reset Password")
+
+    def validate_new_password(self, new_password):
+        if not auth_is_valid_password(password=new_password.data):
+            raise ValidationError(
+                "Password must be at least 8 characters long, must contain at least 1 lower and 1 upper case letters, 1 digit and 1 special symbol !@#$%^&*()-_=+[{]};:'\",<.>/?"
+            )
+
+
+class PasswordResetRequestForm(FlaskForm):
+    email = StringField("Email", validators=[DataRequired(), Email()])
+    submit = SubmitField("Request Password Reset")
+
+    def validate_email(self, email):
+        user = db_read_user_by_email(email=email.data)
+        if user is None:
+            raise ValidationError(
+                "There is no account with that email. You must register first."
+            )

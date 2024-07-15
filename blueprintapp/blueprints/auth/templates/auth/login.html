@@ -42,6 +42,9 @@
                 <div class="text-center mt-3">
                     <span>Don't have an account yet?</span> 
                     <a href="{{ url_for('auth.register') }}">Register</a>
+                    <br>
+                    <span>Forgot your password?</span>
+                    <a href="{{ url_for('auth.reset_password_request') }}">Reset</a>
                 </div>
             </div>
         </div>

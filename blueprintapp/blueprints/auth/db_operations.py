@@ -21,6 +21,11 @@ def db_update_current_user_password(password: str) -> None:
     db.session.commit()
 
 
+def db_update_user_password(user: User, password: str) -> None:
+    user.set_password(password=password)
+    db.session.commit()
+
+
 def db_delete_user(user: User) -> None:
     db.session.delete(user)
     db.session.commit()
