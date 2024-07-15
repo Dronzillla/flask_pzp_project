@@ -86,17 +86,44 @@
 
     {% block content %}{% endblock %}
     
+    <!-- Cookie Consent Banner -->
+    <div id="cookieConsent" class="alert alert-dark fixed-bottom fade show d-none" role="alert">
+        <div class="d-flex justify-content-between align-items-center">
+            <span>
+                We use cookies to ensure you get the best experience on our website.
+                Cookie policy can be found in <a href="{{ url_for('core.cookies') }}">Cookie Policy</a>
+            </span>
+            <button id="acceptCookies" type="button" class="btn btn-primary btn-sm">I Accept</button>
+        </div>
+    </div>  
+
     <!-- Footer -->
     <footer class="bg-dark text-white text-center py-3 mt-5">
         <div class="container">
             <p class="mb-0">&copy; 2024. All rights reserved.</p>
             <p class="mb-0">
                 <a href="{{ url_for('core.privacy') }}" class="text-white me-2">Privacy Policy</a>
-                <a href="{{ url_for('core.terms') }}" class="text-white">Terms of Service</a>
+                <a href="{{ url_for('core.terms') }}" class="text-white me-2">Terms of Service</a>
+                <a href="{{ url_for('core.cookies') }}" class="text-white">Cookie Policy</a>
             </p>
         </div>
     </footer>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    
+    <!-- Cookie Consent Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const consent = localStorage.getItem('cookieConsent');
+            if (!consent) {
+                document.getElementById('cookieConsent').classList.remove('d-none');
+            }
+
+            document.getElementById('acceptCookies').addEventListener('click', () => {
+                localStorage.setItem('cookieConsent', 'true');
+                document.getElementById('cookieConsent').classList.add('d-none');
+            });
+        });
+    </script>
 </body>
 </html>

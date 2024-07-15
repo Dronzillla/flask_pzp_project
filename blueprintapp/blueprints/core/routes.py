@@ -53,3 +53,8 @@ def privacy():
 @core.route("/terms")
 def terms():
     return render_template("core/terms_of_service.html")
+
+
+@core.route("/cookies")
+def cookies():
+    return render_template("core/cookie_policy.html")
