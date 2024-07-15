@@ -21,8 +21,8 @@ from blueprintapp.blueprints.auth.db_operations import (
 from urllib.parse import urlparse
 from blueprintapp.utils.utilities import verified_user
 from blueprintapp.blueprints.auth.emails import (
-    mail_admins_new_user_registration,
-    mail_send_reset_email,
+    email_admins_new_user_registration,
+    email_send_reset_email,
     verify_reset_token,
 )
 
@@ -42,10 +42,10 @@ def register():
             password=form.password.data,
         )
         flash(
-            "Congratulations, you are now a registered user. Note that admin user has to confirm your account.",
+            "Congratulations, you are now a registered user. Note that an admin user still has to verify your account.",
             "info",
         )
-        mail_admins_new_user_registration(email=form.email.data.lower())
+        email_admins_new_user_registration(user=user)
         return redirect(url_for("auth.login"))
     return render_template("auth/register.html", form=form)
 
@@ -139,7 +139,7 @@ def reset_password_request():
         email = form.email.data
         user = db_read_user_by_email(email=email)
         if user:
-            mail_send_reset_email(user)
+            email_send_reset_email(user=user)
         flash("Check your email for the instructions to reset your password", "info")
         return redirect(url_for("auth.login"))
     return render_template("auth/reset_password_request.html", form=form)
