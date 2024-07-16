@@ -165,7 +165,17 @@ def plotly_update_layout_scatter_default(fig: go.Figure) -> None:
     # Update font family to fit bootstrap
     plotly_update_font_family_bootstrap(fig=fig)
     # Update common layout features
-    fig.update_layout(yaxis=dict(type="log"), barmode="group", template="plotly_white")
+    fig.update_layout(
+        yaxis=dict(type="log"),
+        barmode="group",
+        template="plotly_white",
+        legend=dict(
+            orientation="h",
+            traceorder="reversed",
+            x=0,
+            y=-0.2,
+        ),
+    )
     # Update hoover template
     fig.update_traces(hovertemplate="Year: %{x}<br>Amount: %{y:.2s} EUR<br>")
 
