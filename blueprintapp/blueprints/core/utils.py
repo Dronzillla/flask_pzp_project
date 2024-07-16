@@ -1,5 +1,5 @@
 import pandas as pd
-from blueprintapp.app import db_column_map
+from flask import current_app
 from blueprintapp.blueprints.upload.parse_project import ProjectParser
 
 
@@ -15,7 +15,7 @@ def pandas_convert_db_ratios_to_df(ratios_data: list) -> pd.DataFrame:
     df = pd.DataFrame(data, index=["Value"])
     # print(df)
     # Rename columns
-    df.rename(columns=db_column_map, inplace=True)
+    df.rename(columns=current_app.config["DB_COLUMN_MAP"], inplace=True)
     return df
 
 

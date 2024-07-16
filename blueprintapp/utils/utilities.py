@@ -1,4 +1,3 @@
-from blueprintapp.app import db_column_map
 import pandas as pd
 import plotly.graph_objects as go
 import plotly.express as px
@@ -26,7 +25,7 @@ def pandas_convert_db_query_one_to_none_to_df(
     data, drop_columns: list[str] = []
 ) -> pd.DataFrame:
     """Convert database query where methods (.one_to_none, .first, .one) was used to pandas DataFrame.
-    Also, maps column names to db_column_map and deletes specified columns.
+    Also, maps column names to DB_COLUMN_MAP and deletes specified columns.
 
     Args:
         data (_type_): query data. Can be any model.
@@ -39,7 +38,7 @@ def pandas_convert_db_query_one_to_none_to_df(
     df = pd.DataFrame([data.__dict__])
     # Drop columns
     df = df.drop(columns=drop_columns)
-    df.rename(columns=db_column_map, inplace=True)
+    df.rename(columns=current_app.config["DB_COLUMN_MAP"], inplace=True)
     # Sort columns
     df = pandas_sort_df_columns(df=df)
     return df
@@ -49,12 +48,12 @@ def pandas_map_db_cashflows(df: pd.DataFrame) -> pd.DataFrame:
     """Maps list of columns in dataframe to user friendly names.
 
     Args:
-        df (pd.DataFrame): pandas df with column 'category' where values are respective cashflow values in database.
+        df (pd.DataFrame): pandas df with column 'category' where values are respective cashflow values in DB_COLUMN_MAP.
 
     Returns:
         pd.DataFrame: pandas DataFrame with converted values for cashflow categories in column 'category'.
     """
-    df["category"] = df["category"].map(db_column_map)
+    df["category"] = df["category"].map(current_app.config["DB_COLUMN_MAP"])
     return df
 
 

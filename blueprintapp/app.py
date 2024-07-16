@@ -3,7 +3,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_mail import Mail
-from db_map import DB_COLUMN_MAP
 from dotenv import load_dotenv
 import os
 
@@ -11,7 +10,6 @@ load_dotenv()
 db = SQLAlchemy()
 login = LoginManager()
 mail = Mail()
-db_column_map = DB_COLUMN_MAP
 
 
 def create_app(config_class="config.config.DevelopmentConfig"):
