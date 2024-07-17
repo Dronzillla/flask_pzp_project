@@ -1,11 +1,17 @@
-def test_auth_get_register(client):
+"""
+Fixture:
+1. Anonymous user
+"""
+
+
+def test_auth_get_register_anyonymous_user(client):
     response = client.get("/auth/register")
     assert response.status_code == 200
     # Check for unique text in page
     assert b"Already registered?" in response.data
 
 
-def test_auth_get_login(client):
+def test_auth_get_login_anyonymous_user(client):
     response = client.get("/auth/login")
     assert response.status_code == 200
     # Check for unique text in page
@@ -13,20 +19,20 @@ def test_auth_get_login(client):
     assert b"Forgot your password?" in response.data
 
 
-def test_auth_get_reset_password_request(client):
+def test_auth_get_reset_password_request_anyonymous_user(client):
     response = client.get("/auth/reset_password_request")
     assert response.status_code == 200
     # Check for unique text in page
     assert b"Request Password Reset" in response.data
 
 
-def test_auth_get_logout_user_not_logged_in(client):
+def test_auth_get_logout_user_anyonymous_user(client):
     response = client.get("/auth/logout", follow_redirects=True)
     # Check that user was redirected to login page
     assert response.request.path == "/auth/login"
 
 
-def test_auth_post_register_correct_user_data(client):
+def test_auth_post_register_anyonymous_user_correct_data(client):
     response = client.post(
         "/auth/register",
         data={
@@ -57,7 +63,7 @@ def test_auth_post_register_correct_user_data(client):
         assert user.username == "test"
 
 
-def test_auth_post_register_different_user_passwords(client):
+def test_auth_post_register_anyonymous_user_different_passwords(client):
     response = client.post(
         "/auth/register",
         data={

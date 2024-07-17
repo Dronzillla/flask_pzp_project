@@ -28,13 +28,13 @@ class MyHomeView(AdminIndexView):
             admin_user_count = db_read_admin_user_count()
             verified_users_count = db_read_is_verified_user_count(condition=True)
             unverified_users_count = db_read_is_verified_user_count(condition=False)
-            projecs_count = db_aggregate_project_count()
+            projects_count = db_aggregate_project_count()
             return self.render(
                 "admin/index.html",
                 admin_user_count=admin_user_count,
                 verified_users_count=verified_users_count,
                 unverified_users_count=unverified_users_count,
-                projecs_count=projecs_count,
+                projects_count=projects_count,
             )
         flash(
             "You either have to log in or you don't have permission to view that page. "
