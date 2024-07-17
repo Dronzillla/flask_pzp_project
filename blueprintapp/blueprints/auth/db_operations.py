@@ -14,6 +14,7 @@ def db_create_new_user(username: str, email: str, password: str) -> User:
     user.set_password(password=password)
     db.session.add(user)
     db.session.commit()
+    return user
 
 
 def db_update_current_user_password(password: str) -> None:

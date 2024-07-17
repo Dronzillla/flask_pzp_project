@@ -14,7 +14,7 @@ from typing import Optional
 # TODO Update website url
 load_dotenv()
 website_mail_username = os.getenv("MAIL_USERNAME_SECURED")
-website_url = "www.flask_pzp_project.com"
+website_url = "www.flask-pzp-project.com"
 
 
 """
@@ -65,8 +65,8 @@ An email is sent to website and all admin emails.
 def email_user_new_user_registration(user: User) -> None:
     subject = "New user registration"
     recipients = [user.email]
-    body = f"""You have successfully created an account at {website_url}. To log in and use the website services, your account still needs to be verified by an administrator.
-    \nKeep in mind that once your account will be verified, you might not instantly get an email notification.
+    body = f"""You have successfully created an account at {website_url}. To log in and use the website's services, your account still needs to be verified by an administrator.
+    \nKeep in mind that once your account is verified, you might not instantly receive an email notification.
     """
 
     msg = Message(
@@ -82,7 +82,7 @@ def email_admins_new_user_registration(user: User) -> None:
     # TODO update recipients to
     # recipients = [website_mail_username] + admin_user_emails
     recipients = [website_mail_username]
-    body = f"New user with an email address {user.email} registered at {website_url} and awaits validation. Log in to the admin dashboard to validate user account."
+    body = f"New user with an email address {user.email} registered at {website_url} and awaits validation.\nLog in to the admin dashboard to validate user account."
     # Create new message and send emails.
     msg = Message(
         subject=subject, sender=website_mail_username, recipients=recipients, body=body

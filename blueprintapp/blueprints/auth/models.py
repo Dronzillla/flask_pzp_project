@@ -31,4 +31,5 @@ class User(UserMixin, db.Model):
 # A function how users are logged in
 @login.user_loader
 def load_user(id):
-    return User.query.get(int(id))
+    # return User.query.get(int(id))
+    return db.session.get(User, int(id))

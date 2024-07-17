@@ -22,6 +22,7 @@ from urllib.parse import urlparse
 from blueprintapp.utils.utilities import verified_user
 from blueprintapp.blueprints.auth.emails import (
     email_admins_new_user_registration,
+    email_user_new_user_registration,
     email_send_reset_email,
     verify_reset_token,
 )
@@ -46,6 +47,7 @@ def register():
             "info",
         )
         email_admins_new_user_registration(user=user)
+        email_user_new_user_registration(user=user)
         return redirect(url_for("auth.login"))
     return render_template("auth/register.html", form=form)
 
