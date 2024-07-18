@@ -1,5 +1,4 @@
 """
-Fixture:
 3. Registered, logged in, verified, an admin user
 """
 

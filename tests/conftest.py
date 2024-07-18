@@ -26,7 +26,7 @@ def app():
 
 
 """
-Fixture:
+Scenario:
 1. Anonymous user
 """
 
@@ -38,6 +38,7 @@ def setup_database(app):
 
     with app.app_context():
         db.create_all()
+        # Make sure admin user is being created the same as in app.py since we are droping database for each test
         admin_username = os.getenv("ADMIN_USERNAME")
         admin_email = os.getenv("ADMIN_EMAIL")
         admin_password = os.getenv("ADMIN_PASSWORD")
@@ -56,7 +57,7 @@ def client(app, setup_database):
 
 
 """
-Fixture:
+Scenario:
 2. Registered, logged in, verified, not an admin user
 """
 
@@ -72,7 +73,6 @@ def setup_database_2(app):
             email="test@test.com",
             is_verified=True,
         )
-
         user.set_password(
             "QWERqwer1234...."
         )  # Set password using the set_password method
@@ -87,14 +87,13 @@ def setup_database_2(app):
 @pytest.fixture(scope="function")
 def client_2(app, setup_database_2):
     client = app.test_client()
-
     # Log in the user
     login(client, email="test@test.com", password="QWERqwer1234....")
     return client
 
 
 """
-Fixture:
+Scenario:
 3. Registered, logged in, verified, an admin user
 """
 
@@ -104,22 +103,10 @@ def client_3(app, setup_database):
     # app.config["SERVER_NAME"] = "127.0.0.1:5000"
     client = app.test_client()
 
+    # Get admin email and password
     admin_email = os.getenv("ADMIN_EMAIL")
     admin_password = os.getenv("ADMIN_PASSWORD")
 
-    # print(f"Admin Email conft: {admin_email}")
-    # print(f"Admin Password conft: {admin_password}")
-
-    # Verify user creation
-    with app.app_context():
-        user = User.query.filter_by(email=admin_email).first()
-        print(f"User found conft: {user}")
-
-    # Log in admin
+    # Log in admin user
     login(client, email=admin_email, password=admin_password)
     return client
-
-
-# @pytest.fixture(scope="function")
-# def client_2(app, setup_database_2):
-#     return app.test_client()

@@ -1,5 +1,4 @@
 """
-Fixture:
 1. Anonymous user
 """
 
