@@ -159,11 +159,11 @@ Functions to get the count of projects
 """
 
 
-def db_aggregate_project_count() -> Optional[int]:
-    """Returns the count of projects in database.
+def db_aggregate_project_count() -> int:
+    """Calculate number of projects in database.
 
     Returns:
-        Optional[int]: the count of projects or 'None' if there are no projects in database.
+        int: number of uploaded projects in database.
     """
     row_count = int(db.session.query(func.count(Project.id)).scalar())
     return row_count

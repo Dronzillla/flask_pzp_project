@@ -1,16 +1,6 @@
-from flask import request, render_template, redirect, url_for, Blueprint, flash
+from flask import render_template, redirect, url_for, Blueprint, flash
 from flask_login import login_required, current_user
 from blueprintapp.app import db  # Have to leave it for db migrations
-from blueprintapp.blueprints.upload.models import (
-    Project,
-    General,
-    Ratios,
-    Cashflow,
-    BenefitComponent,
-    Benefit,
-    HarmComponent,
-    Harm,
-)
 from blueprintapp.blueprints.upload.parse_project import ProjectParser
 from blueprintapp.blueprints.upload.forms import UploadForm
 from blueprintapp.blueprints.upload.db_operations import (

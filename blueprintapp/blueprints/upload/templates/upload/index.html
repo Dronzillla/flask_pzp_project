@@ -2,26 +2,26 @@
 {% block title %}Upload{% endblock %}
 {% block content %}
 <body>
-  <section>
-    <div class="container">
-      <h1>Upload</h1>
-    </div>
-    <div class="container">
-      <div class="row justify-content-center">
-          <div class="col-md-6">
-              <form method="post" enctype="multipart/form-data">
-                  {{ form.hidden_tag() }}
-                  <div class="mb-3">
-                      <label for="file">{{ form.file.label }}</label>
-                      {{ form.file(class_="form-control") }}
-                  </div>
-                  <div class="text-center">
-                      {{ form.submit(class_="btn btn-primary normal-btn") }}
-                  </div>
-              </form>
-          </div>
-      </div>
-    </div>
-  </section>
+    <section>
+        <div class="container">
+            <h1>Upload</h1>
+        </div>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <form method="post" enctype="multipart/form-data">
+                        {{ form.hidden_tag() }}
+                        <div class="mb-3">
+                            <label for="file">{{ form.file.label }}</label>
+                            {{ form.file(class_="form-control") }}
+                        </div>
+                        <div class="text-center">
+                            {{ form.submit(class_="btn btn-primary normal-btn") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
 </body>
 {% endblock %}

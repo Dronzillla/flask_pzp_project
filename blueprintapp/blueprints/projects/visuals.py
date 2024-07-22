@@ -23,7 +23,7 @@ def graph_project_cashflows_scatter(project_id: int) -> str:
     """Create plotly scatter plot to graph project yearly cashflows.
 
     Returns:
-        str: html string representation of a graph.
+        str: html string representation of a graph or "-" if there is no data.
     """
     # Get data from db
     data = db_read_cashflow_by_project_id(project_id=project_id)
@@ -51,7 +51,7 @@ def graph_project_benefits_scatter(project_id: int) -> str:
     """Create plotly scatter plot to graph project yearly benefits.
 
     Returns:
-        str: html string representation of a graph.
+        str: html string representation of a graph or "-" if there is no data.
     """
     # Get data from db
     data = db_read_benefits_by_project_id(project_id=project_id)
@@ -114,7 +114,7 @@ def table_project_general(project_id: int) -> str:
     """Create plotly table to show general information about project.
 
     Returns:
-        str: html string representation of a table.
+        str: html string representation of a table or "-" if there is no data.
     """
     # Get data from db
     data = db_read_general_by_project_id(project_id=project_id)

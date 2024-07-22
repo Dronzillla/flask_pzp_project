@@ -1,5 +1,4 @@
-from flask import request, render_template, redirect, url_for, Blueprint, flash
-from blueprintapp.app import db
+from flask import render_template, Blueprint, flash
 from blueprintapp.blueprints.projects.visuals import (
     graph_project_cashflows_scatter,
     table_project_ratios,

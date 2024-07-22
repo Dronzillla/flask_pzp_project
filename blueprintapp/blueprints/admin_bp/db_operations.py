@@ -17,10 +17,10 @@ def db_read_is_verified_user_count(condition: bool) -> int:
     """Calulates how many users are verified or unverified.
 
     Args:
-        condition (bool): 'True' for verified users count, 'False' for unverified users count
+        condition (bool): 'True' for verified users count, 'False' for unverified users count.
 
     Returns:
-        int: Returns count of verified or unverified users.
+        int: Returns the count of verified or unverified users.
     """
     count = (
         db.session.query(func.count(User.id))

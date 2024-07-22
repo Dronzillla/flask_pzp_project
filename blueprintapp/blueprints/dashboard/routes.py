@@ -1,6 +1,5 @@
-from flask import request, render_template, redirect, url_for, Blueprint, flash
+from flask import render_template, redirect, url_for, Blueprint, flash
 from flask_login import login_required, current_user
-from blueprintapp.app import db
 from blueprintapp.blueprints.dashboard.db_operations import (
     db_read_all_user_projects,
     db_read_project_by_id_and_user_id,

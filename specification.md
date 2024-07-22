@@ -25,7 +25,7 @@ Objectives:
 - Create project specific and aggregate data visualization.
 
 Requirements:
-- Validate eligble to upload excel files.
+- Validate eligible to upload excel files.
 - Create visuals of aggregate data.
 - Create visuals for viewing specific project data.
 
@@ -39,7 +39,7 @@ Requirements:
 - Create header.
 - Create footer.
 - Create basic styling for all pages.
-- Map basic plotly style to fit default bootstrap style.
+- Map basic Plotly style to fit default bootstrap style.
 - If user is logged in show his username in header.
 - Create Privacy Policy and Terms of Service routes.
 
@@ -63,7 +63,7 @@ Objective: Implement features that improves user experience.
 Requirements:
 - When user registers an email is sent to user email.
 - When new user registers an email is sent to all admin users emails.
-- Include GDPR pop-up for cookie managment.
+- Include GDPR pop-up for cookie management.
 - Merge Plotly and bootstrap colors.
 - Add comments in tables for invalid ratios values.
 - Map database cashflows categories with user friendly category names.
@@ -75,7 +75,7 @@ Objective: Create tests and clean up code.
 Requirements:
 - Create tests for testing application functionality.
 - Clean up code from unused code.
-- Add docstrings to at least all functions that are used in routes files.
+- Add docstrings to at least all functions that are used in routes files and all utility functions.
 - Add requirements.txt
 
 ### Stage 8: Deployment

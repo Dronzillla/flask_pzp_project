@@ -45,7 +45,7 @@ def create_app(config_class="config.config.DevelopmentConfig"):
     # Initialize Flask-Admin with the app context
     init_admin(app)
 
-    # Create admin user if first admin user does not exist
+    # Create admin user ifthe  first admin user does not exist
     from blueprintapp.blueprints.auth.db_operations import db_admin_user_created
 
     with app.app_context():

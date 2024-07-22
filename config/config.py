@@ -9,7 +9,6 @@ security_password_salt = os.getenv("SECURITY_PASSWORD_SALT")
 
 
 class Config:
-    # TODO Update secret key
     SECRET_KEY = secret_key
     SECURITY_PASSWORD_SALT = security_password_salt
     SQLALCHEMY_DATABASE_URI = "sqlite:///./app.db"

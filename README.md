@@ -1,5 +1,5 @@
 # National progress plans data extraction project
-Deployed app is available at: ...
+Deployed application is available at: ...
 
 ## Project Context
 In Lithuania, strategic investment planning involves preparing various programming-level documents, one of which is the development program. Primarily prepared by ministries, development programs,  address significant issues and challenges within their respective areas of state activity. To tackle these problems development programs also outline planned national progress plans to be implemented. 
@@ -50,36 +50,13 @@ This project is organized using blueprints to structure the application code eff
 - Admin user can make another user an admin user.
 - Admin user can update national progress plans names and codes.
 - Admin user can delete any user and any uploaded national progress plan.
+- Projects in the dashboard and projects sections are paginated to display only 5 records at a time.
 
 ### Development process
-This application is being developed in stages. In each stage the main objective(s) and requirements are set. Only after completing the stage new objective(s) and requirements are set for the next stage. Development stages, objectives and requirements are outlined in [specification.md](https://github.com/Dronzillla/flask_pzp_project/blob/main/specification.md)
+This application is being developed in stages. In each stage, the main objectives and requirements are set. Only after completing one stage are new objectives and requirements set for the next stage. Development stages, objectives, and requirements are outlined in [specification.md](https://github.com/Dronzillla/flask_pzp_project/blob/main/specification.md)
 
 In the first stage a database diagram was drawn using [app.diagrams.net](https://app.diagrams.net/) to model how information in Excel spreadsheets should be recorded in database tables:
 <img src="blueprintapp/static/images/db_diagram.png" alt="db_diagram" style="width: 800px;">
-
-### Testing
-During development manual tests were performed to ensure that the application works as it is supposed to. 
-
-For automatic testing **pytest** is used. There are still a lot of automatic tests missing. Automatic tests are organized into folders considering seven scenarios that are based on user type:
-1. Anonymous user.
-2. Registered, logged in, verified, not an admin user.
-3. Registered, logged in, verified, an admin user.
-4. Registered, not logged in, verified, not an admin user.
-5. Registered, not logged in, verified, an admin user.
-6. Registered, not logged in, not verified, not an admin user.
-7. Registered, not logged in, not verified, an admin user.  
-
-Folder structure like this will ensure structured and comprehensive coverage of this app functionality for different user states. Tests are then further separated to folders, that are named based on blueprint names to further align tests with application blueprint structure. 
-
-For running tests and/ or running test coverage report change current working directory to project root directory and run respective commands:  
-1. **For running tests**: 
-    ```sh
-    pytest
-    ```
-2. **For running test coverage report**:
-    ```sh
-    pytest --cov=blueprintapp
-    ```
 
 ## How to use this Project locally
 1. **Clone project repository**:
@@ -119,10 +96,34 @@ For running tests and/ or running test coverage report change current working di
     ```
 
 6. **Run the application**:
-    Get back to the root project folder and run the app
+    Get back to the root project folder and run python script
     ```sh
     cd ../
     python run.py
+    ```
+
+## Testing
+During development, manual tests were performed to ensure that the application works as intended.
+
+For automated testing, **pytest** is used. There are still many automated tests missing. The automated tests are organized into folders based on seven scenarios that consider user type:
+1. Anonymous user.
+2. Registered, logged in, verified, not an admin user.
+3. Registered, logged in, verified, an admin user.
+4. Registered, not logged in, verified, not an admin user.
+5. Registered, not logged in, verified, an admin user.
+6. Registered, not logged in, not verified, not an admin user.
+7. Registered, not logged in, not verified, an admin user.  
+
+A folder structure like this will ensure structured and comprehensive coverage of the application's functionality for different user states. Tests are then further separated into folders named based on blueprint names to align the tests with the application's blueprint structure. 
+
+To run tests or generate a test coverage report, change the current working directory to the project root directory and run the respective commands: 
+1. **To run tests**: 
+    ```sh
+    pytest
+    ```
+2. **To generate test coverage report**:
+    ```sh
+    pytest --cov=blueprintapp
     ```
 
 ## Credits

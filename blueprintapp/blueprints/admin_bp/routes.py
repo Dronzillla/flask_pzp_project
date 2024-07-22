@@ -1,4 +1,4 @@
-from flask import Blueprint, abort, redirect, url_for, flash
+from flask import Blueprint, redirect, url_for, flash
 from flask_admin import Admin, AdminIndexView, expose
 from flask_admin.contrib.sqla import ModelView
 from blueprintapp.app import db
@@ -24,7 +24,6 @@ class MyHomeView(AdminIndexView):
     @login_required
     def index(self):
         if current_user.is_authenticated and current_user.is_admin:
-
             admin_user_count = db_read_admin_user_count()
             verified_users_count = db_read_is_verified_user_count(condition=True)
             unverified_users_count = db_read_is_verified_user_count(condition=False)
@@ -46,10 +45,11 @@ class MyHomeView(AdminIndexView):
 admin = Admin(name="Admin page", template_mode="bootstrap4", index_view=MyHomeView())
 
 
-# Only logged in admin user can view admin pages
 class AdminModelView(ModelView):
+    # Admin user can't create new users or new projects from admin dashboard
     can_create = False
 
+    # Only logged in admin user can view admin pages
     def is_accessible(self):
         if current_user.is_authenticated:
             if current_user.is_admin:
@@ -64,7 +64,7 @@ class AdminModelView(ModelView):
 
 admin.add_view(AdminModelView(User, db.session))
 admin.add_view(AdminModelView(Project, db.session))
-# Add menu link to main page
+# Add menu link to admin dashboard main page
 custom_link = MenuLink(name="Main page", url="/")
 admin.add_link(custom_link)
 

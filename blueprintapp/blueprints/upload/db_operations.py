@@ -24,7 +24,6 @@ from blueprintapp.blueprints.upload.parse_project import (
 from typing import Optional
 
 
-# db operations file
 # Create new project
 def db_create_project(project_tuple: Project_tuple, user_id: int) -> Optional[Project]:
     """Create new project in a database.
@@ -86,11 +85,6 @@ def db_assign_project_information(
         db_insert_economic_sectors(
             economic_sector_names=economic_sector_names, project=project
         )
-        # TODO Assign sectors to project
-        # for economic_sector in economic_sectors:
-        #     project.sectors.append(economic_sector)
-        #     db.session.commit()
-
     except Exception as e:
         db.session.rollback()
         print(f"An error occurred: {e}")

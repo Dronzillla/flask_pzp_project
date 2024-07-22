@@ -29,11 +29,15 @@ Functions to make plotly graphs for aggregate data
 
 
 def graph_general_indicator_pie(indicator: str) -> str:
-    """Create plotly pie chart to graph general indicator.
+    """Create plotly pie chart to graph general indicator of 'General' model.
+
+    Args:
+        indicator (str): database model 'General' attribute 'analysis_method', 'analysis_principle' or 'main_sector'.
 
     Returns:
-        str: html string representation of a graph or "-" is there is no data.
+        str: html string representation of a graph or "-" if there is no data.
     """
+
     # Get database data from General models
     if indicator == "analysis_method":
         # title = "Analysis Methods Used"
@@ -106,7 +110,7 @@ def graph_benefits_scatter_top5() -> str:
     """Create plotly scatter plot to graph aggregate yearly benefits of top5 benefit components.
 
     Returns:
-        str: html string representation of a graph or "-" is there is no data.
+        str: html string representation of a graph or "-" if there is no data.
     """
     # Get database data for cahsflows
     data = db_aggregate_benefits_by_component_by_year()
@@ -136,10 +140,10 @@ Functions to make plotly tables for aggregate data
 
 
 def table_cashflows_totals() -> str:
-    """Create plotly table to show aggregate yearly cashflows of all projects.
+    """Create plotly table to show summed aggregate cashflows of all projects.
 
     Returns:
-        str: html string representation of a table or "-" is there is no data.
+        str: html string representation of a table or "-" if there is no data.
     """
     # Get database data for cashflows
     data = db_aggregate_cashflow_data()
@@ -178,7 +182,7 @@ def table_ratios_averages() -> str:
     data = db_aggregate_ratio_averages()
     if len(data) == 0:
         return "-"
-    # Convert db cashflow data to pandas DataFrame
+    # Convert db ratios data to pandas DataFrame
     df = pandas_convert_db_ratios_to_df(ratios_data=data)
     # Sort df columns since in Dashboard ratios are sorted
     df = pandas_sort_df_columns(df=df)
