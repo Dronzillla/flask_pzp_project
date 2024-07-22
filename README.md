@@ -1,86 +1,130 @@
-## Project 1: National progress plans data extraction project 
+# National progress plans data extraction project
+Deployed app is available at: ...
 
-### Stage 1: Basic data extraction
-Objective: Create a basic application to extract data from standardized excel spreadsheets, which are used for preparing national progress plans.
+## Project Context
+In Lithuania, strategic investment planning involves preparing various programming-level documents, one of which is the development program. Primarily prepared by ministries, development programs,  address significant issues and challenges within their respective areas of state activity. To tackle these problems development programs also outline planned national progress plans to be implemented. 
 
-Requirements:
-- Enable file upload in flask application. 
-- Extract information from file and save it to a database.
+The creation of national progress plans involves assessing both financial and economic impacts. Ministries use a standardized .xlsm format spreadsheet to compile financial and economic cash flow projections and evaluate the relevant indicators for these plans.
 
-### Stage 2: Basic user authentication
-Objective: Create basic user authentication with Flask-Login.
+This project is a web application that enables registered and verified users to upload national progress plans. Its main purpose is to extract data from the uploaded spreadsheets, record it to database and perform visualization for both aggregate and plan specific data.
 
-Requirements:
-- User can register.
-- User can login and choose to stay logged in.
-- User can logout.
-- User can upload projects.
-- User can read and delete projects.
-- User can see menu items based on log in fact.
-- User can access upload, dashboard and auth/logout routes only if he is logged in.
+## Project Description
 
-### Stage 3: Basic visualization for data
-Objectives: 
-- Enforce uploading only valid files.
-- Create project specific and aggregate data visualization.
+### Main technologies used
+This project is being developed using the **Flask** web framework, selected for its flexibility and ease of customization. 
 
-Requirements:
-- Validate eligble to upload excel files.
-- Create visuals of aggregate data.
-- Create visuals for viewing specific project data.
+Data extraction from Excel spreadsheets is handled by **Openpyxl**, which provides an easy solution for reading Excel files. The extracted data is then stored in an **SQLite** database. Given relatively small project's scale, a more specialized database technology was unnecessary. SQLite is also chosen for its simplicity and seamless integration with **SQLAlchemy** and **Flask-Migrate**, which are utilized for database operations. 
 
-### Stage 4: Minimal application
-Objective: Implement search for projects.
+For data visualization, **Plotly** is the main tool used, allowing the creation of interactive and dynamic charts and graphs with ease. Plotly's compatibility with **pandas**, which is employed to fetch and normalize data from the database, enhances its effectiveness in visual data representation. 
 
-Requirements:
-- Non-registered user can see all uploaded projects.
-- Users can search for projects.
-- Registered users can search for uploaded projects in dashboard.
-- Create header.
-- Create footer.
-- Create basic styling for all pages.
-- Map basic plotly style to fit default bootstrap style.
-- If user is logged in show his username in header.
-- Create Privacy Policy and Terms of Service routes.
+User authentication is managed by **Flask-Login**, chosen for its straightforward session management and user-friendly syntax. **Flask-Mail** is used to set up SMTP and send emails, providing a reliable solution for email communication. To securely collect data through HTML forms, **WTForms** is used, offering a simple yet secure method for form handling and validation. 
 
-### Stage 5: Flask admin
-Objective: Implement admin dashboard.
+For the admin dashboard, **Flask-Admin** is utilized, facilitating account management and administrative tasks with ease. 
 
-Requirements:
-- When registering user must enter a complex password.
-- Logged-in user can delete their account.
-- Logged-in user can change their password.
-- Create an admin page.
-- Admin user can make another registered user an admin user.
-- Admin user can delete any user and any project.
-- Admin user can't create new user.
-- Admin user can't create new project.
-- All new users must be verified by an admin user.
+**Bootstrap 5.3.3** is used for the application front-end, selected for its clean and simple styling. **Cookie Consent** by Osano is used for building a cookie pop up.
 
-### Stage 6: Improved UX
-Objective: Implement features that improves user experience.
+### Project structure
+This project is organized using blueprints to structure the application code effectively. The blueprints used in this project include:
+	•	admin: to manage code for admin views.
+	•	auth: to manage code related to user account management such as Login, Registration, Logout, Account deletion, Password updating, Password reset, User notification via emails.
+	•	core: to manage code for horizontal pages: Main, About, Privacy Policy, Terms of Service, and Cookie Policy.
+	•	dashboard: to manage code for user dashboard and displaying all national progress plans uploaded by the user.
+	•	projects: to manage code to display all national progress plans uploaded by all users.
+	•	upload: to manage code related to uploading and extracting data from Excel spreadsheets into the database.
 
-Requirements:
-- When user registers an email is sent to user email.
-- When new user registers an email is sent to all admin users emails.
-- When admin user verifies user account an email is sent to user email.
-- Include GDPR pop-up for cookie managment.
-- Merge Plotly and bootstrap colors.
-- Add comments in tables for invalid ratios values.
-- Map database cashflows categories with user friendly category names.
-- Restyle index page upper part.
+### Main functionality
+- All users can view aggregate data of all uploaded national progress plans.
+- All users can search for uploaded national progress plans and view specific national progress plan data.
+- Not registered user can register.
+- When registering a user must enter a complex password.
+- When new user registers, an email is sent to registration email.
+- When new user registers, an email is sent to all admin users emails.
+- Registered and verified user can login.
+- Registered user can reset his password. A reset token is sent to user email.
+- Logged-in user can upload national progress plans.
+- Logged-in user can search for national progress plans uploaded by himself.
+- Logged-in user can delete national progress plans uploaded by himself.
+- Logged-in user can update his password.
+- Logged-in user can delete his account.
+- Admin user can verify users.
+- Admin user can make another user an admin user.
+- Admin user can update national progress plans names and codes.
+- Admin user can delete any user and any uploaded national progress plan.
 
-### Stage 7: Testing (draft)
-Objective: Create tests and clean up code.
+### Development process
+This application is being developed in stages. In each stage the main objective(s) and requirements are set. Only after completing the stage new objective(s) and requirements are set for the next stage. Development stages, objectives and requirements are outlined in file ...
 
-Requirements:
-- Create unit tests for testing application functionality.
-- Clean up code from unused code.
-- Add docstrings to all functions that are used in routes files.
+In the first stage a database diagram was drawn using [app.diagrams.net](https://app.diagrams.net/) to model how information in Excel spreadsheets should be recorded in database tables:
+<img src="blueprintapp/static/images/db_diagram.png" alt="db_diagram" style="width: 800px;">
 
-### Stage 8: Deployment (draft)
-Objective: Deploy an application.
+### Testing
+During development manual tests were performed to ensure that the application works as it is supposed to. For automatic testing **pytest** is used. There are still a lot of automatic tests missing.
 
-Requirements:
-- Add requirements.txt
-- Deploy an app.
+In this project tests are organized into folders considering seven scenarios that are based on user type:
+1. Anonymous user.
+2. Registered, logged in, verified, not an admin user.
+3. Registered, logged in, verified, an admin user.
+4. Registered, not logged in, verified, not an admin user.
+5. Registered, not logged in, verified, an admin user.
+6. Registered, not logged in, not verified, not an admin user.
+7. Registered, not logged in, not verified, an admin user.
+Folder structure like this will ensure structured and comprehensive coverage of this app functionality for different user states. Tests are then further separated to folders, that are named based on blueprint names to further align tests with application blueprint structure. For running tests and/ or running test coverage report change current working directory to project root directory and run respective commands:
+**For running tests**: 
+    ```sh
+    pytest
+    ```
+**For running test coverage report**:
+    ```sh
+    pytest --cov=blueprintapp
+    ```
+
+## How to use this Project locally
+1. **Clone project repository**:
+    ```sh
+    git clone git@github.com:Dronzillla/flask_pzp_project.git
+    cd flask_pzp_project/
+    ```
+
+2. **Create and activate virtual environment**:
+    ```sh
+    python -m venv venv
+    source venv/bin/activate
+    ```
+
+3. **Install requirements**:
+    ```sh
+    pip install -r requirements.txt
+    ```
+
+4. **Create environment variables file**:
+    Create .env file with the following content:
+    
+    ```
+    MAIL_USERNAME_SECURED="gmail email address that will be serve as a website email address"
+    MAIL_PASSWORD_SECURED="gmail app password for an email address"
+    ADMIN_USERNAME="The username for the administrator account"
+    ADMIN_EMAIL="The email address associated with the administrator account"
+    ADMIN_PASSWORD="The password for the administrator account"
+    SECURITY_PASSWORD_SALT="A random string used to add an additional layer of security to password hashing processes"
+    SECRET_KEY="A random string used for security-related functions, such as session management, token generation, etc."
+    ```
+
+5. **Initialize the database**:
+    ```sh
+    cd blueprintapp/
+    flask db init
+    flask db migrate
+    flask db upgrade
+    ```
+
+6. **Run the application**:
+    Get back to the root project folder and run the app
+    ```sh
+    cd ../
+    python run.py
+    ```
+
+
+## Credits
+Contributors names and contact info:
+* Dominykas (https://github.com/Dronzillla)
