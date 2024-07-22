@@ -311,38 +311,9 @@ def db_insert_economic_sector(name: str) -> Sector:
 def db_insert_economic_sectors(
     economic_sector_names: list[str], project: Project
 ) -> None:
-    # list[Sector] for making an association
-    # result = []
     for name in economic_sector_names:
         # Get new sector or create new sector if it does not exist
         sector = db_insert_economic_sector(name=name)
         # Append to project_sector association table
         project.sectors.append(sector)
         db.session.commit()
-
-        # result.append(sector)
-    # return result
-
-
-# def db_assign_economic_sectors(
-#     project: Project, economic_sectors: list[Sector]
-# ) -> None:
-#     for economic_sector in economic_sectors:
-#         project.sectors.append(economic_sector)
-#         db.session.commit()
-
-
-def db_delete_all_projects() -> None:
-    """Deletes all project information. Leaves data in models BenefitComponent, HarmComponent and Sector."""
-    projects = db.session.query(Project).all()
-    for project in projects:
-        db.session.delete(project)
-    db.session.commit()
-
-
-def db_delete_sector_and_components() -> None:
-    """Deletes data from models BenefitComponent, HarmComponent and Sector."""
-    db.session.query(Sector).delete()
-    db.session.query(BenefitComponent).delete()
-    db.session.query(HarmComponent).delete()
-    db.session.commit()

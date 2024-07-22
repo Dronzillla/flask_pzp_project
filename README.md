@@ -99,9 +99,7 @@ For running tests and/ or running test coverage report change current working di
     pip install -r requirements.txt
     ```
 
-4. **Create environment variables file**:
-    Create .env file with the following content:
-    
+4. **Create .env file**:    
     ```
     MAIL_USERNAME_SECURED="gmail email address that will serve as a website email address"
     MAIL_PASSWORD_SECURED="gmail app password for an email address"

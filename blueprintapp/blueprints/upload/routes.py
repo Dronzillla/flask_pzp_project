@@ -17,8 +17,6 @@ from blueprintapp.blueprints.upload.db_operations import (
     db_project_exists,
     db_create_project,
     db_assign_project_information,
-    db_delete_all_projects,
-    db_delete_sector_and_components,
 )
 from blueprintapp.blueprints.upload.utils import is_valid_excel_file
 from blueprintapp.utils.utilities import verified_user
@@ -85,16 +83,3 @@ def index():
             return redirect(url_for("upload.index"))
     # if request.method == "GET":
     return render_template("upload/index.html", form=form)
-
-
-# TODO Transfer routes to admin
-@upload.route("/delete_all")
-def delete_all():
-    db_delete_all_projects()
-    return redirect(url_for("core.index"))
-
-
-@upload.route("/delete_sector")
-def delete_all_sector():
-    db_delete_sector_and_components()
-    return redirect(url_for("core.index"))
