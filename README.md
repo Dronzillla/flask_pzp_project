@@ -25,12 +25,12 @@ For the admin dashboard, **Flask-Admin** is utilized, facilitating account manag
 
 ### Project structure
 This project is organized using blueprints to structure the application code effectively. The blueprints used in this project include:
-	•	admin: to manage code for admin views.
-	•	auth: to manage code related to user account management such as Login, Registration, Logout, Account deletion, Password updating, Password reset, User notification via emails.
-	•	core: to manage code for horizontal pages: Main, About, Privacy Policy, Terms of Service, and Cookie Policy.
-	•	dashboard: to manage code for user dashboard and displaying all national progress plans uploaded by the user.
-	•	projects: to manage code to display all national progress plans uploaded by all users.
-	•	upload: to manage code related to uploading and extracting data from Excel spreadsheets into the database.
+- admin: to manage code for admin views.
+- auth: to manage code related to user account management such as Login, Registration, Logout, Account deletion, Password updating, Password reset, User notification via emails.
+- core: to manage code for horizontal pages: Main, About, Privacy Policy, Terms of Service, and Cookie Policy.
+- dashboard: to manage code for user dashboard and displaying all national progress plans uploaded by the user.
+- projects: to manage code to display all national progress plans uploaded by all users.
+- upload: to manage code related to uploading and extracting data from Excel spreadsheets into the database.
 
 ### Main functionality
 - All users can view aggregate data of all uploaded national progress plans.
@@ -52,28 +52,31 @@ This project is organized using blueprints to structure the application code eff
 - Admin user can delete any user and any uploaded national progress plan.
 
 ### Development process
-This application is being developed in stages. In each stage the main objective(s) and requirements are set. Only after completing the stage new objective(s) and requirements are set for the next stage. Development stages, objectives and requirements are outlined in file ...
+This application is being developed in stages. In each stage the main objective(s) and requirements are set. Only after completing the stage new objective(s) and requirements are set for the next stage. Development stages, objectives and requirements are outlined in [specification.md](https://github.com/Dronzillla/flask_pzp_project/blob/main/specification.md)
 
 In the first stage a database diagram was drawn using [app.diagrams.net](https://app.diagrams.net/) to model how information in Excel spreadsheets should be recorded in database tables:
 <img src="blueprintapp/static/images/db_diagram.png" alt="db_diagram" style="width: 800px;">
 
 ### Testing
-During development manual tests were performed to ensure that the application works as it is supposed to. For automatic testing **pytest** is used. There are still a lot of automatic tests missing.
+During development manual tests were performed to ensure that the application works as it is supposed to. 
 
-In this project tests are organized into folders considering seven scenarios that are based on user type:
+For automatic testing **pytest** is used. There are still a lot of automatic tests missing. Automatic tests are organized into folders considering seven scenarios that are based on user type:
 1. Anonymous user.
 2. Registered, logged in, verified, not an admin user.
 3. Registered, logged in, verified, an admin user.
 4. Registered, not logged in, verified, not an admin user.
 5. Registered, not logged in, verified, an admin user.
 6. Registered, not logged in, not verified, not an admin user.
-7. Registered, not logged in, not verified, an admin user.
-Folder structure like this will ensure structured and comprehensive coverage of this app functionality for different user states. Tests are then further separated to folders, that are named based on blueprint names to further align tests with application blueprint structure. For running tests and/ or running test coverage report change current working directory to project root directory and run respective commands:
-**For running tests**: 
+7. Registered, not logged in, not verified, an admin user.  
+
+Folder structure like this will ensure structured and comprehensive coverage of this app functionality for different user states. Tests are then further separated to folders, that are named based on blueprint names to further align tests with application blueprint structure. 
+
+For running tests and/ or running test coverage report change current working directory to project root directory and run respective commands:  
+1. **For running tests**: 
     ```sh
     pytest
     ```
-**For running test coverage report**:
+2. **For running test coverage report**:
     ```sh
     pytest --cov=blueprintapp
     ```
@@ -100,7 +103,7 @@ Folder structure like this will ensure structured and comprehensive coverage of 
     Create .env file with the following content:
     
     ```
-    MAIL_USERNAME_SECURED="gmail email address that will be serve as a website email address"
+    MAIL_USERNAME_SECURED="gmail email address that will serve as a website email address"
     MAIL_PASSWORD_SECURED="gmail app password for an email address"
     ADMIN_USERNAME="The username for the administrator account"
     ADMIN_EMAIL="The email address associated with the administrator account"
@@ -123,7 +126,6 @@ Folder structure like this will ensure structured and comprehensive coverage of 
     cd ../
     python run.py
     ```
-
 
 ## Credits
 Contributors names and contact info:

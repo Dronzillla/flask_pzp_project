@@ -63,24 +63,23 @@ Objective: Implement features that improves user experience.
 Requirements:
 - When user registers an email is sent to user email.
 - When new user registers an email is sent to all admin users emails.
-- When admin user verifies user account an email is sent to user email.
 - Include GDPR pop-up for cookie managment.
 - Merge Plotly and bootstrap colors.
 - Add comments in tables for invalid ratios values.
 - Map database cashflows categories with user friendly category names.
 - Restyle index page upper part.
 
-### Stage 7: Testing (draft)
+### Stage 7: Testing
 Objective: Create tests and clean up code.
 
 Requirements:
-- Create unit tests for testing application functionality.
+- Create tests for testing application functionality.
 - Clean up code from unused code.
-- Add docstrings to all functions that are used in routes files.
+- Add docstrings to at least all functions that are used in routes files.
+- Add requirements.txt
 
-### Stage 8: Deployment (draft)
+### Stage 8: Deployment
 Objective: Deploy an application.
 
 Requirements:
-- Add requirements.txt
 - Deploy an app.
