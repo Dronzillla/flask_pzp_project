@@ -82,4 +82,6 @@ Requirements:
 Objective: Deploy an application.
 
 Requirements:
+- Update contact information in website pages.
 - Deploy an app.
+- Get SSL certificate.

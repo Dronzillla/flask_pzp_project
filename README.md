@@ -1,5 +1,5 @@
 # National progress plans data extraction project
-Deployed application is available at: ...
+Deployed application is available at: [pazangos-priemones.eu/](pazangos-priemones.eu/)
 
 ## Project Context
 In Lithuania, strategic investment planning involves preparing various programming-level documents, one of which is the development program. Primarily prepared by ministries, development programs,  address significant issues and challenges within their respective areas of state activity. To tackle these problems development programs also outline planned national progress plans to be implemented. 
@@ -59,10 +59,10 @@ In the first stage a database diagram was drawn using [app.diagrams.net](https:/
 <img src="blueprintapp/static/images/db_diagram.png" alt="db_diagram" style="width: 800px;">
 
 ## How to use this Project locally
-1. **Clone project repository**:
+1. **Create folder for your project**:
     ```sh
-    git clone git@github.com:Dronzillla/flask_pzp_project.git
-    cd flask_pzp_project/
+    mkdir pzp-project
+    cd pzp-project
     ```
 
 2. **Create and activate virtual environment**:
@@ -71,12 +71,7 @@ In the first stage a database diagram was drawn using [app.diagrams.net](https:/
     source venv/bin/activate
     ```
 
-3. **Install requirements**:
-    ```sh
-    pip install -r requirements.txt
-    ```
-
-4. **Create .env file**:    
+3. **Create .env file**:    
     ```
     MAIL_USERNAME_SECURED="gmail email address that will serve as a website email address"
     MAIL_PASSWORD_SECURED="gmail app password for an email address"
@@ -87,7 +82,18 @@ In the first stage a database diagram was drawn using [app.diagrams.net](https:/
     SECRET_KEY="A random string used for security-related functions, such as session management, token generation, etc."
     ```
 
-5. **Initialize the database**:
+4. **Clone project repository**:
+    ```sh
+    git clone git@github.com:Dronzillla/flask_pzp_project.git
+    cd flask_pzp_project/
+    ```
+
+5. **Install requirements**:
+    ```sh
+    pip install -r requirements.txt
+    ```
+
+6. **Initialize the database**:
     ```sh
     cd blueprintapp/
     flask db init
@@ -95,11 +101,11 @@ In the first stage a database diagram was drawn using [app.diagrams.net](https:/
     flask db upgrade
     ```
 
-6. **Run the application**:
-    Get back to the root project folder and run python script
+7. **Run the application**:
+    Get back to the flask_pzp_project/ folder and run python script
     ```sh
     cd ../
-    python run.py
+    python3 run.py
     ```
 
 ## Testing

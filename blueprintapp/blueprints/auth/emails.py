@@ -14,7 +14,7 @@ from typing import Optional
 # TODO Update website url
 load_dotenv()
 website_mail_username = os.getenv("MAIL_USERNAME_SECURED")
-website_url = "www.flask-pzp-project.com"
+website_url = "pazangos-priemones.eu"
 
 
 """
@@ -79,9 +79,8 @@ def email_admins_new_user_registration(user: User) -> None:
     subject = "New user awaits verification"
     # Recipients should be website email + all admin user emails
     admin_user_emails = db_read_admin_users_emails()
-    # TODO update recipients to
-    # recipients = [website_mail_username] + admin_user_emails
-    recipients = [website_mail_username]
+    recipients = admin_user_emails
+    # recipients = [website_mail_username]
     body = f"New user with an email address {user.email} registered at {website_url} and awaits validation.\nLog in to the admin dashboard to validate user account."
     # Create new message and send emails.
     msg = Message(

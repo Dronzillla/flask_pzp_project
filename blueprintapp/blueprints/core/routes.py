@@ -1,4 +1,4 @@
-from flask import render_template, Blueprint
+from flask import render_template, Blueprint, current_app
 from blueprintapp.blueprints.core.visuals import (
     graph_cashflows_scatter,
     table_cashflows_totals,
@@ -47,14 +47,17 @@ def about():
 
 @core.route("/privacy")
 def privacy():
-    return render_template("core/privacy_policy.html")
+    mail_username = current_app.config["MAIL_USERNAME"]
+    return render_template("core/privacy_policy.html", mail_username=mail_username)
 
 
 @core.route("/terms")
 def terms():
-    return render_template("core/terms_of_service.html")
+    mail_username = current_app.config["MAIL_USERNAME"]
+    return render_template("core/terms_of_service.html", mail_username=mail_username)
 
 
 @core.route("/cookies")
 def cookies():
-    return render_template("core/cookie_policy.html")
+    mail_username = current_app.config["MAIL_USERNAME"]
+    return render_template("core/cookie_policy.html", mail_username=mail_username)
