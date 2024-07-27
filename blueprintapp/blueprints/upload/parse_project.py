@@ -114,7 +114,6 @@ class ProjectParser:
         return result
 
     def get_budget_line_values(self, type: str, index: int = None) -> list[dict]:
-        # result: list[dict] = []
         result_dict: dict = {}
         # Get reference period and start year of a project
         period = self.get_reference_period()
@@ -158,7 +157,6 @@ class ProjectParser:
                 # record = {next(myiter): round(cell.value, 2)}
                 # result.append(record)
                 result_dict[next(myiter)] = round(cell.value, 2)
-        # print(result)
         # print(result_dict)
         return result_dict
 
@@ -191,7 +189,7 @@ class ProjectParser:
         name = self.sheet_pradzia["E6"].value
         name = name.strip().lower().capitalize()
         result = Project_tuple(code=code, name=name)
-        print(result)
+        # print(result)
         return result
 
     def fetch_general_info(self) -> General_tuple:
@@ -213,7 +211,7 @@ class ProjectParser:
             da_analysis=da_analysis,
             version=version,
         )
-        print(result)
+        # print(result)
         return result
 
     @staticmethod
@@ -303,7 +301,7 @@ class ProjectParser:
             fvgn=fvgn,
             fnis=fnis,
         )
-        print(result)
+        # print(result)
         return result
 
     def fetch_capex(self) -> Cashflow_tuple:
@@ -376,7 +374,7 @@ class ProjectParser:
             ]
         )
         # For debugging
-        print(result)
+        # print(result)
         return result
 
     def fetch_benefits(self) -> list[Benefit_tuple]:
@@ -391,7 +389,7 @@ class ProjectParser:
             values = self.get_budget_line_values("benefit", index=i)
             benefit = Benefit_tuple(name=benefit_component.strip(), values=values)
             result.append(benefit)
-        print(result)
+        # print(result)
         return result
 
     def fetch_harms(self) -> list[Harm_tuple]:
@@ -406,7 +404,7 @@ class ProjectParser:
             values = self.get_budget_line_values("harm", index=i)
             harm = Harm_tuple(name=harm_component, values=values)
             result.append(harm)
-        print(result)
+        # print(result)
         return result
 
     def fetch_economic_sectors(self) -> list[str]:
@@ -420,5 +418,5 @@ class ProjectParser:
         # if len(sector_indices) == 0:
         #     return []
         economic_sectors = [(self.get_sector_name(index)) for index in sector_indices]
-        print(economic_sectors)
+        # print(economic_sectors)
         return economic_sectors

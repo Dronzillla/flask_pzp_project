@@ -141,6 +141,20 @@ def plotly_update_layout_table_default(fig: go.Figure, title: str = "") -> go.Fi
     """
     # Update font family to fit bootstrap
     plotly_update_font_family_bootstrap(fig=fig)
+    # Adjust layout to be fluid and responsive
+    fig.update_layout(
+        autosize=True,
+        margin=dict(l=0, r=0, t=60 if title else 0, b=0),
+        height=180 if title else 100,
+        title=title,
+    )
+    # Ensure the table is responsive
+    fig.update_xaxes(automargin=True)
+    fig.update_yaxes(automargin=True)
+    return fig
+
+    """
+    ARCHIVE
     if title == "":
         fig.update_layout(
             height=100,
@@ -154,6 +168,7 @@ def plotly_update_layout_table_default(fig: go.Figure, title: str = "") -> go.Fi
             margin=dict(t=60, b=0),
         )
         return fig
+    """
 
 
 def plotly_update_layout_scatter_default(fig: go.Figure) -> None:
