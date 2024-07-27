@@ -1,5 +1,5 @@
 # National progress plans data extraction project
-Deployed application is available at: [pazangos-priemones.eu/](pazangos-priemones.eu/)
+Deployed application is available at: [pazangos-priemones.eu/](https://pazangos-priemones.eu/)
 
 ## Project Context
 In Lithuania, strategic investment planning involves preparing various programming-level documents, one of which is the development program. Primarily prepared by ministries, development programs,  address significant issues and challenges within their respective areas of state activity. To tackle these problems development programs also outline planned national progress plans to be implemented. 
