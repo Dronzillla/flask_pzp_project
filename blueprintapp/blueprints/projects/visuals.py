@@ -10,6 +10,7 @@ from blueprintapp.utils.utilities import (
     pandas_map_db_cashflows,
     plotly_make_table_from_pandas_df,
     plotly_make_scatter,
+    plotly_wrap_text,
 )
 import pandas as pd
 
@@ -34,10 +35,16 @@ def graph_project_cashflows_scatter(project_id: int) -> str:
     # Map cashflow names to human readible format
     df = pandas_map_db_cashflows(df=df)
     # Create graph for cashflows
-    fig = plotly_make_scatter(df=df, x="year", y="amount", color="category")
+    fig = plotly_make_scatter(
+        df=df,
+        x="year",
+        y="amount",
+        color="category",
+        title=f"Progress Plan No. {db_read_project_by_id(id=project_id).code} Financial Cashflows by Category and Year",
+    )
     # Update graph with specific properties
     fig.update_layout(
-        title=f"Progress Plan No. {db_read_project_by_id(id=project_id).code} Financial Cashflows by Category and Year",
+        # title=f"Progress Plan No. {db_read_project_by_id(id=project_id).code} Financial Cashflows by Category and Year",
         xaxis_title="Year",
         yaxis_title="Amount",
         legend_title="Category",
@@ -60,9 +67,15 @@ def graph_project_benefits_scatter(project_id: int) -> str:
     # Convert db data to pandas DataFrame
     df = pd.DataFrame(data=data)
     # Create graph
-    fig = plotly_make_scatter(df=df, x="year", y="amount", color="name")
-    fig.update_layout(
+    fig = plotly_make_scatter(
+        df=df,
+        x="year",
+        y="amount",
+        color="name",
         title=f"Progress Plan No. {db_read_project_by_id(id=project_id).code} Social Impact by Component and Year",
+    )
+    fig.update_layout(
+        # title=f"Progress Plan No. {db_read_project_by_id(id=project_id).code} Social Impact by Component and Year",
         xaxis_title="Year",
         yaxis_title="Amount",
         legend_title="Component",
@@ -96,10 +109,13 @@ def table_project_ratios(project_id: int) -> str:
         title=f"Progress Plan No. {db_read_project_by_id(id=project_id).code} Financial and Economic Ratios Values",
     )
     # Add an annotation for explaining ratios
+    wrapped_annotation = plotly_wrap_text(
+        text="If the ratio value is '-9999', the ratio calculation was not successful. If the ratio value is 'null', the ratio should not have been calculated."
+    )
     fig.update_layout(
         annotations=[
             dict(
-                text="Note! If the ratio value is '-9999', the ratio calculation was not successful. If the ratio value is 'null', the ratio should not have been calculated.",
+                text=wrapped_annotation,
                 y=0,
                 showarrow=False,
             )

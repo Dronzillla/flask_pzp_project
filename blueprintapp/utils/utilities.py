@@ -6,6 +6,7 @@ from flask import request, flash, abort, redirect, url_for
 from flask_login import current_user
 from functools import wraps
 from flask import current_app
+import textwrap
 
 
 def pandas_sort_df_columns(df: pd.DataFrame) -> pd.DataFrame:
@@ -145,8 +146,8 @@ def plotly_update_layout_table_default(fig: go.Figure, title: str = "") -> go.Fi
     fig.update_layout(
         autosize=True,
         margin=dict(l=0, r=0, t=60 if title else 0, b=0),
-        height=180 if title else 100,
-        title=title,
+        height=190 if title else 100,
+        title=dict(text=plotly_wrap_text(text=title), y=0.92),
     )
     # Ensure the table is responsive
     fig.update_xaxes(automargin=True)
@@ -171,7 +172,7 @@ def plotly_update_layout_table_default(fig: go.Figure, title: str = "") -> go.Fi
     """
 
 
-def plotly_update_layout_scatter_default(fig: go.Figure) -> None:
+def plotly_update_layout_scatter_default(fig: go.Figure, title: str = "") -> None:
     """Make default scatter plot layout.
 
     Args:
@@ -181,6 +182,7 @@ def plotly_update_layout_scatter_default(fig: go.Figure) -> None:
     plotly_update_font_family_bootstrap(fig=fig)
     # Update common layout features
     fig.update_layout(
+        title=dict(text=plotly_wrap_text(text=title), y=0.96),
         yaxis=dict(type="log"),
         barmode="group",
         template="plotly_white",
@@ -220,7 +222,9 @@ def plotly_graphs_colors_map() -> list:
     return result
 
 
-def plotly_make_scatter(df: pd.DataFrame, x: str, y: str, color: str) -> go.Figure:
+def plotly_make_scatter(
+    df: pd.DataFrame, x: str, y: str, color: str, title: str = ""
+) -> go.Figure:
     """Create
 
     Args:
@@ -232,6 +236,9 @@ def plotly_make_scatter(df: pd.DataFrame, x: str, y: str, color: str) -> go.Figu
     Returns:
         go.Figure: _description_
     """
+    # Apply text wrapping to the legend values to make very long legend values fit mobile view
+    df[color] = df[color].apply(lambda text: plotly_wrap_text(text))
+
     fig = px.scatter(
         data_frame=df,
         x=x,
@@ -239,7 +246,7 @@ def plotly_make_scatter(df: pd.DataFrame, x: str, y: str, color: str) -> go.Figu
         color=color,
         color_discrete_sequence=plotly_graphs_colors_map(),
     )
-    plotly_update_layout_scatter_default(fig=fig)
+    plotly_update_layout_scatter_default(fig=fig, title=title)
     return fig
 
 
@@ -286,6 +293,20 @@ def auth_is_valid_password(password: str) -> bool:
     if not any(char in "!@#$%^&*()-_=+[{]};:'\",<.>/?" for char in password):
         return False
     return True
+
+
+def plotly_wrap_text(text: str) -> str:
+    """Wraps text to fit into specific text width for mobile view
+
+    Args:
+        text (str): text to wrap
+
+    Returns:
+        str: wrapped text
+    """
+    # Wrap the title text for better display on mobile view
+    wrapped_text = "<br>".join(textwrap.wrap(text, width=41))
+    return wrapped_text
 
 
 def admin_required(f):

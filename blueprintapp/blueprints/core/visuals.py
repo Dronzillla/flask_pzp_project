@@ -19,6 +19,7 @@ from blueprintapp.utils.utilities import (
     plotly_graphs_colors_map,
     plotly_make_scatter,
     plotly_make_table,
+    plotly_wrap_text,
 )
 import plotly.express as px
 
@@ -93,10 +94,16 @@ def graph_cashflows_scatter() -> str:
     # Map cashflow names to human readible format
     df = pandas_map_db_cashflows(df=df)
     # Create aggregate cashflows graph
-    fig = plotly_make_scatter(df=df, x="year", y="total_amount", color="category")
+    fig = plotly_make_scatter(
+        df=df,
+        x="year",
+        y="total_amount",
+        color="category",
+        title="Aggregate Cashflows by Category and Year",
+    )
     # Update graph with specific properties
     fig.update_layout(
-        title="Aggregate Cashflows by Category and Year",
+        # title="Aggregate Cashflows by Category and Year",
         xaxis_title="Year",
         yaxis_title="Amount",
         legend_title="Category",
@@ -121,10 +128,16 @@ def graph_benefits_scatter_top5() -> str:
     # Get top 5 values
     df = pandas_filter_benefits_pd_df_top5(df=df)
     # Create aggregate benefits graph
-    fig = plotly_make_scatter(df=df, x="year", y="total_amount", color="name")
+    fig = plotly_make_scatter(
+        df=df,
+        x="year",
+        y="total_amount",
+        color="name",
+        title="Aggregate Benefits by Year for the TOP 5 Benefit Components",
+    )
     # Update graph with specific properties
     fig.update_layout(
-        title="Top 5 Aggregate Benefits by Benefit Component and Year",
+        # title="Top 5 Aggregate Benefits by Benefit Component and Year",
         xaxis_title="Year",
         yaxis_title="Amount",
         legend_title="Component",
@@ -190,11 +203,14 @@ def table_ratios_averages() -> str:
     fig = plotly_make_table_from_pandas_df(
         df=df, title="Aggregate Average values of Ratios"
     )
-    # Add an annotation for explaining ratios at the bottom
+    # Add an annotation for explaining ratios
+    wrapped_annotation = plotly_wrap_text(
+        text="If the ratio value is '-9999', the ratio calculation was not successful. If the ratio value is 'null', the ratio should not have been calculated."
+    )
     fig.update_layout(
         annotations=[
             dict(
-                text="Note! If the ratio value is '-9999', the ratio calculation was not successful. If the ratio value is 'null', the ratio should not have been calculated.",
+                text=wrapped_annotation,
                 y=0,
                 showarrow=False,
             )
