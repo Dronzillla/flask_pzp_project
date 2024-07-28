@@ -85,3 +85,4 @@ Requirements:
 - Update contact information in website pages.
 - Deploy an app.
 - Get SSL certificate.
+- Set up Google Search Console.

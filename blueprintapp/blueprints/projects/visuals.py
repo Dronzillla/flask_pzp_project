@@ -11,6 +11,7 @@ from blueprintapp.utils.utilities import (
     plotly_make_table_from_pandas_df,
     plotly_make_scatter,
     plotly_wrap_text,
+    plotly_make_table_from_pandas_df_tranpose,
 )
 import pandas as pd
 
@@ -103,11 +104,24 @@ def table_project_ratios(project_id: int) -> str:
     # Convert db data to pandas DataFrame
     drop_columns = ["_sa_instance_state", "id", "project_id"]
     df = pandas_convert_db_query_one_to_none_to_df(data=data, drop_columns=drop_columns)
+    """
+    Vertical table
+    """
+    # Tranpose DataFrame
+    df_trans = df.transpose()
+    # Create transposed plotly figure
+    fig = plotly_make_table_from_pandas_df_tranpose(
+        df=df_trans,
+        title=f"Progress Plan No. {db_read_project_by_id(id=project_id).code} Financial and Economic Ratios Values",
+    )
+    """
+    Horizontal table
     # Create plotly figure
     fig = plotly_make_table_from_pandas_df(
         df=df,
         title=f"Progress Plan No. {db_read_project_by_id(id=project_id).code} Financial and Economic Ratios Values",
     )
+    """
     # Add an annotation for explaining ratios
     wrapped_annotation = plotly_wrap_text(
         text="If the ratio value is '-9999', the ratio calculation was not successful. If the ratio value is 'null', the ratio should not have been calculated."
@@ -139,39 +153,24 @@ def table_project_general(project_id: int) -> str:
     # Convert db data to pandas DataFrame
     drop_columns = ["_sa_instance_state", "id", "project_id"]
     df = pandas_convert_db_query_one_to_none_to_df(data=data, drop_columns=drop_columns)
+    """
+    Vertical table
+    """
+    # Tranpose DataFrame
+    df_trans = df.transpose()
+    # Create transposed plotly figure
+    fig = plotly_make_table_from_pandas_df_tranpose(
+        df=df_trans,
+        title=f"Progress Plan No. {db_read_project_by_id(id=project_id).code} General Information",
+    )
+    """
+    Horizontal table
     # Create plotly figure
     fig = plotly_make_table_from_pandas_df(
         df=df,
         title=f"Progress Plan No. {db_read_project_by_id(id=project_id).code} General Information",
     )
+    """
     # Create html table
     html_table = fig.to_html(full_html=False)
     return html_table
-
-
-"""
-ARCHIVE
-
-def table_project_ratios(project_id: int) -> str:
-    # Get db data for ratios
-    data = db_read_ratios_by_project_id(project_id=project_id)
-    if data is None:
-        return ""
-    # Convert db ratios data to pandas DataFrame
-    df = convert_db_project_ratios_to_pd_df(ratios_data=data)
-    # Set up header and cells for table
-    header = dict(values=list(df.columns), align="left")
-    cells = dict(
-        values=[df[col] for col in df.columns],
-        align="left",
-    )
-    fig = go.Figure(data=[go.Table(header=header, cells=cells)])
-    fig.update_layout(
-        # autosize=False,
-        height=50,
-        margin=dict(t=0, b=0),
-    )
-    # Create html table
-    html_table = fig.to_html(full_html=False)
-    return html_table
-"""

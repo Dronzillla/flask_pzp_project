@@ -111,7 +111,7 @@ def plotly_make_table_from_pandas_df(df: pd.DataFrame, title: str = "") -> go.Fi
         df (pd.DataFrame): pandas DataFrame.
 
     Returns:
-        go.Figure: plotly table object with default height 80.
+        go.Figure: plotly table object with default height.
     """
     colors = plotly_tables_colors_map()
     header = dict(
@@ -121,6 +121,34 @@ def plotly_make_table_from_pandas_df(df: pd.DataFrame, title: str = "") -> go.Fi
     )
     cells = dict(
         values=[df[col] for col in df.columns],
+        align="left",
+        fill_color=colors.get("bg-light"),
+    )
+    fig = go.Figure(data=[go.Table(header=header, cells=cells)])
+    # Update table layout to default
+    fig = plotly_update_layout_table_default(fig=fig, title=title)
+    return fig
+
+
+def plotly_make_table_from_pandas_df_tranpose(
+    df: pd.DataFrame, title: str = ""
+) -> go.Figure:
+    """Creates plotly table from pandas DataFrame, where each DataFrame column corresponds to column.
+
+    Args:
+        df (pd.DataFrame): pandas DataFrame.
+
+    Returns:
+        go.Figure: plotly table object with default height.
+    """
+    colors = plotly_tables_colors_map()
+    header = dict(
+        values=["Field", "Value"],
+        align="left",
+        fill_color=colors.get("bg-secondary-subtle"),
+    )
+    cells = dict(
+        values=[df.index, df.iloc[:, 0]],
         align="left",
         fill_color=colors.get("bg-light"),
     )
@@ -146,8 +174,8 @@ def plotly_update_layout_table_default(fig: go.Figure, title: str = "") -> go.Fi
     fig.update_layout(
         autosize=True,
         margin=dict(l=0, r=0, t=60 if title else 0, b=0),
-        height=190 if title else 100,
-        title=dict(text=plotly_wrap_text(text=title), y=0.92),
+        height=330 if title else 100,
+        title=dict(text=plotly_wrap_text(text=title), y=0.95, x=0),
     )
     # Ensure the table is responsive
     fig.update_xaxes(automargin=True)
@@ -182,7 +210,8 @@ def plotly_update_layout_scatter_default(fig: go.Figure, title: str = "") -> Non
     plotly_update_font_family_bootstrap(fig=fig)
     # Update common layout features
     fig.update_layout(
-        title=dict(text=plotly_wrap_text(text=title), y=0.96),
+        margin=dict(l=0, r=0),
+        title=dict(text=plotly_wrap_text(text=title), y=0.96, x=0),
         yaxis=dict(type="log"),
         barmode="group",
         template="plotly_white",

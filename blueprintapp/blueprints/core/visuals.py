@@ -15,6 +15,7 @@ from blueprintapp.utils.utilities import (
     pandas_sort_df_columns,
     pandas_map_db_cashflows,
     plotly_make_table_from_pandas_df,
+    plotly_make_table_from_pandas_df_tranpose,
     plotly_update_font_family_bootstrap,
     plotly_graphs_colors_map,
     plotly_make_scatter,
@@ -170,10 +171,22 @@ def table_cashflows_totals() -> str:
     category_sum = df.groupby("category")["total_amount"].sum() / 1000000
     category_sum = category_sum.round(0)
     # Set up header and cells for a table
-    category_header = list(category_sum.index)
-    values_header = list(category_sum.values)
-    header = dict(values=category_header, align="left")
-    cells = dict(values=values_header, align="left")
+    """
+    Vertical table
+    """
+    # Convert the Series to a DataFrame
+    df = category_sum.reset_index()
+    df.columns = ["Category", "Value"]
+    # Prepare the header and cells
+    header = dict(values=df.columns.tolist(), align="left")
+    cells = dict(values=[df.Category, df.Value], align="left")
+    """
+    Horizontal table
+    # category_header = list(category_sum.index)
+    # values_header = list(category_sum.values)
+    # header = dict(values=category_header, align="left")
+    # cells = dict(values=values_header, align="left")
+    """
     # Create plotly table
     fig = plotly_make_table(
         header=header,
@@ -199,10 +212,22 @@ def table_ratios_averages() -> str:
     df = pandas_convert_db_ratios_to_df(ratios_data=data)
     # Sort df columns since in Dashboard ratios are sorted
     df = pandas_sort_df_columns(df=df)
+    """
+    Vertical table
+    """
+    # Tranpose DataFrame
+    df_trans = df.transpose()
+    # Create transposed plotly figure
+    fig = plotly_make_table_from_pandas_df_tranpose(
+        df=df_trans, title="Aggregate Average values of Ratios"
+    )
+    """
+    Horizontal table
     # Create plotly figure
     fig = plotly_make_table_from_pandas_df(
         df=df, title="Aggregate Average values of Ratios"
     )
+    """
     # Add an annotation for explaining ratios
     wrapped_annotation = plotly_wrap_text(
         text="If the ratio value is '-9999', the ratio calculation was not successful. If the ratio value is 'null', the ratio should not have been calculated."
