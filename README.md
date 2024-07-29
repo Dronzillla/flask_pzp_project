@@ -2,60 +2,60 @@
 Deployed application is available at: [pazangos-priemones.eu/](https://pazangos-priemones.eu/)
 
 ## Project Context
-In Lithuania, strategic investment planning involves preparing various programming-level documents, one of which is the development program. Primarily prepared by ministries, development programs,  address significant issues and challenges within their respective areas of state activity. To tackle these problems development programs also outline planned national progress plans to be implemented. 
+In Lithuania, strategic investment planning involves preparing various programming-level documents, one of which is the development program. Primarily prepared by ministries, development programs address significant issues and challenges within their respective areas of state activity. To tackle these problems, development programs also outline planned national progress plans to be implemented. 
 
-The creation of national progress plans involves assessing both financial and economic impacts. Ministries use a standardized .xlsm format spreadsheet to compile financial and economic cash flow projections and evaluate the relevant indicators for these plans.
+The creation of national progress plans involves assessing both financial and economic impacts. Ministries use a standardized .xlsm format spreadsheet to compile financial and economic cash flow projections and to evaluate the relevant indicators for these plans.
 
-This project is a web application that enables registered and verified users to upload national progress plans. Its main purpose is to extract data from the uploaded spreadsheets, record it to database and perform visualization for both aggregate and plan specific data.
+This project is a web application that enables registered and verified users to upload national progress plan spreadsheets. Its main purpose is to extract data from the uploaded spreadsheets, record it to a database, and perform visualization for both aggregate and plan-specific data.
 
 ## Project Description
 
 ### Main technologies used
-This project is being developed using the **Flask** web framework, selected for its flexibility and ease of customization. 
+This project is being developed using the **Flask** web framework, selected for its flexibility and ease of customization. The application is deployed using **nginx** and **Gunicorn** on an Ubuntu 24.04 server. To enable HTTPS, **Let's Encrypt** SSL certificate is used.
 
-Data extraction from Excel spreadsheets is handled by **Openpyxl**, which provides an easy solution for reading Excel files. The extracted data is then stored in an **SQLite** database. Given relatively small project's scale, a more specialized database technology was unnecessary. SQLite is also chosen for its simplicity and seamless integration with **SQLAlchemy** and **Flask-Migrate**, which are utilized for database operations. 
+Data extraction from Excel spreadsheets is handled by **Openpyxl**, which provides an easy solution for reading Excel files. The extracted data is then stored in a **SQLite** database. Given the relatively small project's scale, a more specialized database technology was unnecessary. SQLite is also chosen for its simplicity and seamless integration with **SQLAlchemy** and **Flask-Migrate**, which are utilized for database operations. 
 
-For data visualization, **Plotly** is the main tool used, allowing the creation of interactive and dynamic charts and graphs with ease. Plotly's compatibility with **pandas**, which is employed to fetch and normalize data from the database, enhances its effectiveness in visual data representation. 
+For data visualization, **Plotly** is the main tool used, allowing for the creation of interactive and dynamic figures. Plotly's compatibility with **pandas**, which is employed to fetch and normalize data from the database, enhances its effectiveness in visual data representation. 
 
 User authentication is managed by **Flask-Login**, chosen for its straightforward session management and user-friendly syntax. **Flask-Mail** is used to set up SMTP and send emails, providing a reliable solution for email communication. To securely collect data through HTML forms, **WTForms** is used, offering a simple yet secure method for form handling and validation. 
 
-For the admin dashboard, **Flask-Admin** is utilized, facilitating account management and administrative tasks with ease. 
+For the admin dashboard, **Flask-Admin** is utilized, allowing for efficient account and project management and administrative tasks.
 
-**Bootstrap 5.3.3** is used for the application front-end, selected for its clean and simple styling. **Cookie Consent** by Osano is used for building a cookie pop up.
+**Bootstrap 5.3.3** is used for the application front-end, selected for its clean and simple styling.
 
 ### Project structure
 This project is organized using blueprints to structure the application code effectively. The blueprints used in this project include:
 - admin: to manage code for admin views.
-- auth: to manage code related to user account management such as Login, Registration, Logout, Account deletion, Password updating, Password reset, User notification via emails.
-- core: to manage code for horizontal pages: Main, About, Privacy Policy, Terms of Service, and Cookie Policy.
-- dashboard: to manage code for user dashboard and displaying all national progress plans uploaded by the user.
-- projects: to manage code to display all national progress plans uploaded by all users.
-- upload: to manage code related to uploading and extracting data from Excel spreadsheets into the database.
+- auth: to manage code related to user actions such as Login, Registration, Logout, Account deletion, Password updating, Password reset, User notification via emails.
+- core: to manage code for horizontal pages - Main, About, Privacy Policy, Terms of Service, and Cookie Policy.
+- dashboard: to manage code for user operations related to national progress plans uploaded by specific user.
+- projects: to manage code for displaying all national progress plans uploaded by all users.
+- upload: to manage code related to uploading and extracting data from Excel spreadsheets and recording it to the database.
 
 ### Main functionality
 - All users can view aggregate data of all uploaded national progress plans.
 - All users can search for uploaded national progress plans and view specific national progress plan data.
 - Not registered user can register.
 - When registering a user must enter a complex password.
-- When new user registers, an email is sent to registration email.
-- When new user registers, an email is sent to all admin users emails.
+- When a new user registers, an email is sent to the registration email.
+- When a new user registers, an email is sent to all admin users' emails.
 - Registered and verified user can login.
-- Registered user can reset his password. A reset token is sent to user email.
-- Logged-in user can upload national progress plans.
-- Logged-in user can search for national progress plans uploaded by himself.
-- Logged-in user can delete national progress plans uploaded by himself.
-- Logged-in user can update his password.
-- Logged-in user can delete his account.
-- Admin user can verify users.
-- Admin user can make another user an admin user.
-- Admin user can update national progress plans names and codes.
-- Admin user can delete any user and any uploaded national progress plan.
-- Projects in the dashboard and projects sections are paginated to display only 5 records at a time.
+- Registered user can reset their password. A reset token is sent to user email.
+- A logged-in user can upload national progress plans.
+- A logged-in user can search for national progress plans uploaded by themself.
+- A logged-in user can delete national progress plans uploaded by themself.
+- A logged-in user can update their password.
+- A logged-in user can delete their account.
+- An admin user can verify users.
+- An admin user can make another user an admin user.
+- An admin user can update national progress plans names and codes.
+- An admin user can delete any user and any uploaded national progress plan.
+- Projects in the dashboard and projects sections are paginated to display only five records at a time.
 
 ### Development process
 This application is being developed in stages. In each stage, the main objectives and requirements are set. Only after completing one stage are new objectives and requirements set for the next stage. Development stages, objectives, and requirements are outlined in [specification.md](https://github.com/Dronzillla/flask_pzp_project/blob/main/specification.md)
 
-In the first stage a database diagram was drawn using [app.diagrams.net](https://app.diagrams.net/) to model how information in Excel spreadsheets should be recorded in database tables:
+In the first stage, a database diagram was drawn using [app.diagrams.net](https://app.diagrams.net/) to model how information in Excel spreadsheets should be recorded in database tables:
 <img src="blueprintapp/static/images/db_diagram.png" alt="db_diagram" style="width: 800px;">
 
 ## How to use this Project locally
@@ -82,7 +82,7 @@ In the first stage a database diagram was drawn using [app.diagrams.net](https:/
     SECRET_KEY="A random string used for security-related functions, such as session management, token generation, etc."
     ```
 
-4. **Clone project repository**:
+4. **Clone github repository**:
     ```sh
     git clone git@github.com:Dronzillla/flask_pzp_project.git
     cd flask_pzp_project/
@@ -102,7 +102,6 @@ In the first stage a database diagram was drawn using [app.diagrams.net](https:/
     ```
 
 7. **Run the application**:
-    Get back to the flask_pzp_project/ folder and run python script
     ```sh
     cd ../
     python3 run.py
@@ -113,16 +112,16 @@ During development, manual tests were performed to ensure that the application w
 
 For automated testing, **pytest** is used. There are still many automated tests missing. The automated tests are organized into folders based on seven scenarios that consider user type:
 1. Anonymous user.
-2. Registered, logged in, verified, not an admin user.
-3. Registered, logged in, verified, an admin user.
-4. Registered, not logged in, verified, not an admin user.
-5. Registered, not logged in, verified, an admin user.
-6. Registered, not logged in, not verified, not an admin user.
-7. Registered, not logged in, not verified, an admin user.  
+2. Registered, logged-in, verified, not an admin user.
+3. Registered, logged-in, verified, an admin user.
+4. Registered, not logged-in, verified, not an admin user.
+5. Registered, not logged-in, verified, an admin user.
+6. Registered, not logged-in, not verified, not an admin user.
+7. Registered, not logged-in, not verified, an admin user.  
 
 A folder structure like this will ensure structured and comprehensive coverage of the application's functionality for different user states. Tests are then further separated into folders named based on blueprint names to align the tests with the application's blueprint structure. 
 
-To run tests or generate a test coverage report, change the current working directory to the project root directory and run the respective commands: 
+To run tests or generate a test coverage report, change the current working directory to the project github repository folder and run the respective commands: 
 1. **To run tests**: 
     ```sh
     pytest
@@ -133,5 +132,5 @@ To run tests or generate a test coverage report, change the current working dire
     ```
 
 ## Credits
-Contributors names and contact info:
+Contributors' names and contact info:
 * Dominykas (https://github.com/Dronzillla)
