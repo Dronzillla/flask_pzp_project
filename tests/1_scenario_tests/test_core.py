@@ -6,7 +6,7 @@
 def test_core_get_index_anyonymous_user(client):
     response = client.get("/")
     assert response.status_code == 200
-    assert b"Not a registered user?" in response.data
+    assert b"Not a Registered User?" in response.data
 
 
 def test_core_get_about_anyonymous_user(client):
