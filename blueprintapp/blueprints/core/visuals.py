@@ -219,7 +219,10 @@ def table_ratios_averages() -> str:
     df_trans = df.transpose()
     # Create transposed plotly figure
     fig = plotly_make_table_from_pandas_df_tranpose(
-        df=df_trans, title="Aggregate Average values of Ratios"
+        df=df_trans,
+        title="Aggregate Average values of Ratios",
+        annotation="*('-9999': invalid ratio value, 'null': ratio not calculated)",
+        # annotation="If the ratio value is '-9999', the ratio calculation was not successful. If the ratio value is 'null', the ratio should not have been calculated.",
     )
     """
     Horizontal table
@@ -228,19 +231,6 @@ def table_ratios_averages() -> str:
         df=df, title="Aggregate Average values of Ratios"
     )
     """
-    # Add an annotation for explaining ratios
-    wrapped_annotation = plotly_wrap_text(
-        text="If the ratio value is '-9999', the ratio calculation was not successful. If the ratio value is 'null', the ratio should not have been calculated."
-    )
-    fig.update_layout(
-        annotations=[
-            dict(
-                text=wrapped_annotation,
-                y=0,
-                showarrow=False,
-            )
-        ]
-    )
     # Create html table
     html_table = fig.to_html(full_html=False)
     return html_table

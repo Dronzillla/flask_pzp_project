@@ -113,6 +113,8 @@ def table_project_ratios(project_id: int) -> str:
     fig = plotly_make_table_from_pandas_df_tranpose(
         df=df_trans,
         title=f"Progress Plan No. {db_read_project_by_id(id=project_id).code} Financial and Economic Ratios Values",
+        # annotation="If the ratio value is '-9999', the ratio calculation was not successful. If the ratio value is 'null', the ratio should not have been calculated.",
+        annotation="*('-9999': invalid ratio value, 'null': ratio not calculated)",
     )
     """
     Horizontal table
@@ -122,19 +124,6 @@ def table_project_ratios(project_id: int) -> str:
         title=f"Progress Plan No. {db_read_project_by_id(id=project_id).code} Financial and Economic Ratios Values",
     )
     """
-    # Add an annotation for explaining ratios
-    wrapped_annotation = plotly_wrap_text(
-        text="If the ratio value is '-9999', the ratio calculation was not successful. If the ratio value is 'null', the ratio should not have been calculated."
-    )
-    fig.update_layout(
-        annotations=[
-            dict(
-                text=wrapped_annotation,
-                y=0,
-                showarrow=False,
-            )
-        ]
-    )
     # Create html table
     html_table = fig.to_html(full_html=False)
     return html_table

@@ -82,7 +82,9 @@ def plotly_tables_colors_map() -> dict:
     return colors
 
 
-def plotly_make_table(header: dict, cells: dict, title: str = "") -> go.Figure:
+def plotly_make_table(
+    header: dict, cells: dict, title: str = "", annotation: str = ""
+) -> go.Figure:
     """Creates plotly table with provided header, cells and title values. Also, updates table header and cells color to match bootstrap color scheme.
 
     Args:
@@ -100,11 +102,15 @@ def plotly_make_table(header: dict, cells: dict, title: str = "") -> go.Figure:
     # Create a table
     fig = go.Figure(data=[go.Table(header=header, cells=cells)])
     # Update table layout to default
-    fig = plotly_update_layout_table_default(fig=fig, title=title)
+    fig = plotly_update_layout_table_default(
+        fig=fig, title=title, annotation=annotation
+    )
     return fig
 
 
-def plotly_make_table_from_pandas_df(df: pd.DataFrame, title: str = "") -> go.Figure:
+def plotly_make_table_from_pandas_df(
+    df: pd.DataFrame, title: str = "", annotation: str = ""
+) -> go.Figure:
     """Creates plotly table from pandas DataFrame, where each DataFrame column corresponds to column.
 
     Args:
@@ -126,12 +132,14 @@ def plotly_make_table_from_pandas_df(df: pd.DataFrame, title: str = "") -> go.Fi
     )
     fig = go.Figure(data=[go.Table(header=header, cells=cells)])
     # Update table layout to default
-    fig = plotly_update_layout_table_default(fig=fig, title=title)
+    fig = plotly_update_layout_table_default(
+        fig=fig, title=title, annotation=annotation
+    )
     return fig
 
 
 def plotly_make_table_from_pandas_df_tranpose(
-    df: pd.DataFrame, title: str = ""
+    df: pd.DataFrame, title: str = "", annotation: str = ""
 ) -> go.Figure:
     """Creates plotly table from pandas DataFrame, where each DataFrame column corresponds to column.
 
@@ -154,11 +162,15 @@ def plotly_make_table_from_pandas_df_tranpose(
     )
     fig = go.Figure(data=[go.Table(header=header, cells=cells)])
     # Update table layout to default
-    fig = plotly_update_layout_table_default(fig=fig, title=title)
+    fig = plotly_update_layout_table_default(
+        fig=fig, title=title, annotation=annotation
+    )
     return fig
 
 
-def plotly_update_layout_table_default(fig: go.Figure, title: str = "") -> go.Figure:
+def plotly_update_layout_table_default(
+    fig: go.Figure, title: str = "", annotation: str = ""
+) -> go.Figure:
     """Make default table layout for height and margin and set table title.
 
     Args:
@@ -174,8 +186,18 @@ def plotly_update_layout_table_default(fig: go.Figure, title: str = "") -> go.Fi
     fig.update_layout(
         autosize=True,
         margin=dict(l=0, r=0, t=60 if title else 0, b=0),
-        height=330 if title else 100,
+        height=260 if title and annotation else 260 if title else 100,
         title=dict(text=plotly_wrap_text(text=title), y=0.95, x=0),
+        # Add an annotation
+        annotations=[
+            dict(
+                text=plotly_wrap_text(text=annotation, width=70),
+                y=1.1,
+                x=0,
+                showarrow=False,
+                font=dict(color="#dc3545"),
+            )
+        ],
     )
     # Ensure the table is responsive
     fig.update_xaxes(automargin=True)
@@ -324,7 +346,7 @@ def auth_is_valid_password(password: str) -> bool:
     return True
 
 
-def plotly_wrap_text(text: str) -> str:
+def plotly_wrap_text(text: str, width: int = 41) -> str:
     """Wraps text to fit into specific text width for mobile view
 
     Args:
@@ -334,7 +356,7 @@ def plotly_wrap_text(text: str) -> str:
         str: wrapped text
     """
     # Wrap the title text for better display on mobile view
-    wrapped_text = "<br>".join(textwrap.wrap(text, width=41))
+    wrapped_text = "<br>".join(textwrap.wrap(text, width=width))
     return wrapped_text
 
 
