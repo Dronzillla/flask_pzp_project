@@ -9,7 +9,7 @@
                 <div class="col-md-4">
                     <div class="card h-100 border-0 shadow-sm text-center">
                         <div class="card-body bg-light">
-                            <p class="mb-0">Already registered user?</p>
+                            <p class="mb-0">Already Registered User?</p>
                             <form action="{{ url_for('upload.index') }}" method="get">
                                 <button type="submit" class="btn btn-primary mt-3 normal-btn">Upload</button>
                             </form>
@@ -17,16 +17,19 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm text-center">
+                    <div class="card h-100 border-0 shadow-sm text-center">                            
                         <div class="card-body bg-light">
-                            <p class="mb-0">National progress plans uploaded: {{ project_count }}</p>
+                                <p class="card-title mb-0">National Progress Plans Uploaded: {{ project_count }}</p>
+                                <form action="{{ url_for('projects.index') }}" method="get">
+                                    <button type="submit" class="btn btn-secondary mt-3 normal-btn">Projects</button>
+                                </form>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="card h-100 border-0 shadow-sm text-center">
                         <div class="card-body bg-light">
-                            <p class="mb-0">Not a registered user?</p>
+                            <p class="mb-0">Not a Registered User?</p>
                             <form action="{{ url_for('auth.register') }}" method="get">
                                 <button type="submit" class="btn btn-success mt-3 normal-btn">Register</button>
                             </form>
